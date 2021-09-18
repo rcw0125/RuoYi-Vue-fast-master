@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.BzhjcMapper">
+
+    <resultMap type="Bzhjc" id="BzhjcResult">
+        <result property="id"    column="id"    />
+        <result property="checkperson"    column="checkperson"    />
+        <result property="checkaccount"    column="checkaccount"    />
+        <result property="checkdept"    column="checkdept"    />
+        <result property="checkdate"    column="checkdate"    />
+        <result property="checkcontent"    column="checkcontent"    />
+        <result property="confirmresult"    column="confirmresult"    />
+        <result property="confirmdate"    column="confirmdate"    />
+        <result property="confirmcontent"    column="confirmcontent"    />
+        <result property="checkprop"    column="checkprop"    />
+        <result property="checkmoddate"    column="checkmoddate"    />
+        <result property="checkpicture"    column="checkpicture"    />
+        <result property="moddeptid"    column="moddeptid"    />
+        <result property="moddept"    column="moddept"    />
+        <result property="moddonedate"    column="moddonedate"    />
+        <result property="modresult"    column="modresult"    />
+        <result property="modreason"    column="modreason"    />
+        <result property="modcontent"    column="modcontent"    />
+        <result property="modperson"    column="modperson"    />
+        <result property="modpicture"    column="modpicture"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectBzhjcVo">
+        select id, checkperson, checkaccount, checkdept, checkdate, checkcontent, confirmresult, confirmdate, confirmcontent, checkprop, checkmoddate, checkpicture, moddeptid, moddept, moddonedate, modresult, modreason, modcontent, modperson, modpicture, status from bzhjc
+    </sql>
+
+    <select id="selectBzhjcList" parameterType="Bzhjc" resultMap="BzhjcResult">
+        <include refid="selectBzhjcVo"/>
+        <where>
+            <if test="checkperson != null  and checkperson != ''"> and checkperson = #{checkperson}</if>
+            <if test="checkaccount != null  and checkaccount != ''"> and checkaccount = #{checkaccount}</if>
+            <if test="checkdept != null  and checkdept != ''"> and checkdept = #{checkdept}</if>
+            <if test="checkdate != null  and checkdate != ''"> and checkdate = #{checkdate}</if>
+            <if test="checkcontent != null  and checkcontent != ''"> and checkcontent = #{checkcontent}</if>
+            <if test="confirmresult != null  and confirmresult != ''"> and confirmresult = #{confirmresult}</if>
+            <if test="confirmdate != null  and confirmdate != ''"> and confirmdate = #{confirmdate}</if>
+            <if test="confirmcontent != null  and confirmcontent != ''"> and confirmcontent = #{confirmcontent}</if>
+            <if test="checkprop != null  and checkprop != ''"> and checkprop = #{checkprop}</if>
+            <if test="checkmoddate != null  and checkmoddate != ''"> and checkmoddate = #{checkmoddate}</if>
+            <if test="checkpicture != null  and checkpicture != ''"> and checkpicture = #{checkpicture}</if>
+            <if test="moddeptid != null  and moddeptid != ''"> and moddeptid = #{moddeptid}</if>
+            <if test="moddept != null  and moddept != ''"> and moddept = #{moddept}</if>
+            <if test="moddonedate != null  and moddonedate != ''"> and moddonedate = #{moddonedate}</if>
+            <if test="modresult != null  and modresult != ''"> and modresult = #{modresult}</if>
+            <if test="modreason != null  and modreason != ''"> and modreason = #{modreason}</if>
+            <if test="modcontent != null  and modcontent != ''"> and modcontent = #{modcontent}</if>
+            <if test="modperson != null  and modperson != ''"> and modperson = #{modperson}</if>
+            <if test="modpicture != null  and modpicture != ''"> and modpicture = #{modpicture}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND checkdate &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND checkdate &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectBzhjcById" parameterType="Long" resultMap="BzhjcResult">
+        <include refid="selectBzhjcVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBzhjc" parameterType="Bzhjc" useGeneratedKeys="true" keyProperty="id">
+        insert into bzhjc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkperson != null">checkperson,</if>
+            <if test="checkaccount != null">checkaccount,</if>
+            <if test="checkdept != null">checkdept,</if>
+            <if test="checkdate != null">checkdate,</if>
+            <if test="checkcontent != null">checkcontent,</if>
+            <if test="confirmresult != null">confirmresult,</if>
+            <if test="confirmdate != null">confirmdate,</if>
+            <if test="confirmcontent != null">confirmcontent,</if>
+            <if test="checkprop != null">checkprop,</if>
+            <if test="checkmoddate != null">checkmoddate,</if>
+            <if test="checkpicture != null">checkpicture,</if>
+            <if test="moddeptid != null">moddeptid,</if>
+            <if test="moddept != null">moddept,</if>
+            <if test="moddonedate != null">moddonedate,</if>
+            <if test="modresult != null">modresult,</if>
+            <if test="modreason != null">modreason,</if>
+            <if test="modcontent != null">modcontent,</if>
+            <if test="modperson != null">modperson,</if>
+            <if test="modpicture != null">modpicture,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkperson != null">#{checkperson},</if>
+            <if test="checkaccount != null">#{checkaccount},</if>
+            <if test="checkdept != null">#{checkdept},</if>
+            <if test="checkdate != null">#{checkdate},</if>
+            <if test="checkcontent != null">#{checkcontent},</if>
+            <if test="confirmresult != null">#{confirmresult},</if>
+            <if test="confirmdate != null">#{confirmdate},</if>
+            <if test="confirmcontent != null">#{confirmcontent},</if>
+            <if test="checkprop != null">#{checkprop},</if>
+            <if test="checkmoddate != null">#{checkmoddate},</if>
+            <if test="checkpicture != null">#{checkpicture},</if>
+            <if test="moddeptid != null">#{moddeptid},</if>
+            <if test="moddept != null">#{moddept},</if>
+            <if test="moddonedate != null">#{moddonedate},</if>
+            <if test="modresult != null">#{modresult},</if>
+            <if test="modreason != null">#{modreason},</if>
+            <if test="modcontent != null">#{modcontent},</if>
+            <if test="modperson != null">#{modperson},</if>
+            <if test="modpicture != null">#{modpicture},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBzhjc" parameterType="Bzhjc">
+        update bzhjc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkperson != null">checkperson = #{checkperson},</if>
+            <if test="checkaccount != null">checkaccount = #{checkaccount},</if>
+            <if test="checkdept != null">checkdept = #{checkdept},</if>
+            <if test="checkdate != null">checkdate = #{checkdate},</if>
+            <if test="checkcontent != null">checkcontent = #{checkcontent},</if>
+            <if test="confirmresult != null">confirmresult = #{confirmresult},</if>
+            <if test="confirmdate != null">confirmdate = #{confirmdate},</if>
+            <if test="confirmcontent != null">confirmcontent = #{confirmcontent},</if>
+            <if test="checkprop != null">checkprop = #{checkprop},</if>
+            <if test="checkmoddate != null">checkmoddate = #{checkmoddate},</if>
+            <if test="checkpicture != null">checkpicture = #{checkpicture},</if>
+            <if test="moddeptid != null">moddeptid = #{moddeptid},</if>
+            <if test="moddept != null">moddept = #{moddept},</if>
+            <if test="moddonedate != null">moddonedate = #{moddonedate},</if>
+            <if test="modresult != null">modresult = #{modresult},</if>
+            <if test="modreason != null">modreason = #{modreason},</if>
+            <if test="modcontent != null">modcontent = #{modcontent},</if>
+            <if test="modperson != null">modperson = #{modperson},</if>
+            <if test="modpicture != null">modpicture = #{modpicture},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBzhjcById" parameterType="Long">
+        delete from bzhjc where id = #{id}
+    </delete>
+
+    <delete id="deleteBzhjcByIds" parameterType="String">
+        delete from bzhjc where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

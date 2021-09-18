@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.IpguanliMapper">
+    
+    <resultMap type="Ipguanli" id="IpguanliResult">
+        <result property="id"    column="id"    />
+        <result property="ip"    column="ip"    />
+        <result property="dept"    column="dept"    />
+        <result property="weizhi"    column="weizhi"    />
+        <result property="fzr"    column="fzr"    />
+        <result property="changjia"    column="changjia"    />
+        <result property="xinghao"    column="xinghao"    />
+        <result property="beizhu"    column="beizhu"    />
+        <result property="shifouzaiyong"    column="shifouzaiyong"    />
+    </resultMap>
+
+    <sql id="selectIpguanliVo">
+        select id, ip, dept, weizhi, fzr, changjia, xinghao, beizhu, shifouzaiyong from ipguanli
+    </sql>
+
+    <select id="selectIpguanliList" parameterType="Ipguanli" resultMap="IpguanliResult">
+        <include refid="selectIpguanliVo"/>
+        <where>  
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="weizhi != null  and weizhi != ''"> and weizhi = #{weizhi}</if>
+            <if test="fzr != null  and fzr != ''"> and fzr = #{fzr}</if>
+            <if test="changjia != null  and changjia != ''"> and changjia = #{changjia}</if>
+            <if test="xinghao != null  and xinghao != ''"> and xinghao = #{xinghao}</if>
+            <if test="beizhu != null  and beizhu != ''"> and beizhu = #{beizhu}</if>
+            <if test="shifouzaiyong != null  and shifouzaiyong != ''"> and shifouzaiyong = #{shifouzaiyong}</if>
+        </where>
+    </select>
+    
+    <select id="selectIpguanliById" parameterType="Long" resultMap="IpguanliResult">
+        <include refid="selectIpguanliVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertIpguanli" parameterType="Ipguanli" useGeneratedKeys="true" keyProperty="id">
+        insert into ipguanli
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ip != null">ip,</if>
+            <if test="dept != null">dept,</if>
+            <if test="weizhi != null">weizhi,</if>
+            <if test="fzr != null">fzr,</if>
+            <if test="changjia != null">changjia,</if>
+            <if test="xinghao != null">xinghao,</if>
+            <if test="beizhu != null">beizhu,</if>
+            <if test="shifouzaiyong != null">shifouzaiyong,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ip != null">#{ip},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="weizhi != null">#{weizhi},</if>
+            <if test="fzr != null">#{fzr},</if>
+            <if test="changjia != null">#{changjia},</if>
+            <if test="xinghao != null">#{xinghao},</if>
+            <if test="beizhu != null">#{beizhu},</if>
+            <if test="shifouzaiyong != null">#{shifouzaiyong},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIpguanli" parameterType="Ipguanli">
+        update ipguanli
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="weizhi != null">weizhi = #{weizhi},</if>
+            <if test="fzr != null">fzr = #{fzr},</if>
+            <if test="changjia != null">changjia = #{changjia},</if>
+            <if test="xinghao != null">xinghao = #{xinghao},</if>
+            <if test="beizhu != null">beizhu = #{beizhu},</if>
+            <if test="shifouzaiyong != null">shifouzaiyong = #{shifouzaiyong},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteIpguanliById" parameterType="Long">
+        delete from ipguanli where id = #{id}
+    </delete>
+
+    <delete id="deleteIpguanliByIds" parameterType="String">
+        delete from ipguanli where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

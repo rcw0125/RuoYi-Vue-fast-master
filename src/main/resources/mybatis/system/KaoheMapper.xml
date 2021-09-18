@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.KaoheMapper">
+
+    <resultMap type="Kaohe" id="KaoheResult">
+        <result property="kaoheId"    column="KAOHE_ID"    />
+        <result property="useraccount"    column="USERACCOUNT"    />
+        <result property="nickname"    column="NICKNAME"    />
+        <result property="deptname"    column="DEPTNAME"    />
+        <result property="jxkf"    column="JXKF"    />
+        <result property="aqkf"    column="AQKF"    />
+        <result property="team"    column="TEAM"    />
+        <result property="khdj"    column="KHDJ"    />
+        <result property="khxz"    column="KHXZ"    />
+        <result property="khzl"    column="KHZL"    />
+        <result property="khrq"    column="KHRQ"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="khnote"    column="KHNOTE"    />
+        <result property="leaderaccount"    column="LEADERACCOUNT"    />
+        <result property="leadername"    column="LEADERNAME"    />
+        <result property="leaderdept"    column="LEADERDEPT"    />
+        <result property="khtype"    column="KHTYPE"    />
+    </resultMap>
+
+    <sql id="selectKaoheVo">
+        select KAOHE_ID, USERACCOUNT, NICKNAME, DEPTNAME, JXKF, AQKF, TEAM, KHDJ, KHXZ, KHZL, KHRQ, KHNOTE, LEADERACCOUNT, LEADERNAME, LEADERDEPT,KHTYPE,logtime  from kaohe
+    </sql>
+
+    <select id="selectKaoheList" parameterType="Kaohe" resultMap="KaoheResult">
+        <include refid="selectKaoheVo"/>
+        <where>
+            <if test="useraccount != null  and useraccount != ''"> and USERACCOUNT = #{useraccount}</if>
+            <if test="nickname != null  and nickname != ''"> and NICKNAME like concat('%', #{nickname}, '%')</if>
+            <if test="deptname != null  and deptname != ''"> and DEPTNAME like concat('%', #{deptname}, '%')</if>
+            <if test="jxkf != null "> and JXKF = #{jxkf}</if>
+            <if test="aqkf != null "> and AQKF = #{aqkf}</if>
+            <if test="team != null  and team != ''"> and TEAM = #{team}</if>
+            <if test="khdj != null  and khdj != ''"> and KHDJ = #{khdj}</if>
+            <if test="khxz != null  and khxz != ''"> and KHXZ = #{khxz}</if>
+            <if test="khzl != null  and khzl != ''"> and KHZL = #{khzl}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="khnote != null  and khnote != ''"> and KHNOTE = #{khnote}</if>
+            <if test="leaderaccount != null  and leaderaccount != ''"> and LEADERACCOUNT = #{leaderaccount}</if>
+            <if test="leadername != null  and leadername != ''"> and LEADERNAME like concat('%', #{leadername}, '%')</if>
+            <if test="leaderdept != null  and leaderdept != ''"> and LEADERDEPT  like concat('%', #{leaderdept}, '%') </if>
+            <if test="khtype != null  and khtype != ''"> and KHTYPE = #{khtype}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND khrq &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND khrq &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by kaohe_id desc
+    </select>
+
+    <select id="selectKaoheById" parameterType="Long" resultMap="KaoheResult">
+        <include refid="selectKaoheVo"/>
+        where KAOHE_ID = #{kaoheId}
+    </select>
+
+    <insert id="insertKaohe" parameterType="Kaohe" useGeneratedKeys="true" keyProperty="kaoheId">
+        insert into kaohe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="useraccount != null">USERACCOUNT,</if>
+            <if test="nickname != null">NICKNAME,</if>
+            <if test="deptname != null">DEPTNAME,</if>
+            <if test="jxkf != null">JXKF,</if>
+            <if test="aqkf != null">AQKF,</if>
+            <if test="team != null">TEAM,</if>
+            <if test="khdj != null">KHDJ,</if>
+            <if test="khxz != null">KHXZ,</if>
+            <if test="khzl != null">KHZL,</if>
+            <if test="khrq != null">KHRQ,</if>
+            <if test="logtime != null">logtime,</if>
+            <if test="khnote != null">KHNOTE,</if>
+            <if test="leaderaccount != null">LEADERACCOUNT,</if>
+            <if test="leadername != null">LEADERNAME,</if>
+            <if test="leaderdept != null">LEADERDEPT,</if>
+            <if test="khtype != null">KHTYPE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="useraccount != null">#{useraccount},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="deptname != null">#{deptname},</if>
+            <if test="jxkf != null">#{jxkf},</if>
+            <if test="aqkf != null">#{aqkf},</if>
+            <if test="team != null">#{team},</if>
+            <if test="khdj != null">#{khdj},</if>
+            <if test="khxz != null">#{khxz},</if>
+            <if test="khzl != null">#{khzl},</if>
+            <if test="khrq != null">#{khrq},</if>
+            <if test="logtime != null">#{logtime},</if>
+            <if test="khnote != null">#{khnote},</if>
+            <if test="leaderaccount != null">#{leaderaccount},</if>
+            <if test="leadername != null">#{leadername},</if>
+            <if test="leaderdept != null">#{leaderdept},</if>
+            <if test="khtype != null">#{khtype},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKaohe" parameterType="Kaohe">
+        update kaohe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="useraccount != null">USERACCOUNT = #{useraccount},</if>
+            <if test="nickname != null">NICKNAME = #{nickname},</if>
+            <if test="deptname != null">DEPTNAME = #{deptname},</if>
+            <if test="jxkf != null">JXKF = #{jxkf},</if>
+            <if test="aqkf != null">AQKF = #{aqkf},</if>
+            <if test="team != null">TEAM = #{team},</if>
+            <if test="khdj != null">KHDJ = #{khdj},</if>
+            <if test="khxz != null">KHXZ = #{khxz},</if>
+            <if test="khzl != null">KHZL = #{khzl},</if>
+            <if test="khrq != null">KHRQ = #{khrq},</if>
+            <if test="khnote != null">KHNOTE = #{khnote},</if>
+            <if test="leaderaccount != null">LEADERACCOUNT = #{leaderaccount},</if>
+            <if test="leadername != null">LEADERNAME = #{leadername},</if>
+            <if test="leaderdept != null">LEADERDEPT = #{leaderdept},</if>
+            <if test="khtype != null">KHTYPE = #{khtype},</if>
+        </trim>
+        where KAOHE_ID = #{kaoheId}
+    </update>
+
+    <delete id="deleteKaoheById" parameterType="Long">
+        delete from kaohe where KAOHE_ID = #{kaoheId}
+    </delete>
+
+    <delete id="deleteKaoheByIds" parameterType="String">
+        delete from kaohe where KAOHE_ID in
+        <foreach item="kaoheId" collection="array" open="(" separator="," close=")">
+            #{kaoheId}
+        </foreach>
+    </delete>
+</mapper>

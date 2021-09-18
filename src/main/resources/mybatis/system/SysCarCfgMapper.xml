@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.SysCarCfgMapper">
+    
+    <resultMap type="SysCarCfg" id="SysCarCfgResult">
+        <result property="id"    column="id"    />
+        <result property="cartype"    column="carType"    />
+        <result property="shoufeifangshi"    column="shoufeifangshi"    />
+        <result property="danjia"    column="danjia"    />
+        <result property="beizhu"    column="beizhu"    />
+    </resultMap>
+
+    <sql id="selectSysCarCfgVo">
+        select id, carType, shoufeifangshi, danjia, beizhu from sys_car_cfg
+    </sql>
+
+    <select id="selectSysCarCfgList" parameterType="SysCarCfg" resultMap="SysCarCfgResult">
+        <include refid="selectSysCarCfgVo"/>
+        <where>  
+            <if test="cartype != null  and cartype != ''"> and carType = #{cartype}</if>
+            <if test="shoufeifangshi != null  and shoufeifangshi != ''"> and shoufeifangshi = #{shoufeifangshi}</if>
+            <if test="danjia != null "> and danjia = #{danjia}</if>
+            <if test="beizhu != null  and beizhu != ''"> and beizhu = #{beizhu}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCarCfgById" parameterType="Long" resultMap="SysCarCfgResult">
+        <include refid="selectSysCarCfgVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysCarCfg" parameterType="SysCarCfg" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_car_cfg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cartype != null">carType,</if>
+            <if test="shoufeifangshi != null">shoufeifangshi,</if>
+            <if test="danjia != null">danjia,</if>
+            <if test="beizhu != null">beizhu,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cartype != null">#{cartype},</if>
+            <if test="shoufeifangshi != null">#{shoufeifangshi},</if>
+            <if test="danjia != null">#{danjia},</if>
+            <if test="beizhu != null">#{beizhu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCarCfg" parameterType="SysCarCfg">
+        update sys_car_cfg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cartype != null">carType = #{cartype},</if>
+            <if test="shoufeifangshi != null">shoufeifangshi = #{shoufeifangshi},</if>
+            <if test="danjia != null">danjia = #{danjia},</if>
+            <if test="beizhu != null">beizhu = #{beizhu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysCarCfgById" parameterType="Long">
+        delete from sys_car_cfg where id = #{id}
+    </delete>
+
+    <delete id="deleteSysCarCfgByIds" parameterType="String">
+        delete from sys_car_cfg where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

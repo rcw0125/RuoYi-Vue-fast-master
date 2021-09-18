@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.BlogArticleMapper">
+    
+    <resultMap type="BlogArticle" id="BlogArticleResult">
+        <result property="id"    column="id"    />
+        <result property="classifyId"    column="classify_id"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="title"    column="title"    />
+        <result property="keywords"    column="keywords"    />
+        <result property="source"    column="source"    />
+        <result property="excerpt"    column="excerpt"    />
+        <result property="content"    column="content"    />
+        <result property="viewHits"    column="view_hits"    />
+        <result property="commentQuantity"    column="comment_quantity"    />
+        <result property="likesQuantity"    column="likes_quantity"    />
+        <result property="thumbnail"    column="thumbnail"    />
+        <result property="isAudit"    column="is_audit"    />
+        <result property="recommend"    column="recommend"    />
+        <result property="isStickie"    column="is_stickie"    />
+        <result property="archive"    column="archive"    />
+        <result property="articleType"    column="article_type"    />
+        <result property="editor"    column="editor"    />
+        <result property="status"    column="status"    />
+        <result property="wordNumber"    column="word_number"    />
+        <result property="readingTime"    column="reading_time"    />
+        <result property="commentable"    column="commentable"    />
+        <result property="createUserId"    column="create_user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="deleteUserId"    column="delete_user_id"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="updateUserId"    column="update_user_id"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBlogArticleVo">
+        select id, classify_id, channel_id, title, keywords, source, excerpt, content, view_hits, comment_quantity, likes_quantity, thumbnail, is_audit, recommend, is_stickie, archive, article_type, editor, status, word_number, reading_time, commentable, create_user_id, create_time, is_deleted, delete_user_id, delete_time, update_user_id, update_time from blog_article
+    </sql>
+
+    <select id="selectBlogArticleList" parameterType="BlogArticle" resultMap="BlogArticleResult">
+        <include refid="selectBlogArticleVo"/>
+        <where>  
+            <if test="classifyId != null  and classifyId != ''"> and classify_id = #{classifyId}</if>
+            <if test="channelId != null  and channelId != ''"> and channel_id = #{channelId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="keywords != null  and keywords != ''"> and keywords = #{keywords}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="excerpt != null  and excerpt != ''"> and excerpt = #{excerpt}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="viewHits != null "> and view_hits = #{viewHits}</if>
+            <if test="commentQuantity != null "> and comment_quantity = #{commentQuantity}</if>
+            <if test="likesQuantity != null "> and likes_quantity = #{likesQuantity}</if>
+            <if test="thumbnail != null  and thumbnail != ''"> and thumbnail = #{thumbnail}</if>
+            <if test="isAudit != null "> and is_audit = #{isAudit}</if>
+            <if test="recommend != null "> and recommend = #{recommend}</if>
+            <if test="isStickie != null "> and is_stickie = #{isStickie}</if>
+            <if test="archive != null  and archive != ''"> and archive = #{archive}</if>
+            <if test="articleType != null "> and article_type = #{articleType}</if>
+            <if test="editor != null "> and editor = #{editor}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="wordNumber != null "> and word_number = #{wordNumber}</if>
+            <if test="readingTime != null "> and reading_time = #{readingTime}</if>
+            <if test="commentable != null "> and commentable = #{commentable}</if>
+            <if test="createUserId != null "> and create_user_id = #{createUserId}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+            <if test="deleteUserId != null "> and delete_user_id = #{deleteUserId}</if>
+            <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
+            <if test="updateUserId != null "> and update_user_id = #{updateUserId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBlogArticleById" parameterType="Long" resultMap="BlogArticleResult">
+        <include refid="selectBlogArticleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBlogArticle" parameterType="BlogArticle" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classifyId != null">classify_id,</if>
+            <if test="channelId != null and channelId != ''">channel_id,</if>
+            <if test="title != null">title,</if>
+            <if test="keywords != null">keywords,</if>
+            <if test="source != null">source,</if>
+            <if test="excerpt != null">excerpt,</if>
+            <if test="content != null">content,</if>
+            <if test="viewHits != null">view_hits,</if>
+            <if test="commentQuantity != null">comment_quantity,</if>
+            <if test="likesQuantity != null">likes_quantity,</if>
+            <if test="thumbnail != null">thumbnail,</if>
+            <if test="isAudit != null">is_audit,</if>
+            <if test="recommend != null">recommend,</if>
+            <if test="isStickie != null">is_stickie,</if>
+            <if test="archive != null">archive,</if>
+            <if test="articleType != null">article_type,</if>
+            <if test="editor != null">editor,</if>
+            <if test="status != null">status,</if>
+            <if test="wordNumber != null">word_number,</if>
+            <if test="readingTime != null">reading_time,</if>
+            <if test="commentable != null">commentable,</if>
+            <if test="createUserId != null">create_user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="deleteUserId != null">delete_user_id,</if>
+            <if test="deleteTime != null">delete_time,</if>
+            <if test="updateUserId != null">update_user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classifyId != null">#{classifyId},</if>
+            <if test="channelId != null and channelId != ''">#{channelId},</if>
+            <if test="title != null">#{title},</if>
+            <if test="keywords != null">#{keywords},</if>
+            <if test="source != null">#{source},</if>
+            <if test="excerpt != null">#{excerpt},</if>
+            <if test="content != null">#{content},</if>
+            <if test="viewHits != null">#{viewHits},</if>
+            <if test="commentQuantity != null">#{commentQuantity},</if>
+            <if test="likesQuantity != null">#{likesQuantity},</if>
+            <if test="thumbnail != null">#{thumbnail},</if>
+            <if test="isAudit != null">#{isAudit},</if>
+            <if test="recommend != null">#{recommend},</if>
+            <if test="isStickie != null">#{isStickie},</if>
+            <if test="archive != null">#{archive},</if>
+            <if test="articleType != null">#{articleType},</if>
+            <if test="editor != null">#{editor},</if>
+            <if test="status != null">#{status},</if>
+            <if test="wordNumber != null">#{wordNumber},</if>
+            <if test="readingTime != null">#{readingTime},</if>
+            <if test="commentable != null">#{commentable},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="deleteUserId != null">#{deleteUserId},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="updateUserId != null">#{updateUserId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBlogArticle" parameterType="BlogArticle">
+        update blog_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classifyId != null">classify_id = #{classifyId},</if>
+            <if test="channelId != null and channelId != ''">channel_id = #{channelId},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="keywords != null">keywords = #{keywords},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="excerpt != null">excerpt = #{excerpt},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="viewHits != null">view_hits = #{viewHits},</if>
+            <if test="commentQuantity != null">comment_quantity = #{commentQuantity},</if>
+            <if test="likesQuantity != null">likes_quantity = #{likesQuantity},</if>
+            <if test="thumbnail != null">thumbnail = #{thumbnail},</if>
+            <if test="isAudit != null">is_audit = #{isAudit},</if>
+            <if test="recommend != null">recommend = #{recommend},</if>
+            <if test="isStickie != null">is_stickie = #{isStickie},</if>
+            <if test="archive != null">archive = #{archive},</if>
+            <if test="articleType != null">article_type = #{articleType},</if>
+            <if test="editor != null">editor = #{editor},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="wordNumber != null">word_number = #{wordNumber},</if>
+            <if test="readingTime != null">reading_time = #{readingTime},</if>
+            <if test="commentable != null">commentable = #{commentable},</if>
+            <if test="createUserId != null">create_user_id = #{createUserId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="deleteUserId != null">delete_user_id = #{deleteUserId},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="updateUserId != null">update_user_id = #{updateUserId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBlogArticleById" parameterType="Long">
+        delete from blog_article where id = #{id}
+    </delete>
+
+    <delete id="deleteBlogArticleByIds" parameterType="String">
+        delete from blog_article where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

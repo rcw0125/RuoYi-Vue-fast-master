@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.SysCarInfoMapper">
+
+    <resultMap type="SysCarInfo" id="SysCarInfoResult">
+        <result property="id"    column="id"    />
+        <result property="carno"    column="carno"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="cartype"    column="carType"    />
+        <result property="dept"    column="dept"    />
+        <result property="begintime"    column="begintime"    />
+        <result property="endtime"    column="endtime"    />
+        <result property="totaltime"    column="totaltime"    />
+        <result property="zuoyeliang"    column="zuoyeliang"    />
+        <result property="feiyong"    column="feiyong"    />
+        <result property="didian"    column="didian"    />
+        <result property="shiyou"    column="shiyou"    />
+        <result property="note"    column="note"    />
+        <result property="shoufeifangshi"    column="shoufeifangshi"    />
+        <result property="danjia"    column="danjia"    />
+        <result property="beizhu"    column="beizhu"    />
+        <result property="yongcheren"    column="yongcheren"    />
+        <result property="logren"    column="logren"    />
+        <result property="timespan"    column="timespan"    />
+    </resultMap>
+
+    <sql id="selectSysCarInfoVo">
+        select id, carno, logtime, carType, dept, begintime, endtime, totaltime, zuoyeliang, feiyong, didian, shiyou, note, shoufeifangshi, danjia, beizhu, yongcheren, logren, timespan from sys_car_info
+    </sql>
+
+    <select id="selectSysCarInfoList" parameterType="SysCarInfo" resultMap="SysCarInfoResult">
+        <include refid="selectSysCarInfoVo"/>
+        <where>
+            <if test="carno != null  and carno != ''"> and carno = #{carno}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="cartype != null  and cartype != ''"> and carType = #{cartype}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="logren != null  and logren != ''"> and logren = #{logren}</if>
+            <if test="timespan != null  and timespan != ''"> and timespan = #{timespan}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND logtime &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND logtime &lt;=  #{params.endTime}
+            </if>
+
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectSysCarInfoById" parameterType="Long" resultMap="SysCarInfoResult">
+        <include refid="selectSysCarInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysCarInfo" parameterType="SysCarInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_car_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carno != null and carno != ''">carno,</if>
+            <if test="logtime != null and logtime != ''">logtime,</if>
+            <if test="cartype != null and cartype != ''">carType,</if>
+            <if test="dept != null and dept != ''">dept,</if>
+            <if test="begintime != null and begintime != ''">begintime,</if>
+            <if test="endtime != null and endtime != ''">endtime,</if>
+            <if test="totaltime != null">totaltime,</if>
+            <if test="zuoyeliang != null">zuoyeliang,</if>
+            <if test="feiyong != null">feiyong,</if>
+            <if test="didian != null and didian != ''">didian,</if>
+            <if test="shiyou != null and shiyou != ''">shiyou,</if>
+            <if test="note != null">note,</if>
+            <if test="shoufeifangshi != null and shoufeifangshi != ''">shoufeifangshi,</if>
+            <if test="danjia != null">danjia,</if>
+            <if test="beizhu != null and beizhu != ''">beizhu,</if>
+            <if test="yongcheren != null and yongcheren != ''">yongcheren,</if>
+            <if test="logren != null">logren,</if>
+            <if test="timespan != null">timespan,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carno != null and carno != ''">#{carno},</if>
+            <if test="logtime != null and logtime != ''">#{logtime},</if>
+            <if test="cartype != null and cartype != ''">#{cartype},</if>
+            <if test="dept != null and dept != ''">#{dept},</if>
+            <if test="begintime != null and begintime != ''">#{begintime},</if>
+            <if test="endtime != null and endtime != ''">#{endtime},</if>
+            <if test="totaltime != null">#{totaltime},</if>
+            <if test="zuoyeliang != null">#{zuoyeliang},</if>
+            <if test="feiyong != null">#{feiyong},</if>
+            <if test="didian != null and didian != ''">#{didian},</if>
+            <if test="shiyou != null and shiyou != ''">#{shiyou},</if>
+            <if test="note != null">#{note},</if>
+            <if test="shoufeifangshi != null and shoufeifangshi != ''">#{shoufeifangshi},</if>
+            <if test="danjia != null">#{danjia},</if>
+            <if test="beizhu != null and beizhu != ''">#{beizhu},</if>
+            <if test="yongcheren != null and yongcheren != ''">#{yongcheren},</if>
+            <if test="logren != null">#{logren},</if>
+            <if test="timespan != null">#{timespan},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysCarInfo" parameterType="SysCarInfo">
+        update sys_car_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carno != null and carno != ''">carno = #{carno},</if>
+            <if test="logtime != null and logtime != ''">logtime = #{logtime},</if>
+            <if test="cartype != null and cartype != ''">carType = #{cartype},</if>
+            <if test="dept != null and dept != ''">dept = #{dept},</if>
+            <if test="begintime != null and begintime != ''">begintime = #{begintime},</if>
+            <if test="endtime != null and endtime != ''">endtime = #{endtime},</if>
+            <if test="totaltime != null">totaltime = #{totaltime},</if>
+            <if test="zuoyeliang != null">zuoyeliang = #{zuoyeliang},</if>
+            <if test="feiyong != null">feiyong = #{feiyong},</if>
+            <if test="didian != null and didian != ''">didian = #{didian},</if>
+            <if test="shiyou != null and shiyou != ''">shiyou = #{shiyou},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="shoufeifangshi != null and shoufeifangshi != ''">shoufeifangshi = #{shoufeifangshi},</if>
+            <if test="danjia != null">danjia = #{danjia},</if>
+            <if test="beizhu != null and beizhu != ''">beizhu = #{beizhu},</if>
+            <if test="yongcheren != null and yongcheren != ''">yongcheren = #{yongcheren},</if>
+            <if test="logren != null">logren = #{logren},</if>
+            <if test="timespan != null">timespan = #{timespan},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysCarInfoById" parameterType="Long">
+        delete from sys_car_info where id = #{id}
+    </delete>
+
+    <delete id="deleteSysCarInfoByIds" parameterType="String">
+        delete from sys_car_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

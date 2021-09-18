@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.L1opcTagMapper">
+    
+    <resultMap type="L1opcTag" id="L1opcTagResult">
+        <result property="id"    column="id"    />
+        <result property="xuhao"    column="xuhao"    />
+        <result property="name"    column="name"    />
+        <result property="l1name"    column="L1name"    />
+        <result property="scanrate"    column="scanrate"    />
+        <result property="datatype"    column="datatype"    />
+        <result property="action"    column="action"    />
+        <result property="used"    column="used"    />
+        <result property="type"    column="type"    />
+        <result property="ts"    column="ts"    />
+    </resultMap>
+
+    <sql id="selectL1opcTagVo">
+        select id, xuhao, name, L1name, scanrate, datatype, action, used, type, ts from l1opc_tag
+    </sql>
+
+    <select id="selectL1opcTagList" parameterType="L1opcTag" resultMap="L1opcTagResult">
+        <include refid="selectL1opcTagVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="used != null "> and used = #{used}</if>
+        </where>
+    </select>
+    
+    <select id="selectL1opcTagById" parameterType="Long" resultMap="L1opcTagResult">
+        <include refid="selectL1opcTagVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertL1opcTag" parameterType="L1opcTag" useGeneratedKeys="true" keyProperty="id">
+        insert into l1opc_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xuhao != null">xuhao,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="l1name != null and l1name != ''">L1name,</if>
+            <if test="scanrate != null">scanrate,</if>
+            <if test="datatype != null">datatype,</if>
+            <if test="action != null">action,</if>
+            <if test="used != null">used,</if>
+            <if test="type != null">type,</if>
+            <if test="ts != null">ts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xuhao != null">#{xuhao},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="l1name != null and l1name != ''">#{l1name},</if>
+            <if test="scanrate != null">#{scanrate},</if>
+            <if test="datatype != null">#{datatype},</if>
+            <if test="action != null">#{action},</if>
+            <if test="used != null">#{used},</if>
+            <if test="type != null">#{type},</if>
+            <if test="ts != null">#{ts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateL1opcTag" parameterType="L1opcTag">
+        update l1opc_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xuhao != null">xuhao = #{xuhao},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="l1name != null and l1name != ''">L1name = #{l1name},</if>
+            <if test="scanrate != null">scanrate = #{scanrate},</if>
+            <if test="datatype != null">datatype = #{datatype},</if>
+            <if test="action != null">action = #{action},</if>
+            <if test="used != null">used = #{used},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="ts != null">ts = #{ts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteL1opcTagById" parameterType="Long">
+        delete from l1opc_tag where id = #{id}
+    </delete>
+
+    <delete id="deleteL1opcTagByIds" parameterType="String">
+        delete from l1opc_tag where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

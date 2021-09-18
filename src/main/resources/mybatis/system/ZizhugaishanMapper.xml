@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.ZizhugaishanMapper">
+
+    <resultMap type="Zizhugaishan" id="ZizhugaishanResult">
+        <result property="id"    column="id"    />
+        <result property="xmcode"    column="xmcode"    />
+        <result property="xmgsd"    column="xmgsd"    />
+        <result property="xmfl"    column="xmfl"    />
+        <result property="tctime"    column="tctime"    />
+        <result property="tcrcode"    column="tcrcode"    />
+        <result property="tcr"    column="tcr"    />
+        <result property="tcrdw"    column="tcrdw"    />
+        <result property="wctime"    column="wctime"    />
+        <result property="shtime"    column="shtime"    />
+        <result property="cjsh"    column="cjsh"    />
+        <result property="pjtime"    column="pjtime"    />
+        <result property="pjr"    column="pjr"    />
+        <result property="photoBefore"    column="photo_before"    />
+        <result property="photoAfter"    column="photo_after"    />
+        <result property="commentAfter"    column="comment_after"    />
+        <result property="commentProcess"    column="comment_process"    />
+        <result property="commentBefore"    column="comment_before"    />
+        <result property="gsrname1"    column="gsrname1"    />
+        <result property="gsrname2"    column="gsrname2"    />
+        <result property="shuxing"    column="shuxing"    />
+        <result property="status"    column="status"    />
+        <result property="reason"    column="reason"    />
+        <result property="ksreason"    column="ksreason"    />
+        <result property="shks"    column="shks"    />
+        <result property="jybfj"    column="jybfj"    />
+    </resultMap>
+
+    <sql id="selectZizhugaishanVo">
+        select id, xmcode, xmgsd, xmfl, tctime, tcrcode, tcr, tcrdw, wctime, shtime, cjsh, pjtime, pjr, photo_before, photo_after, comment_after, comment_process, comment_before, gsrname1, gsrname2, shuxing,status, reason,ksreason, shks, jybfj from zizhugaishan
+    </sql>
+
+    <select id="selectZizhugaishanList" parameterType="Zizhugaishan" resultMap="ZizhugaishanResult">
+        <include refid="selectZizhugaishanVo"/>
+        <where>
+            <if test="xmfl != null  and xmfl != ''"> and xmfl = #{xmfl}</if>
+            <if test="tctime != null  and tctime != ''"> and tctime = #{tctime}</if>
+            <if test="tcr != null  and tcr != ''"> and tcr like concat('%', #{tcr}, '%')</if>
+            <if test="tcrdw != null  and tcrdw != ''"> and tcrdw = #{tcrdw}</if>
+            <if test="shuxing != null  and shuxing != ''"> and shuxing = #{shuxing}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="shks != null  and shks != ''"> and shks = #{shks}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND tctime &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND tctime &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectZizhugaishanById" parameterType="Integer" resultMap="ZizhugaishanResult">
+        <include refid="selectZizhugaishanVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertZizhugaishan" parameterType="Zizhugaishan" useGeneratedKeys="true" keyProperty="id">
+        insert into zizhugaishan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xmcode != null and xmcode != ''">xmcode,</if>
+            <if test="xmgsd != null and xmgsd != ''">xmgsd,</if>
+            <if test="xmfl != null and xmfl != ''">xmfl,</if>
+            <if test="tctime != null and tctime != ''">tctime,</if>
+            <if test="tcrcode != null and tcrcode != ''">tcrcode,</if>
+            <if test="tcr != null and tcr != ''">tcr,</if>
+            <if test="tcrdw != null and tcrdw != ''">tcrdw,</if>
+            <if test="wctime != null and wctime != ''">wctime,</if>
+            <if test="photoBefore != null and photoBefore != ''">photo_before,</if>
+            <if test="photoAfter != null and photoAfter != ''">photo_after,</if>
+            <if test="commentAfter != null and commentAfter != ''">comment_after,</if>
+            <if test="commentProcess != null and commentProcess != ''">comment_process,</if>
+            <if test="commentBefore != null and commentBefore != ''">comment_before,</if>
+            <if test="gsrname1 != null and gsrname1 != ''">gsrname1,</if>
+            <if test="gsrname2 != null and gsrname2 != ''">gsrname2,</if>
+            <if test="shuxing != null and shuxing != ''">shuxing,</if>
+            <if test="status != null and status != ''">status,</if>
+
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xmcode != null and xmcode != ''">#{xmcode},</if>
+            <if test="xmgsd != null and xmgsd != ''">#{xmgsd},</if>
+            <if test="xmfl != null and xmfl != ''">#{xmfl},</if>
+            <if test="tctime != null and tctime != ''">#{tctime},</if>
+            <if test="tcrcode != null and tcrcode != ''">#{tcrcode},</if>
+            <if test="tcr != null and tcr != ''">#{tcr},</if>
+            <if test="tcrdw != null and tcrdw != ''">#{tcrdw},</if>
+            <if test="wctime != null and wctime != ''">#{wctime},</if>
+            <if test="photoBefore != null and photoBefore != ''">#{photoBefore},</if>
+            <if test="photoAfter != null and photoAfter != ''">#{photoAfter},</if>
+            <if test="commentAfter != null and commentAfter != ''">#{commentAfter},</if>
+            <if test="commentProcess != null and commentProcess != ''">#{commentProcess},</if>
+            <if test="commentBefore != null and commentBefore != ''">#{commentBefore},</if>
+            <if test="gsrname1 != null and gsrname1 != ''">#{gsrname1},</if>
+            <if test="gsrname2 != null and gsrname2 != ''">#{gsrname2},</if>
+            <if test="shuxing != null and shuxing != ''">#{shuxing},</if>
+            <if test="status != null and status != ''">#{status},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateZizhugaishan" parameterType="Zizhugaishan">
+        update zizhugaishan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xmcode != null and xmcode != ''">xmcode = #{xmcode},</if>
+            <if test="xmgsd != null and xmgsd != ''">xmgsd = #{xmgsd},</if>
+            <if test="xmfl != null and xmfl != ''">xmfl = #{xmfl},</if>
+            <if test="tctime != null and tctime != ''">tctime = #{tctime},</if>
+            <if test="tcrcode != null and tcrcode != ''">tcrcode = #{tcrcode},</if>
+            <if test="tcr != null and tcr != ''">tcr = #{tcr},</if>
+            <if test="tcrdw != null and tcrdw != ''">tcrdw = #{tcrdw},</if>
+            <if test="wctime != null and wctime != ''">wctime = #{wctime},</if>
+            <if test="shtime != null and shtime != ''">shtime = #{shtime},</if>
+            <if test="cjsh != null and cjsh != ''">cjsh = #{cjsh},</if>
+            <if test="pjtime != null and pjtime != ''">pjtime = #{pjtime},</if>
+            <if test="pjr != null and pjr != ''">pjr = #{pjr},</if>
+            <if test="photoBefore != null and photoBefore != ''">photo_before = #{photoBefore},</if>
+            <if test="photoAfter != null and photoAfter != ''">photo_after = #{photoAfter},</if>
+            <if test="commentAfter != null and commentAfter != ''">comment_after = #{commentAfter},</if>
+            <if test="commentProcess != null and commentProcess != ''">comment_process = #{commentProcess},</if>
+            <if test="commentBefore != null and commentBefore != ''">comment_before = #{commentBefore},</if>
+            <if test="gsrname1 != null  and gsrname1 != ''">gsrname1 = #{gsrname1},</if>
+            <if test="gsrname2 != null  and gsrname2 != ''">gsrname2 = #{gsrname2},</if>
+            <if test="shuxing != null and shuxing != ''">shuxing = #{shuxing},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="reason != null  and reason != ''">reason = #{reason},</if>
+            <if test="ksreason != null">ksreason = #{ksreason},</if>
+            <if test="shks != null and shks != ''">shks = #{shks},</if>
+            <if test="jybfj != null  and jybfj != ''">jybfj = #{jybfj},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZizhugaishanById" parameterType="Integer">
+        delete from zizhugaishan where id = #{id}
+    </delete>
+
+    <delete id="deleteZizhugaishanByIds" parameterType="String">
+        delete from zizhugaishan where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

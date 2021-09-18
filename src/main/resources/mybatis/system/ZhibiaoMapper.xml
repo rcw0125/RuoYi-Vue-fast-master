@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.ZhibiaoMapper">
+
+    <resultMap type="Zhibiao" id="ZhibiaoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="dept"    column="dept"    />
+        <result property="planval"    column="planval"    />
+        <result property="val"    column="val"    />
+        <result property="reason"    column="reason"    />
+        <result property="cuoshi"    column="cuoshi"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="logperson"    column="logperson"    />
+        <result property="updateperson"    column="updateperson"    />
+    </resultMap>
+
+    <sql id="selectZhibiaoVo">
+        select id, name, dept, planval, val, reason, cuoshi, logtime, logperson, updateperson from zhibiao
+    </sql>
+
+    <select id="selectZhibiaoList" parameterType="Zhibiao" resultMap="ZhibiaoResult">
+        <include refid="selectZhibiaoVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="logperson != null  and logperson != ''"> and logperson = #{logperson}</if>
+            <if test="updateperson != null  and updateperson != ''"> and updateperson = #{updateperson}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND logtime &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND logtime &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by logtime
+    </select>
+
+    <select id="selectZhibiaoById" parameterType="Long" resultMap="ZhibiaoResult">
+        <include refid="selectZhibiaoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertZhibiao" parameterType="Zhibiao" useGeneratedKeys="true" keyProperty="id">
+        insert into zhibiao
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="dept != null and dept != ''">dept,</if>
+            <if test="planval != null">planval,</if>
+            <if test="val != null">val,</if>
+            <if test="reason != null and reason != ''">reason,</if>
+            <if test="cuoshi != null and cuoshi != ''">cuoshi,</if>
+            <if test="logtime != null and logtime != ''">logtime,</if>
+            <if test="logperson != null">logperson,</if>
+            <if test="updateperson != null">updateperson,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="dept != null and dept != ''">#{dept},</if>
+            <if test="planval != null">#{planval},</if>
+            <if test="val != null">#{val},</if>
+            <if test="reason != null and reason != ''">#{reason},</if>
+            <if test="cuoshi != null and cuoshi != ''">#{cuoshi},</if>
+            <if test="logtime != null and logtime != ''">#{logtime},</if>
+            <if test="logperson != null">#{logperson},</if>
+            <if test="updateperson != null">#{updateperson},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhibiao" parameterType="Zhibiao">
+        update zhibiao
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="dept != null and dept != ''">dept = #{dept},</if>
+            <if test="planval != null">planval = #{planval},</if>
+            <if test="val != null">val = #{val},</if>
+            <if test="reason != null and reason != ''">reason = #{reason},</if>
+            <if test="cuoshi != null and cuoshi != ''">cuoshi = #{cuoshi},</if>
+            <if test="logtime != null and logtime != ''">logtime = #{logtime},</if>
+            <if test="logperson != null">logperson = #{logperson},</if>
+            <if test="updateperson != null">updateperson = #{updateperson},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhibiaoById" parameterType="Long">
+        delete from zhibiao where id = #{id}
+    </delete>
+
+    <delete id="deleteZhibiaoByIds" parameterType="String">
+        delete from zhibiao where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
