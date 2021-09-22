@@ -44,6 +44,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach collection="equips" item="item" index="index"
                  separator=" " open="case id" close="end">
             when #{item.id} then #{item.ancestors}
+        </foreach>,name=
+        <foreach collection="equips" item="item" index="index"
+                 separator=" " open="case id" close="end">
+            when #{item.id} then #{item.name}
         </foreach>
         where id in
         <foreach collection="equips" item="item" index="index"

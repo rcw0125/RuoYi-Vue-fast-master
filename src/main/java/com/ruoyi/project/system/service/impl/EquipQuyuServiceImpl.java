@@ -58,6 +58,13 @@ public class EquipQuyuServiceImpl implements IEquipQuyuService
         EquipQuyu  info=equipQuyuMapper.selectEquipQuyuById(equipQuyu.getParentId());
         /** 将关联字段设置为   父项目的关联字段+ 当前的项目的父id**/
         equipQuyu.setAncestors(info.getAncestors() + "," + equipQuyu.getParentId());
+        /** 根目录 设备名称为本身的设备部件名称，子目录为父设备名称+本身的部件名称*/
+        if(equipQuyu.getParentId()==0){
+            equipQuyu.setName(equipQuyu.getNote());
+        }
+        else {
+            equipQuyu.setName(info.getName()+"-"+equipQuyu.getNote());
+        }
         equipQuyu.setCreateTime(DateUtils.getNowDate());
         return equipQuyuMapper.insertEquipQuyu(equipQuyu);
     }
@@ -80,8 +87,22 @@ public class EquipQuyuServiceImpl implements IEquipQuyuService
             String oldAncestors = oldQuyu.getAncestors();
             /** 设置当前项目的关联字段**/
             equipQuyu.setAncestors(newAncestors);
-            updateQuyuChildren(equipQuyu.getId(), newAncestors, oldAncestors);
+
+            /** 新设备名称**/
+            String newName = newParentQuyu.getName() + "-" + equipQuyu.getNote();
+            String oldName = oldQuyu.getName();
+            equipQuyu.setName(newName);
+            updateQuyuChildren(equipQuyu.getId(), newAncestors, oldAncestors,newName,oldName);
         }
+
+        if (StringUtils.isNull(newParentQuyu) && StringUtils.isNotNull(oldQuyu)) {
+            /** 新设备名称**/
+            String newName = equipQuyu.getNote();
+            String oldName = oldQuyu.getName();
+            equipQuyu.setName(newName);
+            updateQuyuChildren(equipQuyu.getId(), "", "",newName,oldName);
+        }
+
         equipQuyu.setUpdateTime(DateUtils.getNowDate());
         return equipQuyuMapper.updateEquipQuyu(equipQuyu);
     }
@@ -93,12 +114,15 @@ public class EquipQuyuServiceImpl implements IEquipQuyuService
      * @param newAncestors 新的父ID集合
      * @param oldAncestors 旧的父ID集合
      */
-    public void updateQuyuChildren(Long Id, String newAncestors, String oldAncestors)
+    public void updateQuyuChildren(Long Id, String newAncestors, String oldAncestors,String newName, String oldName)
     {
         List<EquipQuyu> children = equipQuyuMapper.selectChildrenQuyuById(Id);
         for (EquipQuyu child : children)
         {
-            child.setAncestors(child.getAncestors().replace(oldAncestors, newAncestors));
+            if(StringUtils.isNotEmpty(newAncestors)||StringUtils.isNotEmpty(oldAncestors)){
+                child.setAncestors(child.getAncestors().replace(oldAncestors, newAncestors));
+            }
+            child.setName(child.getName().replace(oldName, newName));
         }
         if (children.size() > 0)
         {

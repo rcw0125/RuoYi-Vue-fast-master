@@ -7,7 +7,7 @@ import com.ruoyi.framework.web.domain.TreeEntity;
 
 /**
  * 设备区域对象 equip_quyu
- * 
+ *
  * @author ruoyi
  * @date 2021-06-29
  */
@@ -18,12 +18,12 @@ public class EquipQuyu extends TreeEntity
     /** 设备区域id */
     private Long id;
 
-    /** 区域名称 */
-    @Excel(name = "区域名称")
+    /** 设备名称 */
+    @Excel(name = "设备名称")
     private String name;
 
-    /** 描述 */
-    @Excel(name = "描述")
+    /** 部件 */
+    @Excel(name = "部件")
     private String note;
 
     /** 状态（0正常 1停用） */
@@ -33,48 +33,48 @@ public class EquipQuyu extends TreeEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setName(String name) 
+    public void setName(String name)
     {
         this.name = name;
     }
 
-    public String getName() 
+    public String getName()
     {
         return name;
     }
-    public void setNote(String note) 
+    public void setNote(String note)
     {
         this.note = note;
     }
 
-    public String getNote() 
+    public String getNote()
     {
         return note;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setDelFlag(String delFlag) 
+    public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
     }
 
-    public String getDelFlag() 
+    public String getDelFlag()
     {
         return delFlag;
     }
