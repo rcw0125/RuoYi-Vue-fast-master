@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipGuzhangMapper">
+
+    <resultMap type="EquipGuzhang" id="EquipGuzhangResult">
+        <result property="id"    column="id"    />
+        <result property="sbid"    column="sbid"    />
+        <result property="sbname"    column="sbname"    />
+        <result property="djdept"    column="djdept"    />
+        <result property="djr"    column="djr"    />
+        <result property="djsk"    column="djsk"    />
+        <result property="djcontent"    column="djcontent"    />
+        <result property="djwxdept"    column="djwxdept"    />
+        <result property="djrphone"    column="djrphone"    />
+        <result property="jsr"    column="jsr"    />
+        <result property="jscontent"    column="jscontent"    />
+        <result property="jsclsj"    column="jsclsj"    />
+        <result property="jsclfl"    column="jsclfl"    />
+        <result property="jssk"    column="jssk"    />
+        <result property="jsys"    column="jsys"    />
+        <result property="clr"    column="clr"    />
+        <result property="clcontent"    column="clcontent"    />
+        <result property="clgzfenlei"    column="clgzfenlei"    />
+        <result property="clsk"    column="clsk"    />
+        <result property="clys"    column="clys"    />
+        <result property="clrphone"    column="clrphone"    />
+        <result property="yzr"    column="yzr"    />
+        <result property="yzresult"    column="yzresult"    />
+        <result property="yzcontent"    column="yzcontent"    />
+        <result property="yzsk"    column="yzsk"    />
+        <result property="yzys"    column="yzys"    />
+        <result property="totalys"    column="totalys"    />
+        <result property="flag"    column="flag"    />
+        <result property="status"    column="status"    />
+        <result property="locked"    column="locked"    />
+    </resultMap>
+
+    <sql id="selectEquipGuzhangVo">
+        select id, sbid, sbname, djdept, djr, djsk, djcontent, djwxdept, djrphone, jsr, jscontent, jsclsj, jsclfl, jssk, jsys, clr, clcontent, clgzfenlei, clsk, clys, clrphone, yzr, yzresult, yzcontent, yzsk, yzys, totalys, flag, status, locked from equip_guzhang
+    </sql>
+
+    <select id="selectEquipGuzhangList" parameterType="EquipGuzhang" resultMap="EquipGuzhangResult">
+        <include refid="selectEquipGuzhangVo"/>
+        <where>
+            <if test="sbid != null "> and (sbid = #{sbid} OR sbid  IN ( SELECT t.id FROM equip_quyu t WHERE find_in_set(#{sbid }, ancestors) ))</if>
+            <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
+            <if test="djdept != null  and djdept != ''"> and djdept = #{djdept}</if>
+            <if test="djr != null  and djr != ''"> and djr = #{djr}</if>
+            <if test="djsk != null  and djsk != ''"> and djsk like concat('%', #{djsk}, '%')</if>
+            <if test="djcontent != null  and djcontent != ''"> and djcontent = #{djcontent}</if>
+            <if test="djwxdept != null  and djwxdept != ''"> and djwxdept = #{djwxdept}</if>
+            <if test="djrphone != null  and djrphone != ''"> and djrphone = #{djrphone}</if>
+            <if test="jsr != null  and jsr != ''"> and jsr = #{jsr}</if>
+            <if test="jscontent != null  and jscontent != ''"> and jscontent = #{jscontent}</if>
+            <if test="jsclsj != null "> and jsclsj = #{jsclsj}</if>
+            <if test="jsclfl != null  and jsclfl != ''"> and jsclfl = #{jsclfl}</if>
+            <if test="jssk != null  and jssk != ''"> and jssk = #{jssk}</if>
+            <if test="jsys != null "> and jsys = #{jsys}</if>
+            <if test="clr != null  and clr != ''"> and clr = #{clr}</if>
+            <if test="clcontent != null  and clcontent != ''"> and clcontent = #{clcontent}</if>
+            <if test="clgzfenlei != null  and clgzfenlei != ''"> and clgzfenlei = #{clgzfenlei}</if>
+            <if test="clsk != null  and clsk != ''"> and clsk = #{clsk}</if>
+            <if test="clys != null "> and clys = #{clys}</if>
+            <if test="clrphone != null  and clrphone != ''"> and clrphone = #{clrphone}</if>
+            <if test="yzr != null  and yzr != ''"> and yzr = #{yzr}</if>
+            <if test="yzresult != null  and yzresult != ''"> and yzresult = #{yzresult}</if>
+            <if test="yzcontent != null  and yzcontent != ''"> and yzcontent = #{yzcontent}</if>
+            <if test="yzsk != null  and yzsk != ''"> and yzsk = #{yzsk}</if>
+            <if test="yzys != null "> and yzys = #{yzys}</if>
+            <if test="totalys != null "> and totalys = #{totalys}</if>
+            <if test="flag != null "> and flag = #{flag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="locked != null "> and locked = #{locked}</if>
+        </where>
+    </select>
+
+    <select id="selectEquipGuzhangById" parameterType="Long" resultMap="EquipGuzhangResult">
+        <include refid="selectEquipGuzhangVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEquipGuzhang" parameterType="EquipGuzhang" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_guzhang
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">sbid,</if>
+            <if test="sbname != null and sbname != ''">sbname,</if>
+            <if test="djdept != null and djdept != ''">djdept,</if>
+            <if test="djr != null and djr != ''">djr,</if>
+            <if test="djsk != null and djsk != ''">djsk,</if>
+            <if test="djcontent != null and djcontent != ''">djcontent,</if>
+            <if test="djwxdept != null and djwxdept != ''">djwxdept,</if>
+            <if test="djrphone != null and djrphone != ''">djrphone,</if>
+            <if test="jsr != null and jsr != ''">jsr,</if>
+            <if test="jscontent != null and jscontent != ''">jscontent,</if>
+            <if test="jsclsj != null">jsclsj,</if>
+            <if test="jsclfl != null and jsclfl != ''">jsclfl,</if>
+            <if test="jssk != null and jssk != ''">jssk,</if>
+            <if test="jsys != null">jsys,</if>
+            <if test="clr != null and clr != ''">clr,</if>
+            <if test="clcontent != null and clcontent != ''">clcontent,</if>
+            <if test="clgzfenlei != null and clgzfenlei != ''">clgzfenlei,</if>
+            <if test="clsk != null and clsk != ''">clsk,</if>
+            <if test="clys != null">clys,</if>
+            <if test="clrphone != null and clrphone != ''">clrphone,</if>
+            <if test="yzr != null and yzr != ''">yzr,</if>
+            <if test="yzresult != null and yzresult != ''">yzresult,</if>
+            <if test="yzcontent != null and yzcontent != ''">yzcontent,</if>
+            <if test="yzsk != null and yzsk != ''">yzsk,</if>
+            <if test="yzys != null">yzys,</if>
+            <if test="totalys != null">totalys,</if>
+            <if test="flag != null">flag,</if>
+            <if test="status != null">status,</if>
+            <if test="locked != null">locked,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">#{sbid},</if>
+            <if test="sbname != null and sbname != ''">#{sbname},</if>
+            <if test="djdept != null and djdept != ''">#{djdept},</if>
+            <if test="djr != null and djr != ''">#{djr},</if>
+            <if test="djsk != null and djsk != ''">#{djsk},</if>
+            <if test="djcontent != null and djcontent != ''">#{djcontent},</if>
+            <if test="djwxdept != null and djwxdept != ''">#{djwxdept},</if>
+            <if test="djrphone != null and djrphone != ''">#{djrphone},</if>
+            <if test="jsr != null and jsr != ''">#{jsr},</if>
+            <if test="jscontent != null and jscontent != ''">#{jscontent},</if>
+            <if test="jsclsj != null">#{jsclsj},</if>
+            <if test="jsclfl != null and jsclfl != ''">#{jsclfl},</if>
+            <if test="jssk != null and jssk != ''">#{jssk},</if>
+            <if test="jsys != null">#{jsys},</if>
+            <if test="clr != null and clr != ''">#{clr},</if>
+            <if test="clcontent != null and clcontent != ''">#{clcontent},</if>
+            <if test="clgzfenlei != null and clgzfenlei != ''">#{clgzfenlei},</if>
+            <if test="clsk != null and clsk != ''">#{clsk},</if>
+            <if test="clys != null">#{clys},</if>
+            <if test="clrphone != null and clrphone != ''">#{clrphone},</if>
+            <if test="yzr != null and yzr != ''">#{yzr},</if>
+            <if test="yzresult != null and yzresult != ''">#{yzresult},</if>
+            <if test="yzcontent != null and yzcontent != ''">#{yzcontent},</if>
+            <if test="yzsk != null and yzsk != ''">#{yzsk},</if>
+            <if test="yzys != null">#{yzys},</if>
+            <if test="totalys != null">#{totalys},</if>
+            <if test="flag != null">#{flag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="locked != null">#{locked},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEquipGuzhang" parameterType="EquipGuzhang">
+        update equip_guzhang
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sbid != null">sbid = #{sbid},</if>
+            <if test="sbname != null and sbname != ''">sbname = #{sbname},</if>
+            <if test="djdept != null and djdept != ''">djdept = #{djdept},</if>
+            <if test="djr != null and djr != ''">djr = #{djr},</if>
+            <if test="djsk != null and djsk != ''">djsk = #{djsk},</if>
+            <if test="djcontent != null and djcontent != ''">djcontent = #{djcontent},</if>
+            <if test="djwxdept != null and djwxdept != ''">djwxdept = #{djwxdept},</if>
+            <if test="djrphone != null and djrphone != ''">djrphone = #{djrphone},</if>
+            <if test="jsr != null and jsr != ''">jsr = #{jsr},</if>
+            <if test="jscontent != null and jscontent != ''">jscontent = #{jscontent},</if>
+            <if test="jsclsj != null">jsclsj = #{jsclsj},</if>
+            <if test="jsclfl != null and jsclfl != ''">jsclfl = #{jsclfl},</if>
+            <if test="jssk != null and jssk != ''">jssk = #{jssk},</if>
+            <if test="jsys != null">jsys = #{jsys},</if>
+            <if test="clr != null and clr != ''">clr = #{clr},</if>
+            <if test="clcontent != null and clcontent != ''">clcontent = #{clcontent},</if>
+            <if test="clgzfenlei != null and clgzfenlei != ''">clgzfenlei = #{clgzfenlei},</if>
+            <if test="clsk != null and clsk != ''">clsk = #{clsk},</if>
+            <if test="clys != null">clys = #{clys},</if>
+            <if test="clrphone != null and clrphone != ''">clrphone = #{clrphone},</if>
+            <if test="yzr != null and yzr != ''">yzr = #{yzr},</if>
+            <if test="yzresult != null and yzresult != ''">yzresult = #{yzresult},</if>
+            <if test="yzcontent != null and yzcontent != ''">yzcontent = #{yzcontent},</if>
+            <if test="yzsk != null and yzsk != ''">yzsk = #{yzsk},</if>
+            <if test="yzys != null">yzys = #{yzys},</if>
+            <if test="totalys != null">totalys = #{totalys},</if>
+            <if test="flag != null">flag = #{flag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="locked != null">locked = #{locked},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipGuzhangById" parameterType="Long">
+        delete from equip_guzhang where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipGuzhangByIds" parameterType="String">
+        delete from equip_guzhang where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

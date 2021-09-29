@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipDianjianBiaozhunMapper">
+
+    <resultMap type="EquipDianjianBiaozhun" id="EquipDianjianBiaozhunResult">
+        <result property="id"    column="id"    />
+        <result property="sbid"    column="sbid"    />
+        <result property="sbname"    column="sbname"    />
+        <result property="name"    column="name"    />
+        <result property="biaozhun"    column="biaozhun"    />
+        <result property="dept"    column="dept"    />
+        <result property="team"    column="team"    />
+        <result property="leibie"    column="leibie"    />
+        <result property="zhouqi"    column="zhouqi"    />
+        <result property="note"    column="note"    />
+        <result property="zhoucishu"    column="zhoucishu"    />
+    </resultMap>
+
+    <sql id="selectEquipDianjianBiaozhunVo">
+        select id, sbid, sbname, name, biaozhun, dept, team, leibie, zhouqi, note, zhoucishu from equip_dianjian_biaozhun
+    </sql>
+
+    <select id="selectEquipDianjianBiaozhunList" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
+        <include refid="selectEquipDianjianBiaozhunVo"/>
+        <where>
+            <if test="sbid != null ">  and (sbid = #{sbid} OR sbid  IN ( SELECT t.id FROM equip_quyu t WHERE find_in_set(#{sbid }, ancestors) ))</if>
+            <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="biaozhun != null  and biaozhun != ''"> and biaozhun = #{biaozhun}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+            <if test="leibie != null  and leibie != ''"> and leibie = #{leibie}</if>
+            <if test="zhouqi != null  and zhouqi != ''"> and zhouqi = #{zhouqi}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="zhoucishu != null  and zhoucishu != ''"> and zhoucishu = #{zhoucishu}</if>
+        </where>
+    </select>
+
+    <select id="selectEquipDianjianBiaozhunById" parameterType="Long" resultMap="EquipDianjianBiaozhunResult">
+        <include refid="selectEquipDianjianBiaozhunVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEquipDianjianBiaozhun" parameterType="EquipDianjianBiaozhun" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_dianjian_biaozhun
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">sbid,</if>
+            <if test="sbname != null">sbname,</if>
+            <if test="name != null">name,</if>
+            <if test="biaozhun != null and biaozhun != ''">biaozhun,</if>
+            <if test="dept != null">dept,</if>
+            <if test="team != null">team,</if>
+            <if test="leibie != null and leibie != ''">leibie,</if>
+            <if test="zhouqi != null and zhouqi != ''">zhouqi,</if>
+            <if test="note != null">note,</if>
+            <if test="zhoucishu != null">zhoucishu,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">#{sbid},</if>
+            <if test="sbname != null">#{sbname},</if>
+            <if test="name != null">#{name},</if>
+            <if test="biaozhun != null and biaozhun != ''">#{biaozhun},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="team != null">#{team},</if>
+            <if test="leibie != null and leibie != ''">#{leibie},</if>
+            <if test="zhouqi != null and zhouqi != ''">#{zhouqi},</if>
+            <if test="note != null">#{note},</if>
+            <if test="zhoucishu != null">#{zhoucishu},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEquipDianjianBiaozhun" parameterType="EquipDianjianBiaozhun">
+        update equip_dianjian_biaozhun
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sbid != null">sbid = #{sbid},</if>
+            <if test="sbname != null">sbname = #{sbname},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="biaozhun != null and biaozhun != ''">biaozhun = #{biaozhun},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="team != null">team = #{team},</if>
+            <if test="leibie != null and leibie != ''">leibie = #{leibie},</if>
+            <if test="zhouqi != null and zhouqi != ''">zhouqi = #{zhouqi},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="zhoucishu != null">zhoucishu = #{zhoucishu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipDianjianBiaozhunById" parameterType="Long">
+        delete from equip_dianjian_biaozhun where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipDianjianBiaozhunByIds" parameterType="String">
+        delete from equip_dianjian_biaozhun where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
