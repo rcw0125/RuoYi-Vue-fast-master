@@ -33,11 +33,10 @@ public class Kaohe extends BaseEntity
     private String deptname;
 
     /** 绩效扣分 */
-    @Excel(name = "绩效扣分")
+    @Excel(name = "考核金额(元)")
     private BigDecimal jxkf;
 
     /** 安全扣分 */
-    @Excel(name = "安全扣分")
     private BigDecimal aqkf;
 
     /** 班组 */

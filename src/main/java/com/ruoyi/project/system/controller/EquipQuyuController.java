@@ -21,7 +21,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 
 /**
  * 设备区域Controller
- * 
+ *
  * @author ruoyi
  * @date 2021-06-29
  */
@@ -97,5 +97,16 @@ public class EquipQuyuController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(equipQuyuService.deleteEquipQuyuByIds(ids));
+    }
+
+
+    /**
+     * 获取部门下拉树列表
+     */
+    @GetMapping("/treeselect")
+    public AjaxResult treeselect(EquipQuyu dept)
+    {
+        List<EquipQuyu> depts = equipQuyuService.selectEquipQuyuList(dept);
+        return AjaxResult.success(equipQuyuService.buildQuyuTreeSelect(depts));
     }
 }

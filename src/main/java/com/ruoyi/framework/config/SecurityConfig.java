@@ -113,8 +113,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/swagger-resources/**").anonymous()
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
-                /** 新增api 路由，将不需要登陆的查询写在此路径下 2021-09-17**/
-                .antMatchers("/*/*/api/**").anonymous()
+                /** 新增api 路由，将不需要登陆的查询写在此路径下 使用 permitAll() 方法所有人都能访问，包括带上 token 访问  2021-09-17**/
+                .antMatchers("/*/*/api/**").permitAll()
                 .antMatchers("/druid/**").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()

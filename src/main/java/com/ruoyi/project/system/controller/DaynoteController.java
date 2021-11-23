@@ -1,10 +1,13 @@
 package com.ruoyi.project.system.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.system.domain.Daynotecfg;
 import com.ruoyi.project.system.domain.SysPost;
 import com.ruoyi.project.system.domain.SysUser;
@@ -85,9 +88,9 @@ public class DaynoteController extends BaseController
         daynote.setDept(checkUser.getDept().getDeptName());
         daynote.setPost(syspost.getPostName());
         daynote.setStatus("正在录入");
-        if(checkUser.getTeam().equals("白班")){
-            daynote.setName(checkUser.getNickName());
-        }
+//        if(StringUtils.isNotNull(checkUser.getTeam())&& checkUser.getTeam().equals("白班")){
+//            daynote.setName(checkUser.getNickName());
+//        }
 
         startPage();
         List<Daynote> list = daynoteService.selectDaynoteList(daynote);
@@ -140,7 +143,7 @@ public class DaynoteController extends BaseController
         daynotecfg.setCode(syspost.getPostName());
         List<Daynotecfg> listcfg = daynotecfgService.selectDaynotecfgList(daynotecfg);
         if(listcfg==null ||listcfg.size()==0){
-            return AjaxResult.error("系统中，你所在岗位没有工作日志模板，请联系管理员！","错误！");
+            return AjaxResult.error("系统中，你所在岗位没有交接班日志模板，请联系管理员！","错误！");
         }
         /** 根据第一个模板，设置到工作日志**/
         Daynote daynote=new Daynote();
@@ -154,10 +157,29 @@ public class DaynoteController extends BaseController
         return AjaxResult.success(daynote);
     }
 
+
+    @GetMapping(value = "/getLastCfg")
+    public AjaxResult getLastCfg()
+    {
+        /** 获取当前用户的岗位，并根据岗位查询对应的模板信息**/
+        String replyAccount= SecurityUtils.getUsername();
+        SysUser checkUser=userService.selectUserByUserName(replyAccount);
+        Daynote dn=new Daynote ();
+        dn.setName(checkUser.getNickName());
+        List<Daynote> list=daynoteService.selectLastDaynoteList(dn);
+
+        if(list==null ||list.size()==0){
+            return AjaxResult.error("系统中，你没有交接班日志！","错误！");
+        }
+        /** 根据第一个模板，设置到工作日志**/
+        Daynote daynote=new Daynote();
+        daynote.setNote(list.get(0).getNote());
+        return AjaxResult.success(daynote);
+    }
+
     /**
      * 新增工作日志
      */
-    @PreAuthorize("@ss.hasPermi('system:daynote:add')")
     @Log(title = "工作日志", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Daynote daynote)
@@ -170,12 +192,12 @@ public class DaynoteController extends BaseController
         dn.setPost(daynote.getPost());
         dn.setDept(checkUser.getDept().getDeptName());
         dn.setStatus("正在录入");
-        if(checkUser.getTeam().equals("白班")){
+        if(StringUtils.isNotNull(checkUser.getTeam())&& checkUser.getTeam().equals("白班")){
             dn.setName(checkUser.getNickName());
         }
         List<Daynote> list = daynoteService.selectDaynoteList(dn);
         if(list!=null && list.size()>0){
-            return AjaxResult.error("系统中，你所在岗位有工作日志还未交班，请先交班！","错误！");
+            return AjaxResult.error("系统中，你所在岗位有交接班日志还未交班，请先交班！","错误！");
         }
 
         daynote.setName(checkUser.getNickName());
@@ -189,14 +211,45 @@ public class DaynoteController extends BaseController
     @GetMapping("/lockNote/{id}")
     public AjaxResult lockNote(@PathVariable Long id)
     {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");//设置日期格式
+        SimpleDateFormat sdfm = new SimpleDateFormat("mm");//设置日期格式
+        int curHour=Integer.parseInt(sdf.format(new Date()));
+        int curMin=Integer.parseInt(sdfm.format(new Date()));
+        if(curHour<7||curHour>20||(curHour>8&&curHour<19)){
+            return AjaxResult.error("只允许在7：30-8：59，19：30-20:59进行交接班！现在时间为"+curHour+"点"+curMin+"分","错误！");
+        }
+        else if(curHour==7||curHour==19){
+            if(curMin<30){
+                return AjaxResult.error("只允许在7：30-8：59，19：30-20:59进行交接班！现在时间为"+curHour+"点"+curMin+"分","错误！");
+            }
+        }
+        String doneDate= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
         Daynote daynote= daynoteService.selectDaynoteById(id);
+        if(curHour==7||curHour==8){
+
+            if(doneDate.equals(daynote.getLogtime())){
+                return AjaxResult.error("日期不应该是今天，请修改日期后，再进行交班操作","错误！");
+            }
+        }
+        if(curHour==19||curHour==20){
+            Daynote dn=new Daynote();
+            dn.setLogtime(doneDate);
+            dn.setDept(daynote.getDept());
+            dn.setPost(daynote.getPost());
+            List<Daynote> list = daynoteService.selectDaynoteList(dn);
+            if(list.size()>1){
+                return AjaxResult.error("这是今天的第二个日志，请明天早上8点进行交班操作","错误！");
+            }
+        }
         daynote.setStatus("已交班");
         return toAjax(daynoteService.updateDaynote(daynote));
     }
     /**
      * 修改工作日志
      */
-    @PreAuthorize("@ss.hasPermi('system:daynote:edit')")
     @Log(title = "工作日志", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Daynote daynote)

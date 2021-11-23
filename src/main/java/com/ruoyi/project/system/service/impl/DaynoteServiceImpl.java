@@ -10,19 +10,19 @@ import com.ruoyi.project.system.service.IDaynoteService;
 
 /**
  * 工作日志Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2021-06-23
  */
 @Service
-public class DaynoteServiceImpl implements IDaynoteService 
+public class DaynoteServiceImpl implements IDaynoteService
 {
     @Autowired
     private DaynoteMapper daynoteMapper;
 
     /**
      * 查询工作日志
-     * 
+     *
      * @param id 工作日志ID
      * @return 工作日志
      */
@@ -34,7 +34,7 @@ public class DaynoteServiceImpl implements IDaynoteService
 
     /**
      * 查询工作日志列表
-     * 
+     *
      * @param daynote 工作日志
      * @return 工作日志
      */
@@ -44,9 +44,21 @@ public class DaynoteServiceImpl implements IDaynoteService
         return daynoteMapper.selectDaynoteList(daynote);
     }
 
+
+    /**
+     * 查询工作日志列表
+     *
+     * @param daynote 工作日志
+     * @return 工作日志
+     */
+    @Override
+    public List<Daynote> selectLastDaynoteList(Daynote daynote)
+    {
+        return daynoteMapper.selectLastDaynoteList(daynote);
+    }
     /**
      * 新增工作日志
-     * 
+     *
      * @param daynote 工作日志
      * @return 结果
      */
@@ -59,7 +71,7 @@ public class DaynoteServiceImpl implements IDaynoteService
 
     /**
      * 修改工作日志
-     * 
+     *
      * @param daynote 工作日志
      * @return 结果
      */
@@ -72,7 +84,7 @@ public class DaynoteServiceImpl implements IDaynoteService
 
     /**
      * 批量删除工作日志
-     * 
+     *
      * @param ids 需要删除的工作日志ID
      * @return 结果
      */
@@ -84,7 +96,7 @@ public class DaynoteServiceImpl implements IDaynoteService
 
     /**
      * 删除工作日志信息
-     * 
+     *
      * @param id 工作日志ID
      * @return 结果
      */

@@ -1,9 +1,13 @@
 package com.ruoyi.project.system.domain;
 
+import com.ruoyi.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.TreeEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 设备区域对象 equip_quyu
@@ -11,7 +15,7 @@ import com.ruoyi.framework.web.domain.TreeEntity;
  * @author ruoyi
  * @date 2021-06-29
  */
-public class EquipQuyu extends TreeEntity
+public class EquipQuyu extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +36,50 @@ public class EquipQuyu extends TreeEntity
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getAncestors() {
+        return ancestors;
+    }
+
+    public void setAncestors(String ancestors) {
+        this.ancestors = ancestors;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    /** 父部门ID */
+    private Long parentId;
+
+    /** 祖级列表 */
+    private String ancestors;
+    /** 显示顺序 */
+    private String orderNum;
+
+
+    public List<EquipQuyu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<EquipQuyu> children) {
+        this.children = children;
+    }
+
+    /** 子菜单 */
+private List<EquipQuyu> children = new ArrayList<EquipQuyu>();
 
     public void setId(Long id)
     {

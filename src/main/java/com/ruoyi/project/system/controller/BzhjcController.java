@@ -91,6 +91,23 @@ public class BzhjcController extends BaseController
     }
 
     /**
+     * 查询需要整改回复列表--需要车间整改回复
+     */
+    @GetMapping("/getPmdlReplyList")
+    public TableDataInfo getPmdlReplyList(Bzhjc bzhjc)
+    {
+
+        String checkAccount= SecurityUtils.getUsername();
+        SysUser checkUser=userService.selectUserByUserName(checkAccount);
+        bzhjc.setModdept(checkUser.getDept().getDeptName());
+        bzhjc.setStatus("等待处理");
+        bzhjc.setCheckprop("跑冒滴漏");
+        startPage();
+        List<Bzhjc> list = bzhjcService.selectBzhjcList(bzhjc);
+        return getDataTable(list);
+    }
+
+    /**
      * 查询需要验证列表--需要检查人验证
      */
     @GetMapping("/getConfirmList")
@@ -100,6 +117,22 @@ public class BzhjcController extends BaseController
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
         bzhjc.setCheckperson(checkUser.getNickName());
         bzhjc.setStatus("等待验证");
+        startPage();
+        List<Bzhjc> list = bzhjcService.selectBzhjcList(bzhjc);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询需要验证列表--需要检查人验证
+     */
+    @GetMapping("/getPmdlConfirmList")
+    public TableDataInfo getPmdlConfirmList(Bzhjc bzhjc)
+    {
+        String checkAccount= SecurityUtils.getUsername();
+        SysUser checkUser=userService.selectUserByUserName(checkAccount);
+        bzhjc.setCheckperson(checkUser.getNickName());
+        bzhjc.setStatus("等待验证");
+        bzhjc.setCheckprop("跑冒滴漏");
         startPage();
         List<Bzhjc> list = bzhjcService.selectBzhjcList(bzhjc);
         return getDataTable(list);
@@ -175,11 +208,38 @@ public class BzhjcController extends BaseController
         String checkAccount= SecurityUtils.getUsername();
         bzhjc.setCheckaccount(checkAccount);
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
+        /** 增加标准化检查单据时，先查询检查人开过的检查单据未被处理的有多少项，如果大于10项，则请先督促整改单位整改；然后查询自己未验证的检查单据，如果大于2项，则请先验证 */
+        Bzhjc bzh=new  Bzhjc();
+        bzh.setCheckperson(checkUser.getNickName());
+        bzh.setStatus("等待处理");
+        List<Bzhjc> list = bzhjcService.selectBzhjcList(bzh);
+        if(checkUser.getDept().getDeptName().contains("车间")){
+            if(list.size()>5){
+                return AjaxResult.error("未被处理的单据大于5项，请先督促整改单位整改！","错误！");
+            }
+        }else{
+            if(list.size()>10){
+                return AjaxResult.error("未被处理的单据大于10项，请先督促整改单位整改！","错误！");
+            }
+        }
+        bzh.setStatus("等待验证");
+        list = bzhjcService.selectBzhjcList(bzh);
+        if(list.size()>2){
+            return AjaxResult.error("未验证的检查单大于2项，请先验证 ！","错误！");
+        }
         bzhjc.setCheckperson(checkUser.getNickName());
         bzhjc.setCheckdept(checkUser.getDept().getDeptName());
         /**  如果所属单位是车间，则设置整改单位是本车间 */
         if(checkUser.getDept().getDeptName().contains("车间")){
-            bzhjc.setModdept(checkUser.getDept().getDeptName());
+            /**  不是跑冒滴漏时，只能开给自己车间 */
+            if(!bzhjc.getCheckprop().equals("跑冒滴漏")){
+                bzhjc.setModdept(checkUser.getDept().getDeptName());
+            }else{
+                /**  当是跑冒滴漏时，如果整改时间为空，则报错*/
+                if(StringUtils.isNull(bzhjc.getModdept())||StringUtils.isEmpty(bzhjc.getModdept())){
+                    return AjaxResult.error("整改单位不能为空，请选择整改单位！","错误！");
+                }
+            }
         }
         else{
             if (bzhjc.getModdept() == null ||"".equals(bzhjc.getModdept()))

@@ -36,6 +36,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null "> and update_time = #{updateTime}</if>
 
         </where>
+        order by id desc
+    </select>
+
+    <select id="selectLastDaynoteList" parameterType="Daynote" resultMap="DaynoteResult">
+        <include refid="selectDaynoteVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="post != null  and post != ''"> and post = #{post}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+
+        </where>
+        order by id desc limit 1
     </select>
 
     <select id="selectDaynoteById" parameterType="Long" resultMap="DaynoteResult">

@@ -5,15 +5,15 @@ import com.ruoyi.project.system.domain.Daynote;
 
 /**
  * 工作日志Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-06-23
  */
-public interface DaynoteMapper 
+public interface DaynoteMapper
 {
     /**
      * 查询工作日志
-     * 
+     *
      * @param id 工作日志ID
      * @return 工作日志
      */
@@ -21,15 +21,24 @@ public interface DaynoteMapper
 
     /**
      * 查询工作日志列表
-     * 
+     *
      * @param daynote 工作日志
      * @return 工作日志集合
      */
     public List<Daynote> selectDaynoteList(Daynote daynote);
 
+
+    /**
+     * 查询工作日志列表
+     *
+     * @param daynote 工作日志
+     * @return 工作日志集合
+     */
+    public List<Daynote> selectLastDaynoteList(Daynote daynote);
+
     /**
      * 新增工作日志
-     * 
+     *
      * @param daynote 工作日志
      * @return 结果
      */
@@ -37,7 +46,7 @@ public interface DaynoteMapper
 
     /**
      * 修改工作日志
-     * 
+     *
      * @param daynote 工作日志
      * @return 结果
      */
@@ -45,7 +54,7 @@ public interface DaynoteMapper
 
     /**
      * 删除工作日志
-     * 
+     *
      * @param id 工作日志ID
      * @return 结果
      */
@@ -53,7 +62,7 @@ public interface DaynoteMapper
 
     /**
      * 批量删除工作日志
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */

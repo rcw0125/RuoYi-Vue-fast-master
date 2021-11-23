@@ -5,23 +5,26 @@ import com.ruoyi.project.system.domain.Kaohe;
 
 /**
  * 考核单Service接口
- * 
+ *
  * @author ruoyi
  * @date 2021-04-08
  */
-public interface IKaoheService 
+public interface IKaoheService
 {
     /**
      * 查询考核单
-     * 
+     *
      * @param kaoheId 考核单ID
      * @return 考核单
      */
     public Kaohe selectKaoheById(Long kaoheId);
 
+
+
+
     /**
      * 查询考核单列表
-     * 
+     *
      * @param kaohe 考核单
      * @return 考核单集合
      */
@@ -29,7 +32,7 @@ public interface IKaoheService
 
     /**
      * 新增考核单
-     * 
+     *
      * @param kaohe 考核单
      * @return 结果
      */
@@ -37,7 +40,7 @@ public interface IKaoheService
 
     /**
      * 修改考核单
-     * 
+     *
      * @param kaohe 考核单
      * @return 结果
      */
@@ -45,7 +48,7 @@ public interface IKaoheService
 
     /**
      * 批量删除考核单
-     * 
+     *
      * @param kaoheIds 需要删除的考核单ID
      * @return 结果
      */
@@ -53,7 +56,7 @@ public interface IKaoheService
 
     /**
      * 删除考核单信息
-     * 
+     *
      * @param kaoheId 考核单ID
      * @return 结果
      */

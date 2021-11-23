@@ -2,8 +2,11 @@ package com.ruoyi.project.system.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.project.system.domain.SysPost;
+import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.project.system.service.ISysPostService;
+import com.ruoyi.project.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,8 @@ public class DaynotecfgController extends BaseController
     private IDaynotecfgService daynotecfgService;
     @Autowired
     private ISysPostService postService;
+    @Autowired
+    private ISysUserService userService;
     /**
      * 查询工作日志模板列表
      */
@@ -44,6 +49,18 @@ public class DaynotecfgController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Daynotecfg daynotecfg)
     {
+        startPage();
+        List<Daynotecfg> list = daynotecfgService.selectDaynotecfgList(daynotecfg);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/myList")
+    public TableDataInfo myList(Daynotecfg daynotecfg)
+    {
+        /** 获取当前用户所在的车间**/
+        String replyAccount= SecurityUtils.getUsername();
+        SysUser checkUser=userService.selectUserByUserName(replyAccount);
+        daynotecfg.setDept(checkUser.getDept().getDeptName());
         startPage();
         List<Daynotecfg> list = daynotecfgService.selectDaynotecfgList(daynotecfg);
         return getDataTable(list);
@@ -93,7 +110,6 @@ public class DaynotecfgController extends BaseController
     /**
      * 获取工作日志模板详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:daynotecfg:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -114,7 +130,6 @@ public class DaynotecfgController extends BaseController
     /**
      * 修改工作日志模板
      */
-    @PreAuthorize("@ss.hasPermi('system:daynotecfg:edit')")
     @Log(title = "工作日志模板", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Daynotecfg daynotecfg)

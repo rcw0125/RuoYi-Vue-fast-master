@@ -1,8 +1,13 @@
 package com.ruoyi.project.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.web.domain.TreeSelect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.system.mapper.EquipQuyuMapper;
@@ -69,6 +74,92 @@ public class EquipQuyuServiceImpl implements IEquipQuyuService
         return equipQuyuMapper.insertEquipQuyu(equipQuyu);
     }
 
+    /**
+     * 构建前端所需要树结构
+     *
+     * @param quyus 部门列表
+     * @return 树结构列表
+     */
+    @Override
+    public List<EquipQuyu> buildTree(List<EquipQuyu>  quyus)
+    {
+        List<EquipQuyu> returnList = new ArrayList<EquipQuyu>();
+        List<Long> tempList = new ArrayList<Long>();
+        for (EquipQuyu dept : quyus)
+        {
+            tempList.add(dept.getId());
+        }
+        for (Iterator<EquipQuyu> iterator = quyus.iterator(); iterator.hasNext();)
+        {
+            EquipQuyu dept = (EquipQuyu) iterator.next();
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(dept.getParentId()))
+            {
+                recursionFn(quyus, dept);
+                returnList.add(dept);
+            }
+        }
+        if (returnList.isEmpty())
+        {
+            returnList = quyus;
+        }
+        return returnList;
+    }
+
+    /**
+     * 递归列表
+     */
+    private void recursionFn(List<EquipQuyu> list, EquipQuyu t)
+    {
+        // 得到子节点列表
+        List<EquipQuyu> childList = getChildList(list, t);
+
+        t.setChildren(childList);
+        for (EquipQuyu tChild : childList)
+        {
+            if (hasChild(list, tChild))
+            {
+                recursionFn(list, tChild);
+            }
+        }
+    }
+
+    /**
+     * 得到子节点列表
+     */
+    private List<EquipQuyu> getChildList(List<EquipQuyu> list, EquipQuyu t)
+    {
+        List<EquipQuyu> tlist = new ArrayList<EquipQuyu>();
+        Iterator<EquipQuyu> it = list.iterator();
+        while (it.hasNext())
+        {
+            EquipQuyu n = (EquipQuyu) it.next();
+            if (StringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getId().longValue())
+            {
+                tlist.add(n);
+            }
+        }
+        return tlist;
+    }
+    /**
+     * 判断是否有子节点
+     */
+    private boolean hasChild(List<EquipQuyu> list, EquipQuyu t)
+    {
+        return getChildList(list, t).size() > 0 ? true : false;
+    }
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param quyus 部门列表
+     * @return 下拉树结构列表
+     */
+    @Override
+    public List<TreeSelect> buildQuyuTreeSelect(List<EquipQuyu> quyus)
+    {
+        List<EquipQuyu> deptTrees = buildTree(quyus);
+        return deptTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+    }
     /**
      * 修改设备区域
      *
