@@ -209,24 +209,45 @@ public class BzhjcController extends BaseController
         bzhjc.setCheckaccount(checkAccount);
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
         /** 增加标准化检查单据时，先查询检查人开过的检查单据未被处理的有多少项，如果大于10项，则请先督促整改单位整改；然后查询自己未验证的检查单据，如果大于2项，则请先验证 */
-        Bzhjc bzh=new  Bzhjc();
-        bzh.setCheckperson(checkUser.getNickName());
-        bzh.setStatus("等待处理");
-        List<Bzhjc> list = bzhjcService.selectBzhjcList(bzh);
-        if(checkUser.getDept().getDeptName().contains("车间")){
-            if(list.size()>5){
-                return AjaxResult.error("未被处理的单据大于5项，请先督促整改单位整改！","错误！");
+        /*******属性为安全的，不进行检查*****/
+        if(!(bzhjc.getCheckprop().equals("安全")||bzhjc.getCheckprop().equals("跑冒滴漏"))){
+            Bzhjc bzh=new  Bzhjc();
+            bzh.setCheckperson(checkUser.getNickName());
+            bzh.setStatus("等待处理");
+            List<Bzhjc> list = bzhjcService.selectBzhjcList(bzh);
+            if(checkUser.getDept().getDeptName().contains("车间")){
+                if(list.size()>9){
+                    return AjaxResult.error("未被处理的单据大于10项，请先督促整改单位整改！","错误！");
+                }
+            }else{
+                if(list.size()>19){
+                    return AjaxResult.error("未被处理的单据大于20项，请先督促整改单位整改！","错误！");
+                }
             }
-        }else{
-            if(list.size()>10){
-                return AjaxResult.error("未被处理的单据大于10项，请先督促整改单位整改！","错误！");
+            bzh.setStatus("等待验证");
+            list = bzhjcService.selectBzhjcList(bzh);
+            if(list.size()>2){
+                return AjaxResult.error("未验证的检查单大于2项，请先验证 ！","错误！");
+            }
+
+
+            Bzhjc bzh1=new  Bzhjc();
+            bzh1.setModdept(checkUser.getDept().getDeptName());
+            bzh1.setStatus("等待处理");
+            list = bzhjcService.selectBzhjcList(bzh1);
+
+            if(checkUser.getDept().getDeptName().contains("车间")){
+                if(list.size()>14){
+                    return AjaxResult.error("所在单位未整改的单据超过15项，请先整改！","错误！");
+                }
+            }else{
+                if(list.size()>4){
+                    return AjaxResult.error("所在单位未整改的单据超过5项，请先整改！","错误！");
+                }
             }
         }
-        bzh.setStatus("等待验证");
-        list = bzhjcService.selectBzhjcList(bzh);
-        if(list.size()>2){
-            return AjaxResult.error("未验证的检查单大于2项，请先验证 ！","错误！");
-        }
+
+
         bzhjc.setCheckperson(checkUser.getNickName());
         bzhjc.setCheckdept(checkUser.getDept().getDeptName());
         /**  如果所属单位是车间，则设置整改单位是本车间 */

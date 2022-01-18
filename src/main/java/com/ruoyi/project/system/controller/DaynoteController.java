@@ -166,6 +166,7 @@ public class DaynoteController extends BaseController
         SysUser checkUser=userService.selectUserByUserName(replyAccount);
         Daynote dn=new Daynote ();
         dn.setName(checkUser.getNickName());
+        dn.setDept(checkUser.getDept().getDeptName());
         List<Daynote> list=daynoteService.selectLastDaynoteList(dn);
 
         if(list==null ||list.size()==0){
@@ -260,8 +261,7 @@ public class DaynoteController extends BaseController
     /**
      * 删除工作日志
      */
-    @PreAuthorize("@ss.hasPermi('system:daynote:remove')")
-    @Log(title = "工作日志", businessType = BusinessType.DELETE)
+
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

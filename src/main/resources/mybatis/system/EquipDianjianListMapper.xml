@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectEquipDianjianListList" parameterType="EquipDianjianList" resultMap="EquipDianjianListResult">
         <include refid="selectEquipDianjianListVo"/>
         <where>
-            <if test="sbid != null "> and sbid = #{sbid}</if>
+            <if test="sbid != null "> and (sbid = #{sbid} OR sbid  IN ( SELECT t.id FROM equip_quyu t WHERE find_in_set(#{sbid }, ancestors) ))</if>
             <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
             <if test="bzhid != null "> and bzhid = #{bzhid}</if>
             <if test="biaozhun != null  and biaozhun != ''"> and biaozhun = #{biaozhun}</if>
@@ -49,6 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null  and note != ''"> and note = #{note}</if>
             <if test="flag != null "> and flag = #{flag}</if>
             <if test="djrq != null  and djrq != ''"> and djrq = #{djrq}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND djrq &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND djrq &lt;=  #{params.endTime}
+            </if>
         </where>
         order by id desc
     </select>
@@ -73,6 +79,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null  and note != ''"> and note = #{note}</if>
             <if test="flag != null "> and flag = #{flag}</if>
             <if test="djrq != null  and djrq != ''"> and djrq = #{djrq}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND djrq &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND djrq &lt;=  #{params.endTime}
+            </if>
         </where>
         order by id desc limit 1
     </select>

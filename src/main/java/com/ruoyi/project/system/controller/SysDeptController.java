@@ -25,7 +25,7 @@ import com.ruoyi.project.system.service.ISysDeptService;
 
 /**
  * 部门信息
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -83,6 +83,13 @@ public class SysDeptController extends BaseController
      */
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysDept dept)
+    {
+        List<SysDept> depts = deptService.selectDeptList(dept);
+        return AjaxResult.success(deptService.buildDeptTreeSelect(depts));
+    }
+
+    @GetMapping("/api/treeselect")
+    public AjaxResult apitreeselect(SysDept dept)
     {
         List<SysDept> depts = deptService.selectDeptList(dept);
         return AjaxResult.success(deptService.buildDeptTreeSelect(depts));

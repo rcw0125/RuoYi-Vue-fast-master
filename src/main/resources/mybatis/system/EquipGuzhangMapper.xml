@@ -73,7 +73,14 @@
             <if test="flag != null "> and flag = #{flag}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="locked != null "> and locked = #{locked}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND djsk &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND djsk &lt;=  #{params.endTime}
+            </if>
         </where>
+        order by id desc
     </select>
 
     <select id="selectEquipGuzhangById" parameterType="Long" resultMap="EquipGuzhangResult">

@@ -9,19 +9,19 @@ import com.ruoyi.project.system.service.IEquipDianjianBiaozhunService;
 
 /**
  * 点检标准Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2021-09-22
  */
 @Service
-public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunService 
+public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunService
 {
     @Autowired
     private EquipDianjianBiaozhunMapper equipDianjianBiaozhunMapper;
 
     /**
      * 查询点检标准
-     * 
+     *
      * @param id 点检标准主键
      * @return 点检标准
      */
@@ -33,7 +33,7 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
 
     /**
      * 查询点检标准列表
-     * 
+     *
      * @param equipDianjianBiaozhun 点检标准
      * @return 点检标准
      */
@@ -43,9 +43,57 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
         return equipDianjianBiaozhunMapper.selectEquipDianjianBiaozhunList(equipDianjianBiaozhun);
     }
 
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectDianjianMingxi(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectDianjianMingxi(equipDianjianBiaozhun);
+    }
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月班组点检情况
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectDianjianTeamRate(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectDianjianTeamRate(equipDianjianBiaozhun);
+    }
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月车间点检情况
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectDianjianDeptRate(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectDianjianDeptRate(equipDianjianBiaozhun);
+    }
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectEquipDianjianBiaozhunByQuyuList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectEquipDianjianBiaozhunByQuyuList(equipDianjianBiaozhun);
+    }
+
     /**
      * 新增点检标准
-     * 
+     *
      * @param equipDianjianBiaozhun 点检标准
      * @return 结果
      */
@@ -57,7 +105,7 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
 
     /**
      * 修改点检标准
-     * 
+     *
      * @param equipDianjianBiaozhun 点检标准
      * @return 结果
      */
@@ -69,7 +117,7 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
 
     /**
      * 批量删除点检标准
-     * 
+     *
      * @param ids 需要删除的点检标准主键
      * @return 结果
      */
@@ -81,7 +129,7 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
 
     /**
      * 删除点检标准信息
-     * 
+     *
      * @param id 点检标准主键
      * @return 结果
      */

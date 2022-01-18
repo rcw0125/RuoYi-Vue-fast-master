@@ -51,7 +51,7 @@ public class EquipGuzhangController extends BaseController
     /**
      * 查询故障报修列表
      */
-    @PreAuthorize("@ss.hasPermi('system:guzhang:list')")
+
     @GetMapping("/list")
     public TableDataInfo list(EquipGuzhang equipGuzhang)
     {
@@ -62,7 +62,7 @@ public class EquipGuzhangController extends BaseController
 
 
     /**
-     * 查询故障报修接收列表
+     * 查询故障报修接收列表---指定维修班组
      */
     @GetMapping("/JsList")
     public TableDataInfo JsList(EquipGuzhang equipGuzhang)
@@ -78,7 +78,7 @@ public class EquipGuzhangController extends BaseController
     }
 
     /**
-     * 查询故障报修处理列表
+     * 查询故障报修处理列表--单位、班组
      */
     @GetMapping("/ClList")
     public TableDataInfo ClList(EquipGuzhang equipGuzhang)
@@ -94,7 +94,7 @@ public class EquipGuzhangController extends BaseController
     }
 
     /**
-     * 查询故障报修验证列表
+     * 查询故障报修验证列表--登记车间进行验证--作业长、主管主任分配权限进行验证
      */
     @GetMapping("/YzList")
     public TableDataInfo YzList(EquipGuzhang equipGuzhang)
@@ -102,7 +102,7 @@ public class EquipGuzhangController extends BaseController
         /** 增加单据时，添加检查人姓名，单位 */
         String checkAccount= SecurityUtils.getUsername();
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
-        equipGuzhang.setDjwxdept(checkUser.getDept().getDeptName());
+        equipGuzhang.setDjdept(checkUser.getDept().getDeptName());
         equipGuzhang.setStatus("等待验证");
         startPage();
         List<EquipGuzhang> list = equipGuzhangService.selectEquipGuzhangList(equipGuzhang);
@@ -112,7 +112,7 @@ public class EquipGuzhangController extends BaseController
     /**
      * 导出故障报修列表
      */
-    @PreAuthorize("@ss.hasPermi('system:guzhang:export')")
+
     @Log(title = "故障报修", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(EquipGuzhang equipGuzhang)
@@ -125,7 +125,7 @@ public class EquipGuzhangController extends BaseController
     /**
      * 获取故障报修详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:guzhang:query')")
+
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -149,9 +149,9 @@ public class EquipGuzhangController extends BaseController
         gzhang.setDjdept(deptName);
         gzhang.setDjr(checkUser.getNickName());
         gzhang.setDjrphone(checkUser.getPhonenumber());
-        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
-            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
-        }
+//        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
+//            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
+//        }
         gzhang.setFlag(0);
         if("冶炼维修车间".equals(deptName)||"连铸维修车间".equals(deptName)||"运行车间".equals(deptName)){
             gzhang.setDjwxdept(deptName);
@@ -161,40 +161,37 @@ public class EquipGuzhangController extends BaseController
     }
 
 
-    @GetMapping(value = "/getAddInfo")
-    public AjaxResult getAddInfo()
-    {
-        EquipGuzhang gzhang=new EquipGuzhang();
-        /** 增加单据时，添加检查人姓名，单位 */
-        String checkAccount= SecurityUtils.getUsername();
-        SysUser checkUser=userService.selectUserByUserName(checkAccount);
-        String deptName=checkUser.getDept().getDeptName();
-        gzhang.setDjdept(deptName);
-        gzhang.setDjr(checkUser.getNickName());
-        gzhang.setDjrphone(checkUser.getPhonenumber());
-        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
-            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
-        }
-        gzhang.setFlag(0);
-        if("冶炼维修车间".equals(deptName)||"连铸维修车间".equals(deptName)||"运行车间".equals(deptName)){
-            gzhang.setDjwxdept(deptName);
-            gzhang.setFlag(1);
-        }
-        return AjaxResult.success(gzhang);
-    }
+//    @GetMapping(value = "/getAddInfo")
+//    public AjaxResult getAddInfo()
+//    {
+//        EquipGuzhang gzhang=new EquipGuzhang();
+//        /** 增加单据时，添加检查人姓名，单位 */
+//        String checkAccount= SecurityUtils.getUsername();
+//        SysUser checkUser=userService.selectUserByUserName(checkAccount);
+//        String deptName=checkUser.getDept().getDeptName();
+//        gzhang.setDjdept(deptName);
+//        gzhang.setDjr(checkUser.getNickName());
+//        gzhang.setDjrphone(checkUser.getPhonenumber());
+////        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
+////            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
+////        }
+//        gzhang.setFlag(0);
+//        if("冶炼维修车间".equals(deptName)||"连铸维修车间".equals(deptName)||"运行车间".equals(deptName)){
+//            gzhang.setDjwxdept(deptName);
+//            gzhang.setFlag(1);
+//        }
+//        return AjaxResult.success(gzhang);
+//    }
 
     /**
      * 新增故障报修
      */
-    @PreAuthorize("@ss.hasPermi('system:guzhang:add')")
+
     @Log(title = "故障报修", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EquipGuzhang equipGuzhang)
     {
-        String doneDate= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        equipGuzhang.setDjsk(doneDate);
-        equipGuzhang.setLocked(0);
-        equipGuzhang.setStatus("等待接收");
+
         /******查询是否存在相同的未完结的故障****/
         EquipGuzhang gzhang=new EquipGuzhang();
         gzhang.setSbid(equipGuzhang.getSbid());
@@ -205,7 +202,22 @@ public class EquipGuzhangController extends BaseController
         if(StringUtils.isNotNull(list)&&list.size()>0){
             return AjaxResult.error("抱歉，存在相同的未完结的故障，正在处理中！","错误！");
         }
-        equipGuzhang.setSbname(equipQuyuService.selectEquipQuyuById(equipGuzhang.getSbid()).getName());
+        String doneDate= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        equipGuzhang.setDjsk(doneDate);
+        equipGuzhang.setLocked(0);
+        equipGuzhang.setStatus("等待接收");
+        /** 如果设备名称为空，则添加*/
+        if(StringUtils.isNull(equipGuzhang.getSbname())||StringUtils.isEmpty(equipGuzhang.getSbname())){
+            equipGuzhang.setSbname(equipQuyuService.selectEquipQuyuById(equipGuzhang.getSbid()).getName());
+        }
+
+        /** 如果登记单位为空，则添加单位、姓名*/
+        if(StringUtils.isNull(equipGuzhang.getDjdept())||StringUtils.isEmpty(equipGuzhang.getDjdept())){
+            String checkAccount= SecurityUtils.getUsername();
+            SysUser checkUser=userService.selectUserByUserName(checkAccount);
+            equipGuzhang.setDjdept(checkUser.getDept().getDeptName());
+            equipGuzhang.setDjr(checkUser.getNickName());
+        }
         return toAjax(equipGuzhangService.insertEquipGuzhang(equipGuzhang));
     }
 
@@ -283,9 +295,9 @@ public class EquipGuzhangController extends BaseController
         String checkAccount= SecurityUtils.getUsername();
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
         equipGuzhang.setClr(checkUser.getNickName());
-        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
-            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
-        }
+//        if(StringUtils.isEmpty(checkUser.getPhonenumber())||StringUtils.isNull(checkUser.getPhonenumber())){
+//            return AjaxResult.error("抱歉，你的个人信息不完整，请完善个人电话！","错误！");
+//        }
         equipGuzhang.setClrphone(checkUser.getPhonenumber());
         equipGuzhang.setStatus("等待验证");
         /**计算用时***/
@@ -347,7 +359,7 @@ public class EquipGuzhangController extends BaseController
     /**
      * 修改故障报修
      */
-    @PreAuthorize("@ss.hasPermi('system:guzhang:edit')")
+
     @Log(title = "故障报修", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody EquipGuzhang equipGuzhang)

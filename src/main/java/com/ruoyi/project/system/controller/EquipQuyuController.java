@@ -35,7 +35,7 @@ public class EquipQuyuController extends BaseController
     /**
      * 查询设备区域列表
      */
-    @PreAuthorize("@ss.hasPermi('system:quyu:list')")
+
     @GetMapping("/list")
     public AjaxResult list(EquipQuyu equipQuyu)
     {
@@ -105,6 +105,13 @@ public class EquipQuyuController extends BaseController
      */
     @GetMapping("/treeselect")
     public AjaxResult treeselect(EquipQuyu dept)
+    {
+        List<EquipQuyu> depts = equipQuyuService.selectEquipQuyuList(dept);
+        return AjaxResult.success(equipQuyuService.buildQuyuTreeSelect(depts));
+    }
+
+    @GetMapping("/api/treeselect")
+    public AjaxResult apitreeselect(EquipQuyu dept)
     {
         List<EquipQuyu> depts = equipQuyuService.selectEquipQuyuList(dept);
         return AjaxResult.success(equipQuyuService.buildQuyuTreeSelect(depts));

@@ -16,16 +16,39 @@
         <result property="zhouqi"    column="zhouqi"    />
         <result property="note"    column="note"    />
         <result property="zhoucishu"    column="zhoucishu"    />
+        <result property="lasttime"    column="lasttime"    />
+        <result property="flag"    column="flag"    />
+        <result property="ordernum"    column="ordernum"    />
+        <result property="djcs"    column="djcs"    />
     </resultMap>
 
     <sql id="selectEquipDianjianBiaozhunVo">
-        select id, sbid, sbname, name, biaozhun, dept, team, leibie, zhouqi, note, zhoucishu from equip_dianjian_biaozhun
+        select id, sbid, sbname, name, biaozhun, dept, team, leibie, zhouqi, note, zhoucishu, lasttime, flag, ordernum from equip_dianjian_biaozhun
     </sql>
 
     <select id="selectEquipDianjianBiaozhunList" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
+    <include refid="selectEquipDianjianBiaozhunVo"/>
+    <where>
+        <if test="sbid != null ">  and sbid = #{sbid}</if>
+        <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
+        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        <if test="biaozhun != null  and biaozhun != ''"> and biaozhun = #{biaozhun}</if>
+        <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+        <if test="team != null  and team != ''"> and team = #{team}</if>
+        <if test="leibie != null  and leibie != ''"> and leibie = #{leibie}</if>
+        <if test="zhouqi != null  and zhouqi != ''"> and zhouqi = #{zhouqi}</if>
+        <if test="note != null  and note != ''"> and note = #{note}</if>
+        <if test="zhoucishu != null  and zhoucishu != ''"> and zhoucishu = #{zhoucishu}</if>
+        <if test="lasttime != null "> and lasttime = #{lasttime}</if>
+
+    </where>
+    order by ordernum
+</select>
+
+    <select id="selectEquipDianjianBiaozhunByQuyuList" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
         <include refid="selectEquipDianjianBiaozhunVo"/>
         <where>
-            <if test="sbid != null ">  and (sbid = #{sbid} OR sbid  IN ( SELECT t.id FROM equip_quyu t WHERE find_in_set(#{sbid }, ancestors) ))</if>
+            <if test="sbid != null "> and (sbid = #{sbid} OR sbid  IN ( SELECT t.id FROM equip_quyu t WHERE find_in_set(#{sbid }, ancestors) ))</if>
             <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="biaozhun != null  and biaozhun != ''"> and biaozhun = #{biaozhun}</if>
@@ -35,7 +58,10 @@
             <if test="zhouqi != null  and zhouqi != ''"> and zhouqi = #{zhouqi}</if>
             <if test="note != null  and note != ''"> and note = #{note}</if>
             <if test="zhoucishu != null  and zhoucishu != ''"> and zhoucishu = #{zhoucishu}</if>
+            <if test="lasttime != null "> and lasttime = #{lasttime}</if>
+
         </where>
+        order by ordernum
     </select>
 
     <select id="selectEquipDianjianBiaozhunById" parameterType="Long" resultMap="EquipDianjianBiaozhunResult">
@@ -56,6 +82,7 @@
             <if test="zhouqi != null and zhouqi != ''">zhouqi,</if>
             <if test="note != null">note,</if>
             <if test="zhoucishu != null">zhoucishu,</if>
+            <if test="ordernum != null">ordernum,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="sbid != null">#{sbid},</if>
@@ -68,6 +95,7 @@
             <if test="zhouqi != null and zhouqi != ''">#{zhouqi},</if>
             <if test="note != null">#{note},</if>
             <if test="zhoucishu != null">#{zhoucishu},</if>
+            <if test="ordernum != null">#{ordernum},</if>
         </trim>
     </insert>
 
@@ -84,6 +112,9 @@
             <if test="zhouqi != null and zhouqi != ''">zhouqi = #{zhouqi},</if>
             <if test="note != null">note = #{note},</if>
             <if test="zhoucishu != null">zhoucishu = #{zhoucishu},</if>
+            <if test="lasttime != null">lasttime = #{lasttime},</if>
+            <if test="flag != null">flag = #{flag},</if>
+            <if test="ordernum != null">ordernum = #{ordernum},</if>
         </trim>
         where id = #{id}
     </update>
@@ -98,4 +129,47 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectDianjianMingxi" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
+        select id,sbid,sbname,name,dept,team,leibie,zhouqi,zhoucishu,lasttime,
+        (select count(distinct djrq) from equip_dianjian_list b where a.sbid=b.sbid and  a.dept=b.dept and a.team=b.team and b.djrq like concat(#{note}, '%'))as djcs
+        from equip_dianjian_biaozhun a
+        <where>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+        </where>
+        order by dept,team,ordernum
+    </select>
+    <select id="selectDianjianTeamRate" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
+        select * from
+        (
+        select dept ,team ,sum(zhoucishu) as zhoucishu,sum(djcs) as djcs from
+        (
+        select sbname,name,dept,team,zhouqi,zhoucishu,(case when b.djcs>b.zhoucishu then b.zhoucishu else b.djcs end ) as djcs
+        from (select id,sbid,sbname,name,dept,team,leibie,zhouqi,floor(zhoucishu*31/7) as zhoucishu,lasttime,(select count(distinct djrq) from equip_dianjian_list b where a.sbid=b.sbid and  a.dept=b.dept and a.team=b.team and b.djrq like concat(#{note}, '%')) as djcs
+        from equip_dianjian_biaozhun a) b
+        ) c
+        group by dept ,team
+        )d
+        <where>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+        </where>
+        order by dept
+    </select>
+
+    <select id="selectDianjianDeptRate" parameterType="EquipDianjianBiaozhun" resultMap="EquipDianjianBiaozhunResult">
+        select * from
+        (
+        select dept  ,sum(zhoucishu) as zhoucishu,sum(djcs) as djcs from
+        (
+        select sbname,name,dept,team,zhouqi,zhoucishu,(case when b.djcs>b.zhoucishu then b.zhoucishu else b.djcs end ) as djcs
+        from (select id,sbid,sbname,name,dept,team,leibie,zhouqi,floor(zhoucishu*31/7) as zhoucishu,lasttime,(select count(distinct djrq) from equip_dianjian_list b where a.sbid=b.sbid and  a.dept=b.dept and a.team=b.team and b.djrq like concat(#{note}, '%')) as djcs
+        from equip_dianjian_biaozhun a) b
+        ) c
+        group by dept
+        )d
+        <where>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+        </where>
+        order by dept
+    </select>
 </mapper>
