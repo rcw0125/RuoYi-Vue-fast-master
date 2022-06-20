@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesMingzhonglvMapper">
+
+    <resultMap type="MesMingzhonglv" id="MesMingzhonglvResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="lfid"    column="lfid"    />
+        <result property="team"    column="team"    />
+        <result property="sicount"    column="sicount"    />
+        <result property="sitotal"    column="sitotal"    />
+        <result property="si"    column="si"    />
+        <result property="mn"    column="mn"    />
+        <result property="mncount"    column="mncount"    />
+        <result property="cr"    column="cr"    />
+        <result property="mntotal"    column="mntotal"    />
+        <result property="crcount"    column="crcount"    />
+        <result property="crtotal"    column="crtotal"    />
+    </resultMap>
+
+    <sql id="selectMesMingzhonglvVo">
+        select id, logtime, lfid, team, sicount, sitotal, si, mn, mncount, cr, mntotal, crcount, crtotal from mes_mingzhonglv
+    </sql>
+
+    <sql id="selectLeijiMingzhonglvVo">
+        select sum(sicount) as sicount,SUM(sitotal) as sitotal,sum(mncount) as mncount,SUM(mntotal) as mntotal,
+               SUM(crcount) as crcount,SUM(crtotal) as crtotal  from mes_mingzhonglv
+    </sql>
+
+    <select id="selectLeijiMingzhonglvBylogtime" parameterType="String" resultMap="MesMingzhonglvResult">
+        <include refid="selectLeijiMingzhonglvVo"/>
+        where lfid='合计' and logtime like  concat(substr( #{logtime},1,7),'%') and logtime &lt;= #{logtime}
+    </select>
+
+    <select id="selectMesMingzhonglvList" parameterType="MesMingzhonglv" resultMap="MesMingzhonglvResult">
+        <include refid="selectMesMingzhonglvVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="lfid != null  and lfid != ''"> and lfid = #{lfid}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+            <if test="sicount != null "> and sicount = #{sicount}</if>
+        </where>
+    </select>
+
+    <select id="selectMesMingzhonglvById" parameterType="Long" resultMap="MesMingzhonglvResult">
+        <include refid="selectMesMingzhonglvVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMesMingzhonglv" parameterType="MesMingzhonglv" useGeneratedKeys="true" keyProperty="id">
+        insert into mes_mingzhonglv
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="lfid != null">lfid,</if>
+            <if test="team != null">team,</if>
+            <if test="sicount != null">sicount,</if>
+            <if test="sitotal != null">sitotal,</if>
+            <if test="si != null">si,</if>
+            <if test="mn != null">mn,</if>
+            <if test="mncount != null">mncount,</if>
+            <if test="cr != null">cr,</if>
+            <if test="mntotal != null">mntotal,</if>
+            <if test="crcount != null">crcount,</if>
+            <if test="crtotal != null">crtotal,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="lfid != null">#{lfid},</if>
+            <if test="team != null">#{team},</if>
+            <if test="sicount != null">#{sicount},</if>
+            <if test="sitotal != null">#{sitotal},</if>
+            <if test="si != null">#{si},</if>
+            <if test="mn != null">#{mn},</if>
+            <if test="mncount != null">#{mncount},</if>
+            <if test="cr != null">#{cr},</if>
+            <if test="mntotal != null">#{mntotal},</if>
+            <if test="crcount != null">#{crcount},</if>
+            <if test="crtotal != null">#{crtotal},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMesMingzhonglv" parameterType="MesMingzhonglv">
+        update mes_mingzhonglv
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="lfid != null">lfid = #{lfid},</if>
+            <if test="team != null">team = #{team},</if>
+            <if test="sicount != null">sicount = #{sicount},</if>
+            <if test="sitotal != null">sitotal = #{sitotal},</if>
+            <if test="si != null">si = #{si},</if>
+            <if test="mn != null">mn = #{mn},</if>
+            <if test="mncount != null">mncount = #{mncount},</if>
+            <if test="cr != null">cr = #{cr},</if>
+            <if test="mntotal != null">mntotal = #{mntotal},</if>
+            <if test="crcount != null">crcount = #{crcount},</if>
+            <if test="crtotal != null">crtotal = #{crtotal},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMesMingzhonglvById" parameterType="Long">
+        delete from mes_mingzhonglv where id = #{id}
+    </delete>
+
+    <delete id="deleteMesMingzhonglvByIds" parameterType="String">
+        delete from mes_mingzhonglv where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

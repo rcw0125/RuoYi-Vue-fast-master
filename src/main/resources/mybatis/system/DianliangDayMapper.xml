@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.DianliangDayMapper">
+
+    <resultMap type="DianliangDay" id="DianliangDayResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="dept"    column="dept"    />
+        <result property="dianliang"    column="dianliang"    />
+        <result property="chanliang"    column="chanliang"    />
+        <result property="dianhao"    column="dianhao"    />
+        <result property="biaozhun"    column="biaozhun"    />
+        <result property="chazhi"    column="chazhi"    />
+        <result property="zuori"    column="zuori"    />
+        <result property="zuorichazhi"    column="zuorichazhi"    />
+        <result property="ordernum"    column="ordernum"    />
+    </resultMap>
+
+    <sql id="selectDianliangDayVo">
+        select id, logtime, dept, dianliang, chanliang, dianhao, biaozhun, chazhi, zuori, zuorichazhi, ordernum from dianliang_day
+    </sql>
+
+    <select id="selectDianliangDayList" parameterType="DianliangDay" resultMap="DianliangDayResult">
+        <include refid="selectDianliangDayVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="dianliang != null "> and dianliang = #{dianliang}</if>
+            <if test="chanliang != null "> and chanliang = #{chanliang}</if>
+            <if test="dianhao != null "> and dianhao = #{dianhao}</if>
+            <if test="biaozhun != null "> and biaozhun = #{biaozhun}</if>
+            <if test="chazhi != null "> and chazhi = #{chazhi}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND logtime &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND logtime &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by logtime desc,ordernum
+
+    </select>
+
+    <select id="selectDianliangDayTotalList" parameterType="DianliangDay" resultMap="DianliangDayResult">
+        select dept,sum(total) as dianliang,(select val from dianliang_biaozhun where dept=dianliang_mingxi.dept ) as biaozhun  from dianliang_mingxi
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}  and leibie != '' </if>
+        </where>
+        group by dept
+    </select>
+
+    <select id="selectDianliangDayById" parameterType="Long" resultMap="DianliangDayResult">
+        <include refid="selectDianliangDayVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectLastDianliangDay" parameterType="DianliangDay" resultMap="DianliangDayResult">
+        select * from dianliang_day order by id desc LIMIT 1
+        <where>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+        </where>
+        order by id desc LIMIT 1
+    </select>
+
+    <insert id="insertDianliangDay" parameterType="DianliangDay" useGeneratedKeys="true" keyProperty="id">
+        insert into dianliang_day
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="dept != null">dept,</if>
+            <if test="dianliang != null">dianliang,</if>
+            <if test="chanliang != null">chanliang,</if>
+            <if test="dianhao != null">dianhao,</if>
+            <if test="biaozhun != null">biaozhun,</if>
+            <if test="chazhi != null">chazhi,</if>
+            <if test="zuori != null">zuori,</if>
+            <if test="zuorichazhi != null">zuorichazhi,</if>
+            <if test="ordernum != null">ordernum,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="dianliang != null">#{dianliang},</if>
+            <if test="chanliang != null">#{chanliang},</if>
+            <if test="dianhao != null">#{dianhao},</if>
+            <if test="biaozhun != null">#{biaozhun},</if>
+            <if test="chazhi != null">#{chazhi},</if>
+            <if test="zuori != null">#{zuori},</if>
+            <if test="zuorichazhi != null">#{zuorichazhi},</if>
+            <if test="ordernum != null">#{ordernum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDianliangDay" parameterType="DianliangDay">
+        update dianliang_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="dianliang != null">dianliang = #{dianliang},</if>
+            <if test="chanliang != null">chanliang = #{chanliang},</if>
+            <if test="dianhao != null">dianhao = #{dianhao},</if>
+            <if test="biaozhun != null">biaozhun = #{biaozhun},</if>
+            <if test="chazhi != null">chazhi = #{chazhi},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDianliangDayById" parameterType="Long">
+        delete from dianliang_day where id = #{id}
+    </delete>
+
+    <delete id="deleteDianliangDayByIds" parameterType="String">
+        delete from dianliang_day where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

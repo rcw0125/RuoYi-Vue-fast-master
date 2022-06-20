@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EmsEquipCfgMapper">
+    
+    <resultMap type="EmsEquipCfg" id="EmsEquipCfgResult">
+        <result property="id"    column="id"    />
+        <result property="sbname"    column="sbname"    />
+        <result property="runtime"    column="runtime"    />
+        <result property="stoptime"    column="stoptime"    />
+        <result property="type"    column="type"    />
+        <result property="opctagid"    column="opctagid"    />
+        <result property="status"    column="status"    />
+        <result property="changetime"    column="changetime"    />
+    </resultMap>
+
+    <sql id="selectEmsEquipCfgVo">
+        select id, sbname, runtime, stoptime, type, opctagid, status, changetime from ems_equip_cfg
+    </sql>
+
+    <select id="selectEmsEquipCfgList" parameterType="EmsEquipCfg" resultMap="EmsEquipCfgResult">
+        <include refid="selectEmsEquipCfgVo"/>
+        <where>  
+            <if test="sbname != null  and sbname != ''"> and sbname = #{sbname}</if>
+            <if test="runtime != null "> and runtime = #{runtime}</if>
+            <if test="stoptime != null "> and stoptime = #{stoptime}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="opctagid != null "> and opctagid = #{opctagid}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="changetime != null  and changetime != ''"> and changetime = #{changetime}</if>
+        </where>
+    </select>
+    
+    <select id="selectEmsEquipCfgById" parameterType="Long" resultMap="EmsEquipCfgResult">
+        <include refid="selectEmsEquipCfgVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEmsEquipCfg" parameterType="EmsEquipCfg" useGeneratedKeys="true" keyProperty="id">
+        insert into ems_equip_cfg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sbname != null and sbname != ''">sbname,</if>
+            <if test="runtime != null">runtime,</if>
+            <if test="stoptime != null">stoptime,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="opctagid != null">opctagid,</if>
+            <if test="status != null">status,</if>
+            <if test="changetime != null">changetime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sbname != null and sbname != ''">#{sbname},</if>
+            <if test="runtime != null">#{runtime},</if>
+            <if test="stoptime != null">#{stoptime},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="opctagid != null">#{opctagid},</if>
+            <if test="status != null">#{status},</if>
+            <if test="changetime != null">#{changetime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEmsEquipCfg" parameterType="EmsEquipCfg">
+        update ems_equip_cfg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sbname != null and sbname != ''">sbname = #{sbname},</if>
+            <if test="runtime != null">runtime = #{runtime},</if>
+            <if test="stoptime != null">stoptime = #{stoptime},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="opctagid != null">opctagid = #{opctagid},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="changetime != null">changetime = #{changetime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmsEquipCfgById" parameterType="Long">
+        delete from ems_equip_cfg where id = #{id}
+    </delete>
+
+    <delete id="deleteEmsEquipCfgByIds" parameterType="String">
+        delete from ems_equip_cfg where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

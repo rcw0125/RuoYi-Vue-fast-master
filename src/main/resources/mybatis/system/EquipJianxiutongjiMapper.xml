@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipJianxiutongjiMapper">
+    
+    <resultMap type="EquipJianxiutongji" id="EquipJianxiutongjiResult">
+        <result property="id"    column="id"    />
+        <result property="djdw"    column="djdw"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="zhou"    column="zhou"    />
+        <result property="sjd"    column="sjd"    />
+        <result property="sbsl"    column="sbsl"    />
+        <result property="sjsl"    column="sjsl"    />
+        <result property="rate"    column="rate"    />
+        <result property="ts"    column="ts"    />
+    </resultMap>
+
+    <sql id="selectEquipJianxiutongjiVo">
+        select id, djdw, logtime, zhou, sjd, sbsl, sjsl, rate, ts from equip_jianxiutongji
+    </sql>
+
+    <select id="selectEquipJianxiutongjiList" parameterType="EquipJianxiutongji" resultMap="EquipJianxiutongjiResult">
+        <include refid="selectEquipJianxiutongjiVo"/>
+        <where>  
+            <if test="djdw != null  and djdw != ''"> and djdw = #{djdw}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="zhou != null  and zhou != ''"> and zhou = #{zhou}</if>
+        </where>
+    </select>
+    
+    <select id="selectEquipJianxiutongjiById" parameterType="Long" resultMap="EquipJianxiutongjiResult">
+        <include refid="selectEquipJianxiutongjiVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEquipJianxiutongji" parameterType="EquipJianxiutongji" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_jianxiutongji
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="djdw != null">djdw,</if>
+            <if test="logtime != null">logtime,</if>
+            <if test="zhou != null">zhou,</if>
+            <if test="sjd != null">sjd,</if>
+            <if test="sbsl != null">sbsl,</if>
+            <if test="sjsl != null">sjsl,</if>
+            <if test="rate != null">rate,</if>
+            <if test="ts != null">ts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="djdw != null">#{djdw},</if>
+            <if test="logtime != null">#{logtime},</if>
+            <if test="zhou != null">#{zhou},</if>
+            <if test="sjd != null">#{sjd},</if>
+            <if test="sbsl != null">#{sbsl},</if>
+            <if test="sjsl != null">#{sjsl},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="ts != null">#{ts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipJianxiutongji" parameterType="EquipJianxiutongji">
+        update equip_jianxiutongji
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="djdw != null">djdw = #{djdw},</if>
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="zhou != null">zhou = #{zhou},</if>
+            <if test="sjd != null">sjd = #{sjd},</if>
+            <if test="sbsl != null">sbsl = #{sbsl},</if>
+            <if test="sjsl != null">sjsl = #{sjsl},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="ts != null">ts = #{ts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipJianxiutongjiById" parameterType="Long">
+        delete from equip_jianxiutongji where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipJianxiutongjiByIds" parameterType="String">
+        delete from equip_jianxiutongji where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

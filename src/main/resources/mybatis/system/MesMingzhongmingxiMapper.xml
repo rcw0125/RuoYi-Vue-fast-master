@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesMingzhongmingxiMapper">
+
+    <resultMap type="MesMingzhongmingxi" id="MesMingzhongmingxiResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="heatid"    column="heatid"    />
+        <result property="lfid"    column="lfid"    />
+        <result property="team"    column="team"    />
+        <result property="si"    column="si"    />
+        <result property="mn"    column="mn"    />
+        <result property="cr"    column="cr"    />
+    </resultMap>
+
+    <sql id="selectMesMingzhongmingxiVo">
+        select id, logtime, heatid, lfid, team, si, mn, cr from mes_mingzhongmingxi
+    </sql>
+
+    <sql id="selectMesChengfenMingzhongmingxiVo">
+        select logtime,heatid,lfid,team,to_char(mnmingzhong(heatid,steelgradeindex)) as mn,to_char(simingzhong(heatid,steelgradeindex)) as si
+        ,to_char(crmingzhong(heatid,steelgradeindex)) as cr
+          from (
+         select to_char(a.productiondate,'yyyy-MM-dd') as logtime ,a.heatid,
+          (select substr(treatno,0,1)||'#LF' from clf_base_data where clf_base_data.heatid=a.heatid and rownum=1) as lfid,
+          (select decode(team,1,'甲班',2,'乙班',3,'丙班','未知') from clf_base_data where clf_base_data.heatid=a.heatid and rownum=1) as team,a.steelgradeindex
+          from cccm_base_data a,cplan_tapping b
+          where  a.heatid=b.heatid and b.refine_type like '%L%' and b.steelgradeindex not like 'F%'
+         )
+    </sql>
+
+    <select id="selectMesChengfenMingzhongmingxiList" parameterType="MesMingzhongmingxi" resultMap="MesMingzhongmingxiResult">
+        <include refid="selectMesChengfenMingzhongmingxiVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="lfid != null  and lfid != ''"> and lfid = #{lfid}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+        </where>
+
+    </select>
+
+    <select id="selectMesMingzhongmingxiList" parameterType="MesMingzhongmingxi" resultMap="MesMingzhongmingxiResult">
+        <include refid="selectMesMingzhongmingxiVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="lfid != null  and lfid != ''"> and lfid = #{lfid}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+        </where>
+        order by lfid ,heatid
+    </select>
+
+    <select id="selectMesMingzhongmingxiById" parameterType="Long" resultMap="MesMingzhongmingxiResult">
+        <include refid="selectMesMingzhongmingxiVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMesMingzhongmingxi" parameterType="MesMingzhongmingxi" useGeneratedKeys="true" keyProperty="id">
+        insert into mes_mingzhongmingxi
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="heatid != null">heatid,</if>
+            <if test="lfid != null">lfid,</if>
+            <if test="team != null">team,</if>
+            <if test="si != null">si,</if>
+            <if test="mn != null">mn,</if>
+            <if test="cr != null">cr,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="heatid != null">#{heatid},</if>
+            <if test="lfid != null">#{lfid},</if>
+            <if test="team != null">#{team},</if>
+            <if test="si != null">#{si},</if>
+            <if test="mn != null">#{mn},</if>
+            <if test="cr != null">#{cr},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMesMingzhongmingxi" parameterType="MesMingzhongmingxi">
+        update mes_mingzhongmingxi
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="heatid != null">heatid = #{heatid},</if>
+            <if test="lfid != null">lfid = #{lfid},</if>
+            <if test="team != null">team = #{team},</if>
+            <if test="si != null">si = #{si},</if>
+            <if test="mn != null">mn = #{mn},</if>
+            <if test="cr != null">cr = #{cr},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMesMingzhongmingxiById" parameterType="Long">
+        delete from mes_mingzhongmingxi where id = #{id}
+    </delete>
+
+    <delete id="deleteMesMingzhongmingxiByIds" parameterType="String">
+        delete from mes_mingzhongmingxi where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

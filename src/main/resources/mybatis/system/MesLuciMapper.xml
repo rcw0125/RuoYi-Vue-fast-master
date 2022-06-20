@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesLuciMapper">
+
+    <resultMap type="MesLuci" id="MesLuciResult">
+        <result property="gongxu"    column="gongxu"    />
+        <result property="heatid"    column="heatid"    />
+        <result property="begintime"    column="begintime"    />
+        <result property="endtime"    column="endtime"    />
+    </resultMap>
+
+    <sql id="selectMesLuciVo">
+        select gongxu, heatid, begintime, endtime from mes_luci
+    </sql>
+
+    <select id="selectMesLuciList" parameterType="MesLuci" resultMap="MesLuciResult">
+        <include refid="selectMesLuciVo"/>
+        <where>
+            <if test="gongxu != null  and gongxu != ''"> and gongxu = #{gongxu}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="begintime != null  and begintime != ''"> and begintime = #{begintime}</if>
+            <if test="endtime != null  and endtime != ''"> and endtime = #{endtime}</if>
+        </where>
+    </select>
+
+    <select id="selectMesLuciByGongxu" parameterType="String" resultMap="MesLuciResult">
+        <include refid="selectMesLuciVo"/>
+        where gongxu = #{gongxu}
+    </select>
+
+    <select id="selectMesLuciByBof" parameterType="String" resultMap="MesLuciResult">
+      select gongxu, heatid, begintime, endtime from get_bof_heatid where gongxu = #{gongxu}
+    </select>
+
+    <select id="selectMesLuciByLf" parameterType="String" resultMap="MesLuciResult">
+      select gongxu, heatid, begintime, endtime from get_lf_heatid where gongxu = #{gongxu}
+    </select>
+
+    <select id="selectMesLuciByCcm" parameterType="String" resultMap="MesLuciResult">
+      select gongxu, heatid, begintime, endtime from get_ccm_heatid where gongxu = #{gongxu}
+    </select>
+
+    <select id="selectMesLuciByDes" parameterType="String" resultMap="MesLuciResult">
+      select gongxu, heatid, begintime, endtime from get_Des_heatid where gongxu = #{gongxu}
+    </select>
+
+    <insert id="insertMesLuci" parameterType="MesLuci">
+        insert into mes_luci
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gongxu != null">gongxu,</if>
+            <if test="heatid != null">heatid,</if>
+            <if test="begintime != null">begintime,</if>
+            <if test="endtime != null">endtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gongxu != null">#{gongxu},</if>
+            <if test="heatid != null">#{heatid},</if>
+            <if test="begintime != null">#{begintime},</if>
+            <if test="endtime != null">#{endtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMesLuci" parameterType="MesLuci">
+        update mes_luci
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatid != null">heatid = #{heatid},</if>
+            <if test="begintime != null">begintime = #{begintime},</if>
+            <if test="endtime != null">endtime = #{endtime},</if>
+        </trim>
+        where gongxu = #{gongxu}
+    </update>
+
+    <delete id="deleteMesLuciByGongxu" parameterType="String">
+        delete from mes_luci where gongxu = #{gongxu}
+    </delete>
+
+    <delete id="deleteMesLuciByGongxus" parameterType="String">
+        delete from mes_luci where gongxu in
+        <foreach item="gongxu" collection="array" open="(" separator="," close=")">
+            #{gongxu}
+        </foreach>
+    </delete>
+</mapper>

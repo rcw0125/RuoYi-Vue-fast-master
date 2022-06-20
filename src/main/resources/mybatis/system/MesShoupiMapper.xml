@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesShoupiMapper">
+
+    <resultMap type="MesShoupi" id="MesShoupiResult">
+        <result property="ccmid"    column="ccmid"    />
+        <result property="heatid"    column="heatid"    />
+        <result property="bofid"    column="bofid"    />
+        <result property="blowstart"    column="blowstart"    />
+        <result property="steelgrade"    column="steelgrade"    />
+        <result property="baocihao"    column="baocihao"    />
+        <result property="productiondate"    column="productiondate"    />
+        <result property="ironweight"    column="ironweight"    />
+        <result property="scrapweight"    column="scrapweight"    />
+        <result property="pigironweight"    column="pigironweight"    />
+        <result property="ykweight"    column="ykweight"    />
+        <result property="steelweight"    column="steelweight"    />
+        <result property="bloomweight"    column="bloomweight"    />
+        <result property="yangqi"    column="yangqi"    />
+        <result property="bofshihui"    column="bofshihui"    />
+        <result property="lfshihui"    column="lfshihui"    />
+        <result property="bofalloy"    column="bofalloy"    />
+        <result property="lfalloy"    column="lfalloy"    />
+        <result property="irontemp"    column="irontemp"    />
+        <result property="ncflag"    column="ncflag"    />
+        <result property="shihuishi"    column="shihuishi"    />
+        <result property="liuzha"    column="liuzha"    />
+        <result property="luling"    column="luling"    />
+        <result property="zhouqi"    column="zhouqi"    />
+        <result property="qingshaobaiyunshi"    column="qingshaobaiyunshi"    />
+        <result property="lgbaiyunshi"    column="lgbaiyunshi"    />
+        <result property="lactemp"    column="lactemp"    />
+        <result property="dingzhahui"    column="dingzhahui"    />
+        <result property="reblowCount"    column="reblow_count"    />
+        <result property="blowjudge"    column="blowjudge"    />
+        <result property="boftime"    column="boftime"    />
+    </resultMap>
+
+    <sql id="selectMesShoupiVo">
+ select * from (
+ select ccmid,heatid ,substr(heatid,2,1)|| '#转炉' as bofid,(select to_char(blow_start_time,'HH24:MI:SS')  from cbof_process_data where heatid=d.heatid) as blowstart ,
+ steelgrade ,baocihao ,productiondate ,ironweight ,scrapweight ,pigironweight ,ykweight ,steelweight ,nvl(bloomweight,0) as bloomweight
+  ,nvl(o2total,0) as yangqi,nvl(bofshihui,0) as bofshihui ,nvl(lfshihui,0) as lfshihui,nvl(bofalloy,0) as bofalloy, nvl(lfalloy,0) as lfalloy
+  ,nvl(irontemp,0) as irontemp  , nvl(ncflag,'未上传') as ncflag,nvl(qingshaobaiyunshi,0) as qingshaobaiyunshi,  nvl(shihuishi,0) as shihuishi,liuzha,luling,zhouqi,
+  lactemp,nvl(dingzhahui,0) as dingzhahui,nvl(lgbaiyunshi,0) as lgbaiyunshi, reblow_count,getyicilatan(heatid) as blowjudge,boftime
+  from (
+  select substr(a.ccmid, 3, 1) || '#铸机' as ccmid, a.heatid, a.steelgrade,(select cal_weight  from cbloom_data where cbloom_data.heatid = a.heatid) as bloomweight,
+  round(o2total,2)  as o2total,decode(remainslag,'是','1','0') as liuzha,reblow_count,furnace_age as luling,to_char(round(smelt_period*1.0/60,1)) as zhouqi ,lac_temp as lactemp,
+  (select round(sum(weight),2)  from get_bof_shihui  where heatid=a.heatid) as bofshihui ,
+  (select round(sum(weight),2)  from get_lf_shihui  where heatid=a.heatid) as lfshihui,
+  (select round(sum(weight),2)  from get_bof_alloy  where heatid=a.heatid) as bofalloy,
+  (select round(sum(weight),2)  from GET_BOF_DINGZHA_HUI  where heatid=a.heatid) as dingzhahui ,
+  (select round(sum(weight),2)  from get_lf_alloy  where heatid=a.heatid) as lfalloy,
+  (select sum(weight)  from cbof_addition_data where element = '13305' and type = 9 and cbof_addition_data.heatid = a.heatid) as qingshaobaiyunshi,
+  (select sum(weight)  from cbof_addition_data where element = '13307' and type = 9 and cbof_addition_data.heatid = a.heatid) as shihuishi,
+  (select sum(weight)  from cbof_addition_data where element = '13323' and type = 9 and cbof_addition_data.heatid = a.heatid) as lgbaiyunshi,
+  (select substr(ccmid, 3, 1) || '-' || tundish_heatnum from cccm_process_data where cccm_process_data.heatid = a.heatid) as baocihao,
+   round(b.ironweight, 2) as ironweight,round(b.scrapweight, 2) as scrapweight,round(b.pigironweight, 2) as pigironweight,round(ykweight, 2) as ykweight,
+   c.weight as steelweight,to_char(productiondate,'yyyy-MM-dd') as productiondate,to_char(e.CHARGING_START_TIME,'yyyy-MM-dd') as boftime,b.irontemp ,
+   (select ncflag from get_nc_flag where heatid = a.heatid) as ncflag
+   from cccm_base_data a ,cbof_feed_data b, csteel_data c,cbof_process_data e where a.heatid = b.heatid and a.heatid = c.heatid and a.heatid=e.heatid
+   order by a.ccmid,a.productiondate
+   )d
+   )
+    </sql>
+
+    <select id="selectMesShoupiList" parameterType="MesShoupi" resultMap="MesShoupiResult">
+        <include refid="selectMesShoupiVo"/>
+        <where>
+            <if test="ccmid != null  and ccmid != ''"> and ccmid = #{ccmid}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="bofid != null  and bofid != ''"> and bofid = #{bofid}</if>
+            <if test="productiondate != null  and productiondate != ''"> and productiondate = #{productiondate}</if>
+            <if test="ncflag != null  and ncflag != ''"> and ncflag = #{ncflag}</if>
+            <if test="boftime != null  and boftime != ''"> and boftime = #{boftime}</if>
+        </where>
+    </select>
+
+    <select id="selectMesShoupiByCcmid" parameterType="String" resultMap="MesShoupiResult">
+        <include refid="selectMesShoupiVo"/>
+        where ccmid = #{ccmid}
+    </select>
+
+    <insert id="insertMesShoupi" parameterType="MesShoupi">
+        insert into mes_shoupi
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ccmid != null">ccmid,</if>
+            <if test="heatid != null">heatid,</if>
+            <if test="bofid != null">bofid,</if>
+            <if test="blowstart != null">blowstart,</if>
+            <if test="steelgrade != null">steelgrade,</if>
+            <if test="baocihao != null">baocihao,</if>
+            <if test="productiondate != null">productiondate,</if>
+            <if test="ironweight != null">ironweight,</if>
+            <if test="scrapweight != null">scrapweight,</if>
+            <if test="pigironweight != null">pigironweight,</if>
+            <if test="ykweight != null">ykweight,</if>
+            <if test="steelweight != null">steelweight,</if>
+            <if test="bloomweight != null">bloomweight,</if>
+            <if test="yangqi != null">yangqi,</if>
+            <if test="bofshihui != null">bofshihui,</if>
+            <if test="lfshihui != null">lfshihui,</if>
+            <if test="bofalloy != null">bofalloy,</if>
+            <if test="lfalloy != null">lfalloy,</if>
+            <if test="irontemp != null">irontemp,</if>
+            <if test="ncflag != null">ncflag,</if>
+            <if test="shihuishi != null">shihuishi,</if>
+            <if test="liuzha != null">liuzha,</if>
+            <if test="luling != null">luling,</if>
+            <if test="zhouqi != null">zhouqi,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ccmid != null">#{ccmid},</if>
+            <if test="heatid != null">#{heatid},</if>
+            <if test="bofid != null">#{bofid},</if>
+            <if test="blowstart != null">#{blowstart},</if>
+            <if test="steelgrade != null">#{steelgrade},</if>
+            <if test="baocihao != null">#{baocihao},</if>
+            <if test="productiondate != null">#{productiondate},</if>
+            <if test="ironweight != null">#{ironweight},</if>
+            <if test="scrapweight != null">#{scrapweight},</if>
+            <if test="pigironweight != null">#{pigironweight},</if>
+            <if test="ykweight != null">#{ykweight},</if>
+            <if test="steelweight != null">#{steelweight},</if>
+            <if test="bloomweight != null">#{bloomweight},</if>
+            <if test="yangqi != null">#{yangqi},</if>
+            <if test="bofshihui != null">#{bofshihui},</if>
+            <if test="lfshihui != null">#{lfshihui},</if>
+            <if test="bofalloy != null">#{bofalloy},</if>
+            <if test="lfalloy != null">#{lfalloy},</if>
+            <if test="irontemp != null">#{irontemp},</if>
+            <if test="ncflag != null">#{ncflag},</if>
+            <if test="shihuishi != null">#{shihuishi},</if>
+            <if test="liuzha != null">#{liuzha},</if>
+            <if test="luling != null">#{luling},</if>
+            <if test="zhouqi != null">#{zhouqi},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMesShoupi" parameterType="MesShoupi">
+        update mes_shoupi
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatid != null">heatid = #{heatid},</if>
+            <if test="bofid != null">bofid = #{bofid},</if>
+            <if test="blowstart != null">blowstart = #{blowstart},</if>
+            <if test="steelgrade != null">steelgrade = #{steelgrade},</if>
+            <if test="baocihao != null">baocihao = #{baocihao},</if>
+            <if test="productiondate != null">productiondate = #{productiondate},</if>
+            <if test="ironweight != null">ironweight = #{ironweight},</if>
+            <if test="scrapweight != null">scrapweight = #{scrapweight},</if>
+            <if test="pigironweight != null">pigironweight = #{pigironweight},</if>
+            <if test="ykweight != null">ykweight = #{ykweight},</if>
+            <if test="steelweight != null">steelweight = #{steelweight},</if>
+            <if test="bloomweight != null">bloomweight = #{bloomweight},</if>
+            <if test="yangqi != null">yangqi = #{yangqi},</if>
+            <if test="bofshihui != null">bofshihui = #{bofshihui},</if>
+            <if test="lfshihui != null">lfshihui = #{lfshihui},</if>
+            <if test="bofalloy != null">bofalloy = #{bofalloy},</if>
+            <if test="lfalloy != null">lfalloy = #{lfalloy},</if>
+            <if test="irontemp != null">irontemp = #{irontemp},</if>
+            <if test="ncflag != null">ncflag = #{ncflag},</if>
+            <if test="shihuishi != null">shihuishi = #{shihuishi},</if>
+            <if test="liuzha != null">liuzha = #{liuzha},</if>
+            <if test="luling != null">luling = #{luling},</if>
+            <if test="zhouqi != null">zhouqi = #{zhouqi},</if>
+        </trim>
+        where ccmid = #{ccmid}
+    </update>
+
+    <delete id="deleteMesShoupiByCcmid" parameterType="String">
+        delete from mes_shoupi where ccmid = #{ccmid}
+    </delete>
+
+    <delete id="deleteMesShoupiByCcmids" parameterType="String">
+        delete from mes_shoupi where ccmid in
+        <foreach item="ccmid" collection="array" open="(" separator="," close=")">
+            #{ccmid}
+        </foreach>
+    </delete>
+</mapper>

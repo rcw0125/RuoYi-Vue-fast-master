@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipJianxiuMapper">
+
+    <resultMap type="EquipJianxiu" id="EquipJianxiuResult">
+        <result property="id"    column="id"    />
+        <result property="sbid"    column="sbid"    />
+        <result property="sbname"    column="sbname"    />
+        <result property="dept"    column="dept"    />
+        <result property="team"    column="team"    />
+        <result property="jhr"    column="jhr"    />
+        <result property="jhrq"    column="jhrq"    />
+        <result property="djtime"    column="djtime"    />
+        <result property="jxnr"    column="jxnr"    />
+        <result property="jxms"    column="jxms"    />
+        <result property="jxtime"    column="jxtime"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectEquipJianxiuVo">
+        select id, sbid, sbname, dept, team, jhr, jhrq, djtime, jxnr, jxms, jxtime, status from equip_jianxiu
+    </sql>
+
+    <select id="selectEquipJianxiuList" parameterType="EquipJianxiu" resultMap="EquipJianxiuResult">
+        <include refid="selectEquipJianxiuVo"/>
+        <where>
+            <if test="sbid != null "> and sbid = #{sbid}</if>
+            <if test="sbname != null  and sbname != ''"> and sbname like concat('%', #{sbname}, '%')</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+            <if test="jhr != null  and jhr != ''"> and jhr = #{jhr}</if>
+            <if test="jhrq != null  and jhrq != ''"> and jhrq = #{jhrq}</if>
+            <if test="djtime != null  and djtime != ''"> and djtime = #{djtime}</if>
+            <if test="jxnr != null  and jxnr != ''"> and jxnr = #{jxnr}</if>
+            <if test="jxms != null  and jxms != ''"> and jxms = #{jxms}</if>
+            <if test="jxtime != null  and jxtime != ''"> and jxtime = #{jxtime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND jhrq &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND jhrq &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectEquipJianxiuById" parameterType="Long" resultMap="EquipJianxiuResult">
+        <include refid="selectEquipJianxiuVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEquipJianxiu" parameterType="EquipJianxiu" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_jianxiu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">sbid,</if>
+            <if test="sbname != null">sbname,</if>
+            <if test="dept != null">dept,</if>
+            <if test="team != null">team,</if>
+            <if test="jhr != null">jhr,</if>
+            <if test="jhrq != null">jhrq,</if>
+            <if test="djtime != null">djtime,</if>
+            <if test="jxnr != null">jxnr,</if>
+            <if test="jxms != null">jxms,</if>
+            <if test="jxtime != null">jxtime,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sbid != null">#{sbid},</if>
+            <if test="sbname != null">#{sbname},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="team != null">#{team},</if>
+            <if test="jhr != null">#{jhr},</if>
+            <if test="jhrq != null">#{jhrq},</if>
+            <if test="djtime != null">#{djtime},</if>
+            <if test="jxnr != null">#{jxnr},</if>
+            <if test="jxms != null">#{jxms},</if>
+            <if test="jxtime != null">#{jxtime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipJianxiu" parameterType="EquipJianxiu">
+        update equip_jianxiu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sbid != null">sbid = #{sbid},</if>
+            <if test="sbname != null">sbname = #{sbname},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="team != null">team = #{team},</if>
+            <if test="jhr != null">jhr = #{jhr},</if>
+            <if test="jhrq != null">jhrq = #{jhrq},</if>
+            <if test="djtime != null">djtime = #{djtime},</if>
+            <if test="jxnr != null">jxnr = #{jxnr},</if>
+            <if test="jxms != null">jxms = #{jxms},</if>
+            <if test="jxtime != null">jxtime = #{jxtime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipJianxiuById" parameterType="Long">
+        delete from equip_jianxiu where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipJianxiuByIds" parameterType="String">
+        delete from equip_jianxiu where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

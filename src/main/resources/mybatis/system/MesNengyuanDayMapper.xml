@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesNengyuanDayMapper">
+
+    <resultMap type="MesNengyuanDay" id="MesNengyuanDayResult">
+        <result property="logtime"    column="logtime"    />
+        <result property="tg"    column="tg"    />
+        <result property="shuihao"    column="SHUIHAO"    />
+        <result property="dianhao"    column="dianhao"    />
+        <result property="jiaolumeiqi"    column="JIAOLUMEIQI"    />
+        <result property="zhuanlumeiqi"    column="ZHUANLUMEIQI"    />
+        <result property="danqi"    column="DANQI"    />
+        <result property="yangqi"    column="YANGQI"    />
+        <result property="yaqi"    column="YAQI"    />
+        <result property="zhengqiwaigong"    column="ZHENGQIWAIGONG"    />
+        <result property="meiqihuishou"    column="MEIQIHUISHOU"    />
+    </resultMap>
+
+    <sql id="selectMesNengyuanDayVo">
+        select logtime, tg, SHUIHAO, dianhao, JIAOLUMEIQI, ZHUANLUMEIQI, DANQI, YANGQI, YAQI, ZHENGQIWAIGONG, MEIQIHUISHOU from nengyuan_day
+    </sql>
+
+    <select id="selectMesNengyuanDayList" parameterType="MesNengyuanDay" resultMap="MesNengyuanDayResult">
+        <include refid="selectMesNengyuanDayVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="tg != null "> and tg = #{tg}</if>
+            <if test="shuihao != null "> and SHUIHAO = #{shuihao}</if>
+            <if test="dianhao != null "> and dianhao = #{dianhao}</if>
+            <if test="jiaolumeiqi != null "> and JIAOLUMEIQI = #{jiaolumeiqi}</if>
+            <if test="zhuanlumeiqi != null "> and ZHUANLUMEIQI = #{zhuanlumeiqi}</if>
+            <if test="danqi != null "> and DANQI = #{danqi}</if>
+            <if test="yangqi != null "> and YANGQI = #{yangqi}</if>
+            <if test="yaqi != null "> and YAQI = #{yaqi}</if>
+            <if test="zhengqiwaigong != null "> and ZHENGQIWAIGONG = #{zhengqiwaigong}</if>
+            <if test="meiqihuishou != null "> and MEIQIHUISHOU = #{meiqihuishou}</if>
+        </where>
+    </select>
+
+    <select id="selectMesNengyuanDayByLogtime" parameterType="String" resultMap="MesNengyuanDayResult">
+        <include refid="selectMesNengyuanDayVo"/>
+        where logtime = #{logtime}
+    </select>
+
+    <insert id="insertMesNengyuanDay" parameterType="MesNengyuanDay">
+        insert into nengyuan_day
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="tg != null">tg,</if>
+            <if test="shuihao != null">SHUIHAO,</if>
+            <if test="dianhao != null">dianhao,</if>
+            <if test="jiaolumeiqi != null">JIAOLUMEIQI,</if>
+            <if test="zhuanlumeiqi != null">ZHUANLUMEIQI,</if>
+            <if test="danqi != null">DANQI,</if>
+            <if test="yangqi != null">YANGQI,</if>
+            <if test="yaqi != null">YAQI,</if>
+            <if test="zhengqiwaigong != null">ZHENGQIWAIGONG,</if>
+            <if test="meiqihuishou != null">MEIQIHUISHOU,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="tg != null">#{tg},</if>
+            <if test="shuihao != null">#{shuihao},</if>
+            <if test="dianhao != null">#{dianhao},</if>
+            <if test="jiaolumeiqi != null">#{jiaolumeiqi},</if>
+            <if test="zhuanlumeiqi != null">#{zhuanlumeiqi},</if>
+            <if test="danqi != null">#{danqi},</if>
+            <if test="yangqi != null">#{yangqi},</if>
+            <if test="yaqi != null">#{yaqi},</if>
+            <if test="zhengqiwaigong != null">#{zhengqiwaigong},</if>
+            <if test="meiqihuishou != null">#{meiqihuishou},</if>
+         </trim>
+    </insert>
+
+    <insert id="shengchengMesNengyuanDay" parameterType="String">
+    insert into nengyuan_day(TG,ShuiHao,DianHao,JiaoLuMeiQi,ZhuanLuMeiQi,DanQi,YangQi,YaQi,ZhengQiWaiGong,MeiQiHuiShou,logtime)
+    select ic.value as tg,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_ShuiHao') as ShuiHao
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and (code='TG_DianHao' or code='BXG_DianHao') ) as DianHao
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_JiaoLuMeiQi'  ) as JiaoLuMeiQi
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_ZhuanLuMeiQi'  ) as ZhuanLuMeiQi
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_DanQi'  ) as DanQi
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_YangQi'  ) as YangQi
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_YaQi'  ) as YaQi
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_ZhengQiWaiGong')-(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_dlgrhzq') as ZhengQiWaiGong
+   ,(select sum(value)  from INDICATORVALUES  where bizdate=ic.bizdate and code='TG_MeiQiHuiShou'  ) as MeiQiHuiShou
+   ,ic.bizdate  as logtime
+   from INDICATORVALUES ic  where ic.bizdate= #{logtime} and ic.code='C5'
+    </insert>
+
+    <update id="updateMesNengyuanDay" parameterType="MesNengyuanDay">
+        update nengyuan_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tg != null">tg = #{tg},</if>
+            <if test="shuihao != null">SHUIHAO = #{shuihao},</if>
+            <if test="dianhao != null">dianhao = #{dianhao},</if>
+            <if test="jiaolumeiqi != null">JIAOLUMEIQI = #{jiaolumeiqi},</if>
+            <if test="zhuanlumeiqi != null">ZHUANLUMEIQI = #{zhuanlumeiqi},</if>
+            <if test="danqi != null">DANQI = #{danqi},</if>
+            <if test="yangqi != null">YANGQI = #{yangqi},</if>
+            <if test="yaqi != null">YAQI = #{yaqi},</if>
+            <if test="zhengqiwaigong != null">ZHENGQIWAIGONG = #{zhengqiwaigong},</if>
+            <if test="meiqihuishou != null">MEIQIHUISHOU = #{meiqihuishou},</if>
+        </trim>
+        where logtime = #{logtime}
+    </update>
+
+    <delete id="deleteMesNengyuanDayByLogtime" parameterType="String">
+        delete from mes_nengyuan_day where logtime = #{logtime}
+    </delete>
+
+    <delete id="deleteMesNengyuanDayByLogtimes" parameterType="String">
+        delete from mes_nengyuan_day where logtime in
+        <foreach item="logtime" collection="array" open="(" separator="," close=")">
+            #{logtime}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.DianliangBiaozhunMapper">
+    
+    <resultMap type="DianliangBiaozhun" id="DianliangBiaozhunResult">
+        <result property="id"    column="id"    />
+        <result property="dept"    column="dept"    />
+        <result property="val"    column="val"    />
+    </resultMap>
+
+    <sql id="selectDianliangBiaozhunVo">
+        select id, dept, val from dianliang_biaozhun
+    </sql>
+
+    <select id="selectDianliangBiaozhunList" parameterType="DianliangBiaozhun" resultMap="DianliangBiaozhunResult">
+        <include refid="selectDianliangBiaozhunVo"/>
+        <where>  
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="val != null "> and val = #{val}</if>
+        </where>
+    </select>
+    
+    <select id="selectDianliangBiaozhunById" parameterType="Integer" resultMap="DianliangBiaozhunResult">
+        <include refid="selectDianliangBiaozhunVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDianliangBiaozhun" parameterType="DianliangBiaozhun" useGeneratedKeys="true" keyProperty="id">
+        insert into dianliang_biaozhun
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dept != null">dept,</if>
+            <if test="val != null">val,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dept != null">#{dept},</if>
+            <if test="val != null">#{val},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDianliangBiaozhun" parameterType="DianliangBiaozhun">
+        update dianliang_biaozhun
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="val != null">val = #{val},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDianliangBiaozhunById" parameterType="Integer">
+        delete from dianliang_biaozhun where id = #{id}
+    </delete>
+
+    <delete id="deleteDianliangBiaozhunByIds" parameterType="String">
+        delete from dianliang_biaozhun where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipDianjianfenleiMapper">
+    
+    <resultMap type="EquipDianjianfenlei" id="EquipDianjianfenleiResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="djfl"    column="djfl"    />
+        <result property="djsl"    column="djsl"    />
+        <result property="wtsl"    column="wtsl"    />
+        <result property="zhou"    column="zhou"    />
+        <result property="sjd"    column="sjd"    />
+        <result property="ts"    column="ts"    />
+    </resultMap>
+
+    <sql id="selectEquipDianjianfenleiVo">
+        select id, logtime, djfl, djsl, wtsl, zhou, sjd, ts from equip_dianjianfenlei
+    </sql>
+
+    <select id="selectEquipDianjianfenleiList" parameterType="EquipDianjianfenlei" resultMap="EquipDianjianfenleiResult">
+        <include refid="selectEquipDianjianfenleiVo"/>
+        <where>  
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="djfl != null  and djfl != ''"> and djfl = #{djfl}</if>
+        </where>
+    </select>
+    
+    <select id="selectEquipDianjianfenleiById" parameterType="Long" resultMap="EquipDianjianfenleiResult">
+        <include refid="selectEquipDianjianfenleiVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEquipDianjianfenlei" parameterType="EquipDianjianfenlei" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_dianjianfenlei
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="djfl != null">djfl,</if>
+            <if test="djsl != null">djsl,</if>
+            <if test="wtsl != null">wtsl,</if>
+            <if test="zhou != null">zhou,</if>
+            <if test="sjd != null">sjd,</if>
+            <if test="ts != null">ts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="djfl != null">#{djfl},</if>
+            <if test="djsl != null">#{djsl},</if>
+            <if test="wtsl != null">#{wtsl},</if>
+            <if test="zhou != null">#{zhou},</if>
+            <if test="sjd != null">#{sjd},</if>
+            <if test="ts != null">#{ts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipDianjianfenlei" parameterType="EquipDianjianfenlei">
+        update equip_dianjianfenlei
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="djfl != null">djfl = #{djfl},</if>
+            <if test="djsl != null">djsl = #{djsl},</if>
+            <if test="wtsl != null">wtsl = #{wtsl},</if>
+            <if test="zhou != null">zhou = #{zhou},</if>
+            <if test="sjd != null">sjd = #{sjd},</if>
+            <if test="ts != null">ts = #{ts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipDianjianfenleiById" parameterType="Long">
+        delete from equip_dianjianfenlei where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipDianjianfenleiByIds" parameterType="String">
+        delete from equip_dianjianfenlei where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

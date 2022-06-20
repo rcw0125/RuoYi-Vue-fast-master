@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipMyDianjianMapper">
+    
+    <resultMap type="EquipMyDianjian" id="EquipMyDianjianResult">
+        <result property="id"    column="id"    />
+        <result property="bzid"    column="bzid"    />
+        <result property="username"    column="username"    />
+        <result property="dept"    column="dept"    />
+        <result property="team"    column="team"    />
+    </resultMap>
+
+    <sql id="selectEquipMyDianjianVo">
+        select id, bzid, username, dept, team from equip_my_dianjian
+    </sql>
+
+    <select id="selectEquipMyDianjianList" parameterType="EquipMyDianjian" resultMap="EquipMyDianjianResult">
+        <include refid="selectEquipMyDianjianVo"/>
+        <where>  
+            <if test="bzid != null "> and bzid = #{bzid}</if>
+            <if test="username != null  and username != ''"> and username = #{username}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="team != null  and team != ''"> and team = #{team}</if>
+        </where>
+    </select>
+    
+    <select id="selectEquipMyDianjianById" parameterType="Long" resultMap="EquipMyDianjianResult">
+        <include refid="selectEquipMyDianjianVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEquipMyDianjian" parameterType="EquipMyDianjian" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_my_dianjian
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bzid != null">bzid,</if>
+            <if test="username != null">username,</if>
+            <if test="dept != null">dept,</if>
+            <if test="team != null">team,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bzid != null">#{bzid},</if>
+            <if test="username != null">#{username},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="team != null">#{team},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipMyDianjian" parameterType="EquipMyDianjian">
+        update equip_my_dianjian
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bzid != null">bzid = #{bzid},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="team != null">team = #{team},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipMyDianjianById" parameterType="Long">
+        delete from equip_my_dianjian where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipMyDianjianByIds" parameterType="String">
+        delete from equip_my_dianjian where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

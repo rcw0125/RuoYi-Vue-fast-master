@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.DianliangCfgMapper">
+
+    <resultMap type="DianliangCfg" id="DianliangCfgResult">
+        <result property="id"    column="id"    />
+        <result property="bianhao"    column="bianhao"    />
+        <result property="beilv"    column="beilv"    />
+        <result property="name"    column="name"    />
+        <result property="leibie"    column="leibie"    />
+        <result property="dept"    column="dept"    />
+        <result property="val"    column="val"    />
+        <result property="laiyuan"    column="laiyuan"    />
+        <result property="ordernum"    column="ordernum"    />
+        <result property="note"    column="note"    />
+        <result property="miaoshu"    column="miaoshu"    />
+    </resultMap>
+
+    <sql id="selectDianliangCfgVo">
+        select id, bianhao, beilv, name, leibie, dept, val, laiyuan, ordernum, note, miaoshu from dianliang_cfg
+    </sql>
+
+    <select id="selectDianliangCfgList" parameterType="DianliangCfg" resultMap="DianliangCfgResult">
+        <include refid="selectDianliangCfgVo"/>
+        <where>
+            <if test="bianhao != null  and bianhao != ''"> and bianhao = #{bianhao}</if>
+            <if test="beilv != null  and beilv != ''"> and beilv = #{beilv}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="leibie != null  and leibie != ''"> and leibie = #{leibie}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="val != null "> and val = #{val}</if>
+            <if test="laiyuan != null  and laiyuan != ''"> and laiyuan = #{laiyuan}</if>
+            <if test="ordernum != null "> and ordernum = #{ordernum}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="miaoshu != null  and miaoshu != ''"> and miaoshu = #{miaoshu}</if>
+        </where>
+    </select>
+
+    <select id="selectDianliangCfgById" parameterType="Long" resultMap="DianliangCfgResult">
+        <include refid="selectDianliangCfgVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDianliangCfg" parameterType="DianliangCfg" useGeneratedKeys="true" keyProperty="id">
+        insert into dianliang_cfg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bianhao != null">bianhao,</if>
+            <if test="beilv != null">beilv,</if>
+            <if test="name != null">name,</if>
+            <if test="leibie != null">leibie,</if>
+            <if test="dept != null">dept,</if>
+            <if test="val != null">val,</if>
+            <if test="laiyuan != null">laiyuan,</if>
+            <if test="ordernum != null">ordernum,</if>
+            <if test="note != null">note,</if>
+            <if test="miaoshu != null">miaoshu,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bianhao != null">#{bianhao},</if>
+            <if test="beilv != null">#{beilv},</if>
+            <if test="name != null">#{name},</if>
+            <if test="leibie != null">#{leibie},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="val != null">#{val},</if>
+            <if test="laiyuan != null">#{laiyuan},</if>
+            <if test="ordernum != null">#{ordernum},</if>
+            <if test="note != null">#{note},</if>
+            <if test="miaoshu != null">#{miaoshu},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDianliangCfg" parameterType="DianliangCfg">
+        update dianliang_cfg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bianhao != null">bianhao = #{bianhao},</if>
+            <if test="beilv != null">beilv = #{beilv},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="leibie != null">leibie = #{leibie},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="val != null">val = #{val},</if>
+            <if test="laiyuan != null">laiyuan = #{laiyuan},</if>
+            <if test="ordernum != null">ordernum = #{ordernum},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="miaoshu != null">miaoshu = #{miaoshu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDianliangCfgById" parameterType="Long">
+        delete from dianliang_cfg where id = #{id}
+    </delete>
+
+    <delete id="deleteDianliangCfgByIds" parameterType="String">
+        delete from dianliang_cfg where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

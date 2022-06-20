@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipDianjiantongjiMapper">
+
+    <resultMap type="EquipDianjiantongji" id="EquipDianjiantongjiResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="zhou"    column="zhou"    />
+        <result property="sjd"    column="sjd"    />
+        <result property="djdw"    column="djdw"    />
+        <result property="ydjsl"    column="ydjsl"    />
+        <result property="sdjsl"    column="sdjsl"    />
+        <result property="djrate"    column="djrate"    />
+        <result property="cjzb"    column="cjzb"    />
+        <result property="wtsl"    column="wtsl"    />
+        <result property="glwtsl"    column="glwtsl"    />
+        <result property="glwtsllj"    column="glwtsllj"    />
+        <result property="wtrate"    column="wtrate"    />
+    </resultMap>
+
+    <sql id="selectEquipDianjiantongjiVo">
+        select id, logtime, zhou, sjd, djdw, ydjsl, sdjsl, djrate, cjzb, wtsl, glwtsl, glwtsllj, wtrate from equip_dianjiantongji
+    </sql>
+
+    <select id="selectEquipDianjiantongjiList" parameterType="EquipDianjiantongji" resultMap="EquipDianjiantongjiResult">
+        <include refid="selectEquipDianjiantongjiVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="zhou != null  and zhou != ''"> and zhou = #{zhou}</if>
+            <if test="sjd != null  and sjd != ''"> and sjd = #{sjd}</if>
+            <if test="djdw != null  and djdw != ''"> and djdw = #{djdw}</if>
+            <if test="ydjsl != null "> and ydjsl = #{ydjsl}</if>
+            <if test="sdjsl != null "> and sdjsl = #{sdjsl}</if>
+            <!--<if test="djrate != null "> and djrate = #{djrate}</if>-->
+            <if test="cjzb != null "> and cjzb = #{cjzb}</if>
+            <if test="wtsl != null "> and wtsl = #{wtsl}</if>
+            <if test="glwtsl != null "> and glwtsl = #{glwtsl}</if>
+            <if test="glwtsllj != null "> and glwtsllj = #{glwtsllj}</if>
+
+            <!--<if test="wtrate != null "> and wtrate = #{wtrate}</if>-->
+        </where>
+    </select>
+
+    <select id="selectEquipDianjiantongjiById" parameterType="Long" resultMap="EquipDianjiantongjiResult">
+        <include refid="selectEquipDianjiantongjiVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEquipDianjiantongji" parameterType="EquipDianjiantongji">
+        insert into equip_dianjiantongji
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="logtime != null">logtime,</if>
+            <if test="zhou != null">zhou,</if>
+            <if test="sjd != null">sjd,</if>
+            <if test="djdw != null">djdw,</if>
+            <if test="ydjsl != null">ydjsl,</if>
+            <if test="sdjsl != null">sdjsl,</if>
+            <if test="djrate != null">djrate,</if>
+            <if test="cjzb != null">cjzb,</if>
+            <if test="wtsl != null">wtsl,</if>
+            <if test="glwtsl != null">glwtsl,</if>
+            <if test="glwtsllj != null">glwtsllj,</if>
+            <if test="wtrate != null">wtrate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="logtime != null">#{logtime},</if>
+            <if test="zhou != null">#{zhou},</if>
+            <if test="sjd != null">#{sjd},</if>
+            <if test="djdw != null">#{djdw},</if>
+            <if test="ydjsl != null">#{ydjsl},</if>
+            <if test="sdjsl != null">#{sdjsl},</if>
+            <if test="djrate != null">#{djrate},</if>
+            <if test="cjzb != null">#{cjzb},</if>
+            <if test="wtsl != null">#{wtsl},</if>
+            <if test="glwtsl != null">#{glwtsl},</if>
+            <if test="glwtsllj != null">#{glwtsllj},</if>
+            <if test="wtrate != null">#{wtrate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipDianjiantongji" parameterType="EquipDianjiantongji">
+        update equip_dianjiantongji
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="zhou != null">zhou = #{zhou},</if>
+            <if test="sjd != null">sjd = #{sjd},</if>
+            <if test="djdw != null">djdw = #{djdw},</if>
+            <if test="ydjsl != null">ydjsl = #{ydjsl},</if>
+            <if test="sdjsl != null">sdjsl = #{sdjsl},</if>
+            <if test="djrate != null">djrate = #{djrate},</if>
+            <if test="cjzb != null">cjzb = #{cjzb},</if>
+            <if test="wtsl != null">wtsl = #{wtsl},</if>
+            <if test="glwtsl != null">glwtsl = #{glwtsl},</if>
+            <if test="glwtsllj != null">glwtsllj = #{glwtsllj},</if>
+            <if test="wtrate != null">wtrate = #{wtrate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipDianjiantongjiById" parameterType="Long">
+        delete from equip_dianjiantongji where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipDianjiantongjiByIds" parameterType="String">
+        delete from equip_dianjiantongji where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

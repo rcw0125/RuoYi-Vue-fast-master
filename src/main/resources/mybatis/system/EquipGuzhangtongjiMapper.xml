@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EquipGuzhangtongjiMapper">
+    
+    <resultMap type="EquipGuzhangtongji" id="EquipGuzhangtongjiResult">
+        <result property="id"    column="id"    />
+        <result property="djdw"    column="djdw"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="djsl"    column="djsl"    />
+        <result property="yjssl"    column="yjssl"    />
+        <result property="jssl"    column="jssl"    />
+        <result property="clsl"    column="clsl"    />
+        <result property="dclsl"    column="dclsl"    />
+        <result property="yyzsl"    column="yyzsl"    />
+        <result property="yzsl"    column="yzsl"    />
+        <result property="yzrate"    column="yzrate"    />
+        <result property="ywsl"    column="ywsl"    />
+        <result property="ywrate"    column="ywrate"    />
+        <result property="jsrate"    column="jsrate"    />
+        <result property="clrate"    column="clrate"    />
+        <result property="zhou"    column="zhou"    />
+        <result property="sjd"    column="sjd"    />
+        <result property="ts"    column="ts"    />
+    </resultMap>
+
+    <sql id="selectEquipGuzhangtongjiVo">
+        select id, djdw, logtime, djsl, yjssl, jssl, clsl, dclsl, yyzsl, yzsl, yzrate, ywsl, ywrate, jsrate, clrate, zhou, sjd, ts from equip_guzhangtongji
+    </sql>
+
+    <select id="selectEquipGuzhangtongjiList" parameterType="EquipGuzhangtongji" resultMap="EquipGuzhangtongjiResult">
+        <include refid="selectEquipGuzhangtongjiVo"/>
+        <where>  
+            <if test="djdw != null  and djdw != ''"> and djdw = #{djdw}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="zhou != null  and zhou != ''"> and zhou = #{zhou}</if>
+        </where>
+    </select>
+    
+    <select id="selectEquipGuzhangtongjiById" parameterType="Long" resultMap="EquipGuzhangtongjiResult">
+        <include refid="selectEquipGuzhangtongjiVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEquipGuzhangtongji" parameterType="EquipGuzhangtongji" useGeneratedKeys="true" keyProperty="id">
+        insert into equip_guzhangtongji
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="djdw != null">djdw,</if>
+            <if test="logtime != null">logtime,</if>
+            <if test="djsl != null">djsl,</if>
+            <if test="yjssl != null">yjssl,</if>
+            <if test="jssl != null">jssl,</if>
+            <if test="clsl != null">clsl,</if>
+            <if test="dclsl != null">dclsl,</if>
+            <if test="yyzsl != null">yyzsl,</if>
+            <if test="yzsl != null">yzsl,</if>
+            <if test="yzrate != null">yzrate,</if>
+            <if test="ywsl != null">ywsl,</if>
+            <if test="ywrate != null">ywrate,</if>
+            <if test="jsrate != null">jsrate,</if>
+            <if test="clrate != null">clrate,</if>
+            <if test="zhou != null">zhou,</if>
+            <if test="sjd != null">sjd,</if>
+            <if test="ts != null">ts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="djdw != null">#{djdw},</if>
+            <if test="logtime != null">#{logtime},</if>
+            <if test="djsl != null">#{djsl},</if>
+            <if test="yjssl != null">#{yjssl},</if>
+            <if test="jssl != null">#{jssl},</if>
+            <if test="clsl != null">#{clsl},</if>
+            <if test="dclsl != null">#{dclsl},</if>
+            <if test="yyzsl != null">#{yyzsl},</if>
+            <if test="yzsl != null">#{yzsl},</if>
+            <if test="yzrate != null">#{yzrate},</if>
+            <if test="ywsl != null">#{ywsl},</if>
+            <if test="ywrate != null">#{ywrate},</if>
+            <if test="jsrate != null">#{jsrate},</if>
+            <if test="clrate != null">#{clrate},</if>
+            <if test="zhou != null">#{zhou},</if>
+            <if test="sjd != null">#{sjd},</if>
+            <if test="ts != null">#{ts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquipGuzhangtongji" parameterType="EquipGuzhangtongji">
+        update equip_guzhangtongji
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="djdw != null">djdw = #{djdw},</if>
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="djsl != null">djsl = #{djsl},</if>
+            <if test="yjssl != null">yjssl = #{yjssl},</if>
+            <if test="jssl != null">jssl = #{jssl},</if>
+            <if test="clsl != null">clsl = #{clsl},</if>
+            <if test="dclsl != null">dclsl = #{dclsl},</if>
+            <if test="yyzsl != null">yyzsl = #{yyzsl},</if>
+            <if test="yzsl != null">yzsl = #{yzsl},</if>
+            <if test="yzrate != null">yzrate = #{yzrate},</if>
+            <if test="ywsl != null">ywsl = #{ywsl},</if>
+            <if test="ywrate != null">ywrate = #{ywrate},</if>
+            <if test="jsrate != null">jsrate = #{jsrate},</if>
+            <if test="clrate != null">clrate = #{clrate},</if>
+            <if test="zhou != null">zhou = #{zhou},</if>
+            <if test="sjd != null">sjd = #{sjd},</if>
+            <if test="ts != null">ts = #{ts},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEquipGuzhangtongjiById" parameterType="Long">
+        delete from equip_guzhangtongji where id = #{id}
+    </delete>
+
+    <delete id="deleteEquipGuzhangtongjiByIds" parameterType="String">
+        delete from equip_guzhangtongji where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

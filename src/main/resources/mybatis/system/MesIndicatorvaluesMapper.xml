@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.MesIndicatorvaluesMapper">
+    
+    <resultMap type="MesIndicatorvalues" id="MesIndicatorvaluesResult">
+        <result property="code"    column="code"    />
+        <result property="value"    column="value"    />
+        <result property="bizdate"    column="bizdate"    />
+    </resultMap>
+
+    <sql id="selectMesIndicatorvaluesVo">
+        select code, value, bizdate from mes_indicatorvalues
+    </sql>
+
+    <select id="selectMesIndicatorvaluesList" parameterType="MesIndicatorvalues" resultMap="MesIndicatorvaluesResult">
+        <include refid="selectMesIndicatorvaluesVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="value != null "> and value = #{value}</if>
+            <if test="bizdate != null  and bizdate != ''"> and bizdate = #{bizdate}</if>
+        </where>
+    </select>
+    
+    <select id="selectMesIndicatorvaluesByCode" parameterType="String" resultMap="MesIndicatorvaluesResult">
+        <include refid="selectMesIndicatorvaluesVo"/>
+        where code = #{code}
+    </select>
+        
+    <insert id="insertMesIndicatorvalues" parameterType="MesIndicatorvalues">
+        insert into mes_indicatorvalues
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="value != null">value,</if>
+            <if test="bizdate != null">bizdate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="value != null">#{value},</if>
+            <if test="bizdate != null">#{bizdate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMesIndicatorvalues" parameterType="MesIndicatorvalues">
+        update mes_indicatorvalues
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="value != null">value = #{value},</if>
+            <if test="bizdate != null">bizdate = #{bizdate},</if>
+        </trim>
+        where code = #{code}
+    </update>
+
+    <delete id="deleteMesIndicatorvaluesByCode" parameterType="String">
+        delete from mes_indicatorvalues where code = #{code}
+    </delete>
+
+    <delete id="deleteMesIndicatorvaluesByCodes" parameterType="String">
+        delete from mes_indicatorvalues where code in 
+        <foreach item="code" collection="array" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </delete>
+</mapper>

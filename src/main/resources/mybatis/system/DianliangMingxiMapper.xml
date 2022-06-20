@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.DianliangMingxiMapper">
+
+    <resultMap type="DianliangMingxi" id="DianliangMingxiResult">
+        <result property="id"    column="id"    />
+        <result property="bianhao"    column="bianhao"    />
+        <result property="beilv"    column="beilv"    />
+        <result property="miaoshu"    column="miaoshu"    />
+        <result property="total"    column="total"    />
+        <result property="jianfeng"    column="jianfeng"    />
+        <result property="gaofeng"    column="gaofeng"    />
+        <result property="ping"    column="ping"    />
+        <result property="gu"    column="gu"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="name"    column="name"    />
+        <result property="leibie"    column="leibie"    />
+        <result property="dept"    column="dept"    />
+        <result property="laiyuan"    column="laiyuan"    />
+        <result property="ordernum"    column="ordernum"    />
+        <result property="note"    column="note"    />
+        <result property="s1"    column="s1"    />
+        <result property="s2"    column="s2"    />
+        <result property="s3"    column="s3"    />
+        <result property="s4"    column="s4"    />
+        <result property="s5"    column="s5"    />
+        <result property="s6"    column="s6"    />
+        <result property="s7"    column="s7"    />
+        <result property="s8"    column="s8"    />
+        <result property="s9"    column="s9"    />
+        <result property="s10"    column="s10"    />
+        <result property="s11"    column="s11"    />
+        <result property="s12"    column="s12"    />
+        <result property="s13"    column="s13"    />
+        <result property="s14"    column="s14"    />
+        <result property="s15"    column="s15"    />
+        <result property="s16"    column="s16"    />
+        <result property="s17"    column="s17"    />
+        <result property="s18"    column="s18"    />
+        <result property="s19"    column="s19"    />
+        <result property="s20"    column="s20"    />
+        <result property="s21"    column="s21"    />
+        <result property="s22"    column="s22"    />
+        <result property="s23"    column="s23"    />
+        <result property="s24"    column="s24"    />
+    </resultMap>
+
+    <sql id="selectDianliangMingxiVo">
+        select id, bianhao, beilv, miaoshu, total, jianfeng, gaofeng, ping, gu, logtime, name, leibie, dept, laiyuan, ordernum, note, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24 from dianliang_mingxi
+    </sql>
+
+    <select id="selectDianliangMingxiList" parameterType="DianliangMingxi" resultMap="DianliangMingxiResult">
+        <include refid="selectDianliangMingxiVo"/>
+        <where>
+            <if test="bianhao != null  and bianhao != ''"> and bianhao = #{bianhao}</if>
+            <if test="beilv != null  and beilv != ''"> and beilv = #{beilv}</if>
+            <if test="miaoshu != null  and miaoshu != ''"> and miaoshu = #{miaoshu}</if>
+            <if test="total != null "> and total = #{total}</if>
+            <if test="jianfeng != null "> and jianfeng = #{jianfeng}</if>
+            <if test="gaofeng != null "> and gaofeng = #{gaofeng}</if>
+            <if test="ping != null "> and ping = #{ping}</if>
+            <if test="gu != null "> and gu = #{gu}</if>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="leibie != null  and leibie != ''"> and leibie = #{leibie}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="laiyuan != null  and laiyuan != ''"> and laiyuan = #{laiyuan}</if>
+            <if test="ordernum != null "> and ordernum = #{ordernum}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND logtime &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND logtime &lt;=  #{params.endTime}
+            </if>
+        </where>
+        order by logtime desc,ordernum
+    </select>
+
+    <select id="selectDianliangMingxiById" parameterType="Long" resultMap="DianliangMingxiResult">
+        <include refid="selectDianliangMingxiVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDianliangMingxi" parameterType="DianliangMingxi" useGeneratedKeys="true" keyProperty="id">
+        insert into dianliang_mingxi
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bianhao != null">bianhao,</if>
+            <if test="beilv != null">beilv,</if>
+            <if test="miaoshu != null">miaoshu,</if>
+            <if test="total != null">total,</if>
+            <if test="jianfeng != null">jianfeng,</if>
+            <if test="gaofeng != null">gaofeng,</if>
+            <if test="ping != null">ping,</if>
+            <if test="gu != null">gu,</if>
+            <if test="logtime != null">logtime,</if>
+            <if test="name != null">name,</if>
+            <if test="leibie != null">leibie,</if>
+            <if test="dept != null">dept,</if>
+            <if test="laiyuan != null">laiyuan,</if>
+            <if test="ordernum != null">ordernum,</if>
+            <if test="note != null">note,</if>
+            <if test="s1 != null">s1,</if>
+            <if test="s2 != null">s2,</if>
+            <if test="s3 != null">s3,</if>
+            <if test="s4 != null">s4,</if>
+            <if test="s5 != null">s5,</if>
+            <if test="s6 != null">s6,</if>
+            <if test="s7 != null">s7,</if>
+            <if test="s8 != null">s8,</if>
+            <if test="s9 != null">s9,</if>
+            <if test="s10 != null">s10,</if>
+            <if test="s11 != null">s11,</if>
+            <if test="s12 != null">s12,</if>
+            <if test="s13 != null">s13,</if>
+            <if test="s14 != null">s14,</if>
+            <if test="s15 != null">s15,</if>
+            <if test="s16 != null">s16,</if>
+            <if test="s17 != null">s17,</if>
+            <if test="s18 != null">s18,</if>
+            <if test="s19 != null">s19,</if>
+            <if test="s20 != null">s20,</if>
+            <if test="s21 != null">s21,</if>
+            <if test="s22 != null">s22,</if>
+            <if test="s23 != null">s23,</if>
+            <if test="s24 != null">s24,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bianhao != null">#{bianhao},</if>
+            <if test="beilv != null">#{beilv},</if>
+            <if test="miaoshu != null">#{miaoshu},</if>
+            <if test="total != null">#{total},</if>
+            <if test="jianfeng != null">#{jianfeng},</if>
+            <if test="gaofeng != null">#{gaofeng},</if>
+            <if test="ping != null">#{ping},</if>
+            <if test="gu != null">#{gu},</if>
+            <if test="logtime != null">#{logtime},</if>
+            <if test="name != null">#{name},</if>
+            <if test="leibie != null">#{leibie},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="laiyuan != null">#{laiyuan},</if>
+            <if test="ordernum != null">#{ordernum},</if>
+            <if test="note != null">#{note},</if>
+            <if test="s1 != null">#{s1},</if>
+            <if test="s2 != null">#{s2},</if>
+            <if test="s3 != null">#{s3},</if>
+            <if test="s4 != null">#{s4},</if>
+            <if test="s5 != null">#{s5},</if>
+            <if test="s6 != null">#{s6},</if>
+            <if test="s7 != null">#{s7},</if>
+            <if test="s8 != null">#{s8},</if>
+            <if test="s9 != null">#{s9},</if>
+            <if test="s10 != null">#{s10},</if>
+            <if test="s11 != null">#{s11},</if>
+            <if test="s12 != null">#{s12},</if>
+            <if test="s13 != null">#{s13},</if>
+            <if test="s14 != null">#{s14},</if>
+            <if test="s15 != null">#{s15},</if>
+            <if test="s16 != null">#{s16},</if>
+            <if test="s17 != null">#{s17},</if>
+            <if test="s18 != null">#{s18},</if>
+            <if test="s19 != null">#{s19},</if>
+            <if test="s20 != null">#{s20},</if>
+            <if test="s21 != null">#{s21},</if>
+            <if test="s22 != null">#{s22},</if>
+            <if test="s23 != null">#{s23},</if>
+            <if test="s24 != null">#{s24},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDianliangMingxi" parameterType="DianliangMingxi">
+        update dianliang_mingxi
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bianhao != null">bianhao = #{bianhao},</if>
+            <if test="beilv != null">beilv = #{beilv},</if>
+            <if test="miaoshu != null">miaoshu = #{miaoshu},</if>
+            <if test="total != null">total = #{total},</if>
+            <if test="jianfeng != null">jianfeng = #{jianfeng},</if>
+            <if test="gaofeng != null">gaofeng = #{gaofeng},</if>
+            <if test="ping != null">ping = #{ping},</if>
+            <if test="gu != null">gu = #{gu},</if>
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="leibie != null">leibie = #{leibie},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="laiyuan != null">laiyuan = #{laiyuan},</if>
+            <if test="ordernum != null">ordernum = #{ordernum},</if>
+            <if test="note != null">note = #{note},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDianliangMingxiById" parameterType="Long">
+        delete from dianliang_mingxi where id = #{id}
+    </delete>
+
+    <delete id="deleteDianliangMingxiByIds" parameterType="String">
+        delete from dianliang_mingxi where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

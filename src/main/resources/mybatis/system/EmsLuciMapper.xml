@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EmsLuciMapper">
+    
+    <resultMap type="EmsLuci" id="EmsLuciResult">
+        <result property="id"    column="id"    />
+        <result property="gongxu"    column="gongxu"    />
+        <result property="heatid"    column="heatid"    />
+        <result property="begintime"    column="begintime"    />
+        <result property="endtime"    column="endtime"    />
+    </resultMap>
+
+    <sql id="selectEmsLuciVo">
+        select id, gongxu, heatid, begintime, endtime from ems_luci
+    </sql>
+
+    <select id="selectEmsLuciList" parameterType="EmsLuci" resultMap="EmsLuciResult">
+        <include refid="selectEmsLuciVo"/>
+        <where>  
+            <if test="gongxu != null  and gongxu != ''"> and gongxu = #{gongxu}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="begintime != null  and begintime != ''"> and begintime = #{begintime}</if>
+            <if test="endtime != null  and endtime != ''"> and endtime = #{endtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectEmsLuciById" parameterType="Integer" resultMap="EmsLuciResult">
+        <include refid="selectEmsLuciVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEmsLuci" parameterType="EmsLuci" useGeneratedKeys="true" keyProperty="id">
+        insert into ems_luci
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gongxu != null">gongxu,</if>
+            <if test="heatid != null">heatid,</if>
+            <if test="begintime != null">begintime,</if>
+            <if test="endtime != null">endtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gongxu != null">#{gongxu},</if>
+            <if test="heatid != null">#{heatid},</if>
+            <if test="begintime != null">#{begintime},</if>
+            <if test="endtime != null">#{endtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEmsLuci" parameterType="EmsLuci">
+        update ems_luci
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gongxu != null">gongxu = #{gongxu},</if>
+            <if test="heatid != null">heatid = #{heatid},</if>
+            <if test="begintime != null">begintime = #{begintime},</if>
+            <if test="endtime != null">endtime = #{endtime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmsLuciById" parameterType="Integer">
+        delete from ems_luci where id = #{id}
+    </delete>
+
+    <delete id="deleteEmsLuciByIds" parameterType="String">
+        delete from ems_luci where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

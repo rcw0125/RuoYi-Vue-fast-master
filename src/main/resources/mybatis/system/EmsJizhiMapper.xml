@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.mapper.EmsJizhiMapper">
+
+    <resultMap type="EmsJizhi" id="EmsJizhiResult">
+        <result property="id"    column="id"    />
+        <result property="logtime"    column="logtime"    />
+        <result property="gongxu"    column="gongxu"    />
+        <result property="jztype"    column="jztype"    />
+        <result property="sbname"    column="sbname"    />
+        <result property="opertype"    column="opertype"    />
+        <result property="heatid"    column="heatid"    />
+        <result property="heatendtime"    column="heatendtime"    />
+        <result property="gongxuren"    column="gongxuren"    />
+        <result property="diaodu"    column="diaodu"    />
+        <result property="lgqztime"    column="lgqztime"    />
+        <result property="exceptnote"    column="exceptnote"    />
+        <result property="zhilingren"    column="zhilingren"    />
+        <result property="zhilingnote"    column="zhilingnote"    />
+        <result property="zhunbeitime"    column="zhunbeitime"    />
+        <result property="caozuotime"    column="caozuotime"    />
+        <result property="sbdongzuotime"    column="sbdongzuotime"    />
+        <result property="wanbitime"    column="wanbitime"    />
+        <result property="zhixingren"    column="zhixingren"    />
+        <result property="dlnote"    column="dlnote"    />
+        <result property="status"    column="status"    />
+        <result property="panding"    column="panding"    />
+        <result property="biaozhuntime"    column="biaozhuntime"    />
+        <result property="shijitime"    column="shijitime"    />
+        <result property="dongzuonote"    column="dongzuonote"    />
+    </resultMap>
+
+    <sql id="selectEmsJizhiVo">
+        select id, logtime, gongxu, jztype, sbname, opertype, heatid, heatendtime, gongxuren, diaodu, lgqztime, exceptnote, zhilingren, zhilingnote, zhunbeitime, caozuotime, sbdongzuotime, wanbitime, zhixingren, dlnote, status, panding, biaozhuntime, shijitime, dongzuonote  from ems_jizhi
+    </sql>
+
+    <select id="selectEmsJizhiList" parameterType="EmsJizhi" resultMap="EmsJizhiResult">
+        <include refid="selectEmsJizhiVo"/>
+        <where>
+            <if test="logtime != null  and logtime != ''"> and logtime = #{logtime}</if>
+            <if test="gongxu != null  and gongxu != ''"> and gongxu = #{gongxu}</if>
+            <if test="jztype != null  and jztype != ''"> and jztype = #{jztype}</if>
+            <if test="sbname != null  and sbname != ''"> and sbname = #{sbname}</if>
+            <if test="opertype != null  and opertype != ''"> and opertype = #{opertype}</if>
+            <if test="heatid != null  and heatid != ''"> and heatid = #{heatid}</if>
+            <if test="heatendtime != null  and heatendtime != ''"> and heatendtime = #{heatendtime}</if>
+            <if test="gongxuren != null  and gongxuren != ''"> and gongxuren = #{gongxuren}</if>
+            <if test="diaodu != null  and diaodu != ''"> and diaodu = #{diaodu}</if>
+            <if test="lgqztime != null  and lgqztime != ''"> and lgqztime = #{lgqztime}</if>
+            <if test="exceptnote != null  and exceptnote != ''"> and exceptnote = #{exceptnote}</if>
+            <if test="zhilingren != null  and zhilingren != ''"> and zhilingren = #{zhilingren}</if>
+            <if test="zhilingnote != null  and zhilingnote != ''"> and zhilingnote = #{zhilingnote}</if>
+            <if test="zhunbeitime != null  and zhunbeitime != ''"> and zhunbeitime = #{zhunbeitime}</if>
+            <if test="caozuotime != null  and caozuotime != ''"> and caozuotime = #{caozuotime}</if>
+            <if test="sbdongzuotime != null  and sbdongzuotime != ''"> and sbdongzuotime = #{sbdongzuotime}</if>
+            <if test="wanbitime != null  and wanbitime != ''"> and wanbitime = #{wanbitime}</if>
+            <if test="zhixingren != null  and zhixingren != ''"> and zhixingren = #{zhixingren}</if>
+            <if test="dlnote != null  and dlnote != ''"> and dlnote = #{dlnote}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="panding != null  and panding != ''"> and panding = #{panding}</if>
+            <if test="biaozhuntime != null "> and biaozhuntime = #{biaozhuntime}</if>
+            <if test="shijitime != null "> and shijitime = #{shijitime}</if>
+            <if test="dongzuonote != null  and dongzuonote != ''"> and dongzuonote = #{dongzuonote}</if>
+        </where>
+        order by  id desc
+    </select>
+
+    <select id="selectEmsJizhiById" parameterType="Long" resultMap="EmsJizhiResult">
+        <include refid="selectEmsJizhiVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEmsJizhi" parameterType="EmsJizhi" useGeneratedKeys="true" keyProperty="id">
+        insert into ems_jizhi
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">logtime,</if>
+            <if test="gongxu != null">gongxu,</if>
+            <if test="jztype != null">jztype,</if>
+            <if test="sbname != null">sbname,</if>
+            <if test="opertype != null">opertype,</if>
+            <if test="heatid != null">heatid,</if>
+            <if test="heatendtime != null">heatendtime,</if>
+            <if test="gongxuren != null">gongxuren,</if>
+            <if test="diaodu != null">diaodu,</if>
+            <if test="lgqztime != null">lgqztime,</if>
+            <if test="exceptnote != null">exceptnote,</if>
+            <if test="zhilingren != null">zhilingren,</if>
+            <if test="zhilingnote != null">zhilingnote,</if>
+            <if test="zhunbeitime != null">zhunbeitime,</if>
+            <if test="caozuotime != null">caozuotime,</if>
+            <if test="sbdongzuotime != null">sbdongzuotime,</if>
+            <if test="wanbitime != null">wanbitime,</if>
+            <if test="zhixingren != null">zhixingren,</if>
+            <if test="dlnote != null">dlnote,</if>
+            <if test="status != null">status,</if>
+            <if test="panding != null">panding,</if>
+            <if test="biaozhuntime != null">biaozhuntime,</if>
+            <if test="shijitime != null">shijitime,</if>
+            <if test="dongzuonote != null">dongzuonote,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logtime != null">#{logtime},</if>
+            <if test="gongxu != null">#{gongxu},</if>
+            <if test="jztype != null">#{jztype},</if>
+            <if test="sbname != null">#{sbname},</if>
+            <if test="opertype != null">#{opertype},</if>
+            <if test="heatid != null">#{heatid},</if>
+            <if test="heatendtime != null">#{heatendtime},</if>
+            <if test="gongxuren != null">#{gongxuren},</if>
+            <if test="diaodu != null">#{diaodu},</if>
+            <if test="lgqztime != null">#{lgqztime},</if>
+            <if test="exceptnote != null">#{exceptnote},</if>
+            <if test="zhilingren != null">#{zhilingren},</if>
+            <if test="zhilingnote != null">#{zhilingnote},</if>
+            <if test="zhunbeitime != null">#{zhunbeitime},</if>
+            <if test="caozuotime != null">#{caozuotime},</if>
+            <if test="sbdongzuotime != null">#{sbdongzuotime},</if>
+            <if test="wanbitime != null">#{wanbitime},</if>
+            <if test="zhixingren != null">#{zhixingren},</if>
+            <if test="dlnote != null">#{dlnote},</if>
+            <if test="status != null">#{status},</if>
+            <if test="panding != null">#{panding},</if>
+            <if test="biaozhuntime != null">#{biaozhuntime},</if>
+            <if test="shijitime != null">#{shijitime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEmsJizhi" parameterType="EmsJizhi">
+        update ems_jizhi
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logtime != null">logtime = #{logtime},</if>
+            <if test="gongxu != null">gongxu = #{gongxu},</if>
+            <if test="jztype != null">jztype = #{jztype},</if>
+            <if test="sbname != null">sbname = #{sbname},</if>
+            <if test="opertype != null">opertype = #{opertype},</if>
+            <if test="heatid != null">heatid = #{heatid},</if>
+            <if test="heatendtime != null">heatendtime = #{heatendtime},</if>
+            <if test="gongxuren != null">gongxuren = #{gongxuren},</if>
+            <if test="diaodu != null">diaodu = #{diaodu},</if>
+            <if test="lgqztime != null">lgqztime = #{lgqztime},</if>
+            <if test="exceptnote != null">exceptnote = #{exceptnote},</if>
+            <if test="zhilingren != null">zhilingren = #{zhilingren},</if>
+            <if test="zhilingnote != null">zhilingnote = #{zhilingnote},</if>
+            <if test="zhunbeitime != null">zhunbeitime = #{zhunbeitime},</if>
+            <if test="caozuotime != null">caozuotime = #{caozuotime},</if>
+            <if test="sbdongzuotime != null">sbdongzuotime = #{sbdongzuotime},</if>
+            <if test="wanbitime != null">wanbitime = #{wanbitime},</if>
+            <if test="zhixingren != null">zhixingren = #{zhixingren},</if>
+            <if test="dlnote != null">dlnote = #{dlnote},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="panding != null">panding = #{panding},</if>
+            <if test="biaozhuntime != null">biaozhuntime = #{biaozhuntime},</if>
+            <if test="shijitime != null">shijitime = #{shijitime},</if>
+            <if test="dongzuonote != null">dongzuonote = #{dongzuonote},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmsJizhiById" parameterType="Long">
+        delete from ems_jizhi where id = #{id}
+    </delete>
+
+    <delete id="deleteEmsJizhiByIds" parameterType="String">
+        delete from ems_jizhi where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
