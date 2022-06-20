@@ -52,6 +52,13 @@ public class EquipDianjianBiaozhun extends BaseEntity
     @Excel(name = "点检周期")
     private String zhouqi;
 
+    /** 关注参数 */
+    @Excel(name = "关注参数")
+    private String yxcs;
+
+    /** 点检等级 */
+    @Excel(name = "点检等级")
+    private String fenji;
     /** 备注 */
     private String note;
 
@@ -215,6 +222,25 @@ public class EquipDianjianBiaozhun extends BaseEntity
         return djcs;
     }
 
+    public void setYxcs(String yxcs)
+    {
+        this.yxcs = yxcs;
+    }
+
+    public String getYxcs()
+    {
+        return yxcs;
+    }
+    public void setFenji(String fenji)
+    {
+        this.fenji = fenji;
+    }
+
+    public String getFenji()
+    {
+        return fenji;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -233,6 +259,8 @@ public class EquipDianjianBiaozhun extends BaseEntity
                 .append("flag", getFlag())
                 .append("ordernum", getOrdernum())
                 .append("djcs", getDjcs())
+                .append("yxcs", getYxcs())
+                .append("fenji", getFenji())
                 .toString();
     }
 }

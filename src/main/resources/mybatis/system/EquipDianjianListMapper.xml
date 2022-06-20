@@ -23,10 +23,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="note"    column="note"    />
         <result property="flag"    column="flag"    />
         <result property="djrq"    column="djrq"    />
+        <result property="yxcs"    column="yxcs"    />
+        <result property="fenji"    column="fenji"    />
+        <result property="pic"    column="pic"    />
+        <result property="ip"    column="ip"    />
+        <result property="laiyuan"    column="laiyuan"    />
     </resultMap>
 
     <sql id="selectEquipDianjianListVo">
-        select id, sbid, sbname, bzhid, biaozhun, dept, team, leibie, zhouqi, bzhnote, zhoucishu, djr, djresult, djcontent, djtime, note, flag, djrq from equip_dianjian_list
+        select id, sbid, sbname, bzhid, biaozhun, dept, team, leibie, zhouqi, bzhnote, zhoucishu, djr, djresult, djcontent, djtime, note, flag, djrq, yxcs, fenji, pic, ip, laiyuan  from equip_dianjian_list
     </sql>
 
     <select id="selectEquipDianjianListList" parameterType="EquipDianjianList" resultMap="EquipDianjianListResult">
@@ -49,6 +54,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null  and note != ''"> and note = #{note}</if>
             <if test="flag != null "> and flag = #{flag}</if>
             <if test="djrq != null  and djrq != ''"> and djrq = #{djrq}</if>
+            <if test="yxcs != null  and yxcs != ''"> and yxcs = #{yxcs}</if>
+            <if test="fenji != null  and fenji != ''"> and fenji = #{fenji}</if>
+            <if test="pic != null  and pic != ''"> and pic = #{pic}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="laiyuan != null  and laiyuan != ''"> and laiyuan = #{laiyuan}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND djrq &gt;= #{params.beginTime}
             </if>
@@ -79,6 +89,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null  and note != ''"> and note = #{note}</if>
             <if test="flag != null "> and flag = #{flag}</if>
             <if test="djrq != null  and djrq != ''"> and djrq = #{djrq}</if>
+            <if test="yxcs != null  and yxcs != ''"> and yxcs = #{yxcs}</if>
+            <if test="fenji != null  and fenji != ''"> and fenji = #{fenji}</if>
+            <if test="pic != null  and pic != ''"> and pic = #{pic}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND djrq &gt;= #{params.beginTime}
             </if>
@@ -114,6 +127,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null">note,</if>
             <if test="flag != null">flag,</if>
             <if test="djrq != null">djrq,</if>
+            <if test="yxcs != null">yxcs,</if>
+            <if test="fenji != null">fenji,</if>
+            <if test="pic != null">pic,</if>
+            <if test="ip != null">ip,</if>
+            <if test="laiyuan != null">laiyuan,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="sbid != null">#{sbid},</if>
@@ -133,6 +151,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null">#{note},</if>
             <if test="flag != null">#{flag},</if>
             <if test="djrq != null">#{djrq},</if>
+            <if test="yxcs != null">#{yxcs},</if>
+            <if test="fenji != null">#{fenji},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="laiyuan != null">#{laiyuan},</if>
          </trim>
     </insert>
 
@@ -156,6 +179,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="note != null">note = #{note},</if>
             <if test="flag != null">flag = #{flag},</if>
             <if test="djrq != null">djrq = #{djrq},</if>
+            <if test="yxcs != null">yxcs = #{yxcs},</if>
+            <if test="fenji != null">fenji = #{fenji},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="laiyuan != null">laiyuan = #{laiyuan},</if>
         </trim>
         where id = #{id}
     </update>

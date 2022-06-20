@@ -7,6 +7,6 @@ echo.
 cd %~dp0
 
 cd ..
-call mvn clean
+call mvn clean 
 
 pause

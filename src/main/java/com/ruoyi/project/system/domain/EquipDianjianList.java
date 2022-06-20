@@ -28,13 +28,6 @@ public class EquipDianjianList extends BaseEntity
     @Excel(name = "设备名称")
     private String sbname;
 
-    /** 标准id */
-    @Excel(name = "标准id")
-    private Long bzhid;
-
-    /** 标准内容 */
-    @Excel(name = "标准内容")
-    private String biaozhun;
 
     /** 点检单位 */
     @Excel(name = "点检单位")
@@ -52,6 +45,14 @@ public class EquipDianjianList extends BaseEntity
     @Excel(name = "点检周期")
     private String zhouqi;
 
+    /** 关注参数 */
+    @Excel(name = "关注参数")
+    private String yxcs;
+
+    /** 点检等级 */
+    @Excel(name = "点检等级")
+    private String fenji;
+
     /** 点检人 */
     @Excel(name = "点检人")
     private String djr;
@@ -67,6 +68,19 @@ public class EquipDianjianList extends BaseEntity
     /** 点检时刻 */
     @Excel(name = "点检时刻", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     private Date djtime;
+
+    /** 点检图片 */
+    @Excel(name = "点检图片")
+    private String pic;
+
+    /** 标准id */
+    @Excel(name = "标准id")
+    private Long bzhid;
+
+    /** 标准内容 */
+    @Excel(name = "标准内容")
+    private String biaozhun;
+
 
     /** 周应点检次数 */
     @Excel(name = "周应点检次数")
@@ -85,6 +99,14 @@ public class EquipDianjianList extends BaseEntity
     /** 标准备注 */
     @Excel(name = "标准备注")
     private String bzhnote;
+
+    /** IP地址 */
+    @Excel(name = "IP地址")
+    private String ip;
+
+    /** 来源(电脑或手机) */
+    @Excel(name = "来源(电脑或手机)")
+    private String laiyuan;
     public void setId(Long id)
     {
         this.id = id;
@@ -247,6 +269,52 @@ public class EquipDianjianList extends BaseEntity
     {
         return djrq;
     }
+    public void setYxcs(String yxcs)
+    {
+        this.yxcs = yxcs;
+    }
+
+    public String getYxcs()
+    {
+        return yxcs;
+    }
+    public void setFenji(String fenji)
+    {
+        this.fenji = fenji;
+    }
+
+    public String getFenji()
+    {
+        return fenji;
+    }
+    public void setPic(String pic)
+    {
+        this.pic = pic;
+    }
+
+    public String getPic()
+    {
+        return pic;
+    }
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+    }
+
+    public String getIp()
+    {
+        return ip;
+    }
+    public void setLaiyuan(String laiyuan)
+    {
+        this.laiyuan = laiyuan;
+    }
+
+    public String getLaiyuan()
+    {
+        return laiyuan;
+    }
 
     @Override
     public String toString() {
@@ -269,6 +337,11 @@ public class EquipDianjianList extends BaseEntity
             .append("note", getNote())
             .append("flag", getFlag())
             .append("djrq", getDjrq())
+                .append("yxcs", getYxcs())
+                .append("fenji", getFenji())
+                .append("pic", getPic())
+                .append("ip", getIp())
+                .append("laiyuan", getLaiyuan())
             .toString();
     }
 }

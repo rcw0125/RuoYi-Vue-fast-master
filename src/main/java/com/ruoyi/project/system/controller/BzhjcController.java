@@ -237,12 +237,12 @@ public class BzhjcController extends BaseController
             list = bzhjcService.selectBzhjcList(bzh1);
 
             if(checkUser.getDept().getDeptName().contains("车间")){
-                if(list.size()>14){
-                    return AjaxResult.error("所在单位未整改的单据超过15项，请先整改！","错误！");
+                if(list.size()>39){
+                    return AjaxResult.error("所在单位未整改的单据超过40项，请先整改！","错误！");
                 }
             }else{
-                if(list.size()>4){
-                    return AjaxResult.error("所在单位未整改的单据超过5项，请先整改！","错误！");
+                if(list.size()>9){
+                    return AjaxResult.error("所在单位未整改的单据超过10项，请先整改！","错误！");
                 }
             }
         }

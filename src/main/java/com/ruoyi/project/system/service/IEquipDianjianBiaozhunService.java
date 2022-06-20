@@ -27,6 +27,24 @@ public interface IEquipDianjianBiaozhunService
      */
     public List<EquipDianjianBiaozhun> selectEquipDianjianBiaozhunList(EquipDianjianBiaozhun equipDianjianBiaozhun);
 
+
+    /**
+     * 查询我的点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准集合
+     */
+    public List<EquipDianjianBiaozhun> selectMyDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+    /**
+     * 查询我的点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准集合
+     */
+    public List<EquipDianjianBiaozhun> selectNotMyDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+
     /**
      * 查询点检标准列表
      *
@@ -52,6 +70,33 @@ public interface IEquipDianjianBiaozhunService
      */
     public List<EquipDianjianBiaozhun> selectDianjianDeptRate(EquipDianjianBiaozhun equipDianjianBiaozhun);
 
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准集合
+     */
+    public List<EquipDianjianBiaozhun> selectZhouDianjianMingxi(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月班组点检情况
+     * @return 点检标准集合
+     */
+    public List<EquipDianjianBiaozhun> selectZhouDianjianTeamRate(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月车间点检情况
+     * @return 点检标准集合
+     */
+    public List<EquipDianjianBiaozhun> selectZhouDianjianDeptRate(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+
     /**
      * 查询点检标准列表
      *
@@ -59,6 +104,8 @@ public interface IEquipDianjianBiaozhunService
      * @return 点检标准集合
      */
     public List<EquipDianjianBiaozhun> selectEquipDianjianBiaozhunByQuyuList(EquipDianjianBiaozhun equipDianjianBiaozhun);
+
+    public int  calDianjianDeptRate(String month);
 
     /**
      * 新增点检标准

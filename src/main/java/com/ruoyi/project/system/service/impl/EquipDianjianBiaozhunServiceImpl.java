@@ -1,6 +1,12 @@
 package com.ruoyi.project.system.service.impl;
 
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import com.ruoyi.project.system.domain.EquipDianjiantongji;
+import com.ruoyi.project.system.mapper.EquipDianjiantongjiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.system.mapper.EquipDianjianBiaozhunMapper;
@@ -18,7 +24,8 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
 {
     @Autowired
     private EquipDianjianBiaozhunMapper equipDianjianBiaozhunMapper;
-
+    @Autowired
+    private EquipDianjiantongjiMapper equipDianjiantongjiMapper;
     /**
      * 查询点检标准
      *
@@ -43,6 +50,29 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
         return equipDianjianBiaozhunMapper.selectEquipDianjianBiaozhunList(equipDianjianBiaozhun);
     }
 
+    /**
+     * 查询我的点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectMyDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectMyDianJianList(equipDianjianBiaozhun);
+    }
+
+    /**
+     * 查询我的点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectNotMyDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectNotMyDianJianList(equipDianjianBiaozhun);
+    }
 
     /**
      * 查询点检标准列表
@@ -79,6 +109,70 @@ public class EquipDianjianBiaozhunServiceImpl implements IEquipDianjianBiaozhunS
     {
         return equipDianjianBiaozhunMapper.selectDianjianDeptRate(equipDianjianBiaozhun);
     }
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectZhouDianjianMingxi(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectZhouDianjianMingxi(equipDianjianBiaozhun);
+    }
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月班组点检情况
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectZhouDianjianTeamRate(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectZhouDianjianTeamRate(equipDianjianBiaozhun);
+    }
+
+    /**
+     * 查询点检标准列表
+     *
+     * @param equipDianjianBiaozhun 点检标准-当月车间点检情况
+     * @return 点检标准
+     */
+    @Override
+    public List<EquipDianjianBiaozhun> selectZhouDianjianDeptRate(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        return equipDianjianBiaozhunMapper.selectZhouDianjianDeptRate(equipDianjianBiaozhun);
+    }
+
+
+
+    @Override
+    public int  calDianjianDeptRate(String month)
+    {
+        if(month.length()!=7){
+            month= LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        }
+        EquipDianjianBiaozhun biaozhun=new EquipDianjianBiaozhun();
+        biaozhun.setNote(month);
+        System.out.print("月份为："+biaozhun.getName());
+        List<EquipDianjianBiaozhun> list=equipDianjianBiaozhunMapper.selectDianjianDeptRate(biaozhun);
+        for(EquipDianjianBiaozhun item :list){
+            EquipDianjiantongji equipDianjiantongji=new EquipDianjiantongji();
+            equipDianjiantongji.setLogtime(month);
+            equipDianjiantongji.setDjdw(item.getDept());
+            equipDianjiantongji.setYdjsl(Long.valueOf(item.getZhoucishu()));
+            equipDianjiantongji.setSdjsl(Long.valueOf(item.getDjcs()));
+            DecimalFormat df=new DecimalFormat("######0.0");
+            equipDianjiantongji.setDjrate(Double.valueOf(df.format(equipDianjiantongji.getSdjsl()*1.0/equipDianjiantongji.getYdjsl())));
+            equipDianjiantongjiMapper.insertEquipDianjiantongji(equipDianjiantongji);
+        }
+
+        return 0;
+    }
+
+
     /**
      * 查询点检标准列表
      *

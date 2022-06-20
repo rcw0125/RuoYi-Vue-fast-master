@@ -73,19 +73,6 @@ public class EquipDianjianBiaozhunController extends BaseController
     {
         startPage();
         List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectDianjianMingxi(equipDianjianBiaozhun);
-        String str=equipDianjianBiaozhun.getNote();
-        int day=31;
-        if(str.contains("-04")||str.contains("-06")||str.contains("-09")||str.contains("-11")){
-            day=30;
-        }else  if(str.contains("-02")){
-            day=28;
-        }
-        for(EquipDianjianBiaozhun item:list){
-            item.setZhoucishu(""+ new Double(Double.parseDouble(item.getZhoucishu())*day/7).intValue());
-        }
-
-
-
         return getDataTable(list);
     }
 
@@ -94,18 +81,6 @@ public class EquipDianjianBiaozhunController extends BaseController
     {
         startPage();
         List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectDianjianTeamRate(equipDianjianBiaozhun);
-        String str=equipDianjianBiaozhun.getNote();
-        int day=31;
-        if(str.contains("-04")||str.contains("-06")||str.contains("-09")||str.contains("-11")){
-            day=30;
-        }else  if(str.contains("-02")){
-            day=28;
-        }
-
-            for(EquipDianjianBiaozhun item:list){
-                item.setZhoucishu(""+ new Double(Double.parseDouble(item.getZhoucishu())*day/31).intValue());
-            }
-
         return getDataTable(list);
     }
 
@@ -114,21 +89,55 @@ public class EquipDianjianBiaozhunController extends BaseController
     {
         startPage();
         List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectDianjianDeptRate(equipDianjianBiaozhun);
-        String str=equipDianjianBiaozhun.getNote();
-        int day=31;
-        if(str.contains("-04")||str.contains("-06")||str.contains("-09")||str.contains("-11")){
-            day=30;
-        }else  if(str.contains("-02")){
-            day=28;
-        }
-
-            for(EquipDianjianBiaozhun item:list){
-                item.setZhoucishu(""+ new Double(Double.parseDouble(item.getZhoucishu())*day/31).intValue());
-            }
-
         return getDataTable(list);
     }
 
+
+    @GetMapping("/ZhouMingXiList")
+    public TableDataInfo ZhouMingXiList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        startPage();
+        List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectZhouDianjianMingxi(equipDianjianBiaozhun);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/ZhouTeamList")
+    public TableDataInfo ZhouTeamList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        startPage();
+        List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectZhouDianjianTeamRate(equipDianjianBiaozhun);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/ZhouDeptList")
+    public TableDataInfo ZhouDeptList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        startPage();
+        List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectZhouDianjianDeptRate(equipDianjianBiaozhun);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/notMyDianJianList")
+    public TableDataInfo notMyDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun)
+    {
+        startPage();
+        /** 增加标准化检查单据时，添加检查人姓名，单位 */
+        String checkAccount= SecurityUtils.getUsername();
+        /**赋值个人用户名**/
+        equipDianjianBiaozhun.setNote(checkAccount);
+        SysUser checkUser=userService.selectUserByUserName(checkAccount);
+        /**赋值个人单位**/
+        equipDianjianBiaozhun.setDept(checkUser.getDept().getDeptName());
+        /**维检车间赋值个人岗位**/
+        List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectNotMyDianJianList(equipDianjianBiaozhun);
+        String deptname=checkUser.getDept().getDeptName();
+        if(deptname.equals("维修车间")||deptname.equals("运行车间")){
+            /** 设置岗位 */
+            String post=userService.selectUserPostGroup(checkUser.getUserName());
+            equipDianjianBiaozhun.setTeam(post);
+        }
+        return getDataTable(list);
+    }
 
     /**
      * 查询我的车间、班组的点检标准列表
@@ -148,7 +157,9 @@ public class EquipDianjianBiaozhunController extends BaseController
 
 
     /**
+     * 0-班组未点检，1-班组已点检、2-车间点检情况、3-我的点检，共用此方法
      * 查询我的车间、班组的点检标准列表
+     *    查询班组未点检，班组已点检时，需要设置岗位即所在班组，查询车间设备点检情况时不需要
      */
     @GetMapping("/myDianJianList")
     public TableDataInfo myDianJianList(EquipDianjianBiaozhun equipDianjianBiaozhun)
@@ -157,19 +168,34 @@ public class EquipDianjianBiaozhunController extends BaseController
         String checkAccount= SecurityUtils.getUsername();
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
         equipDianjianBiaozhun.setDept(checkUser.getDept().getDeptName());
-        /**0 未点检 1 已点检 2为 我的车间*/
-        if(equipDianjianBiaozhun.getFlag().equals("0")||equipDianjianBiaozhun.getFlag().equals("1")){
+
+        /**0 未点检 1 已点检 2为 我的车间 根据标志，是否是维检车间，设置班组*/
+        if(equipDianjianBiaozhun.getFlag().equals(0)||equipDianjianBiaozhun.getFlag().equals(1)){
             String deptname=checkUser.getDept().getDeptName();
-            if(deptname.equals("冶炼维修车间")||deptname.equals("连铸维修车间")||deptname.equals("运行车间")){
+            if(deptname.equals("维修车间")||deptname.equals("运行车间")){
                 /** 设置岗位 */
                 String post=userService.selectUserPostGroup(checkUser.getUserName());
                 equipDianjianBiaozhun.setTeam(post);
             }
         }
+        /**我的点检、需要设置我的账号**/
+        if(equipDianjianBiaozhun.getFlag().equals(3)){
+            equipDianjianBiaozhun.setNote(checkAccount);
+        }
 
 
         startPage();
-        List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectEquipDianjianBiaozhunByQuyuList(equipDianjianBiaozhun);
+        List<EquipDianjianBiaozhun> list;
+
+        if(equipDianjianBiaozhun.getFlag().equals(3)){
+            //System.out.println("参数flag="+equipDianjianBiaozhun.getFlag()+",参数note="+equipDianjianBiaozhun.getNote());
+            list = equipDianjianBiaozhunService.selectMyDianJianList(equipDianjianBiaozhun);
+
+        }else {
+            //System.out.println("参数:flag="+equipDianjianBiaozhun.getFlag());
+            list = equipDianjianBiaozhunService.selectEquipDianjianBiaozhunByQuyuList(equipDianjianBiaozhun);
+        }
+
         Iterator<EquipDianjianBiaozhun> it = list.iterator();
         while (it.hasNext())
         {
@@ -222,8 +248,9 @@ public class EquipDianjianBiaozhunController extends BaseController
                     d.setRemark("已点检");
                 }
             }
-            /***0 代表未点检  1 代表已点检**/
+            /***0 代表班组未点检  1 代表班组已点检**/
             /***当 设备当前状态与查询条件不一致时，则移除**/
+
             if(equipDianjianBiaozhun.getFlag().equals(0)){
                 if(d.getFlag().equals(1)){
                     it.remove();

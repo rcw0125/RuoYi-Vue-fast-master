@@ -7,10 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.project.system.domain.EquipDianjianBiaozhun;
+import com.ruoyi.project.system.domain.Ipguanli;
 import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.project.system.service.IEquipDianjianBiaozhunService;
+import com.ruoyi.project.system.service.IIpguanliService;
 import com.ruoyi.project.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,8 @@ public class EquipDianjianListController extends BaseController
     private IEquipDianjianBiaozhunService equipDianjianBiaozhunService;
     @Autowired
     private ISysUserService userService;
+    @Autowired
+    private IIpguanliService ipguanliService;
     /**
      * 查询点检记录列表
      */
@@ -91,7 +97,8 @@ public class EquipDianjianListController extends BaseController
         SysUser checkUser=userService.selectUserByUserName(checkAccount);
         equipDianjianBiaozhun.setDept(checkUser.getDept().getDeptName());
         String deptname=checkUser.getDept().getDeptName();
-        if(deptname.equals("冶炼维修车间")||deptname.equals("连铸维修车间")||deptname.equals("运行车间")){
+        /**维修车间必须设定班组；其它单位按车间整体分，都可以点检车间的设备**/
+        if(deptname.equals("维修车间")||deptname.equals("运行车间")){
             /** 设置岗位 */
             String post=userService.selectUserPostGroup(checkUser.getUserName());
             if(StringUtils.isNull(post)||StringUtils.isEmpty(post)){
@@ -105,9 +112,13 @@ public class EquipDianjianListController extends BaseController
         if(StringUtils.isNull(list)||list.size()<1){
             return AjaxResult.error("抱歉，你所在班组没有此设备的点检标准！","错误！");
         }
+        if(list.size()>1){
+            return AjaxResult.error("抱歉，此设备的点检标准存在多个，请联系车间管理员认真维护！","错误！");
+        }
         EquipDianjianBiaozhun curBz=list.get(0);
         EquipDianjianList dianJian=new EquipDianjianList();
         dianJian.setFlag(0);
+        dianJian.setDjresult("正常");
 
 //        /** 1、存在点检标准后，如果周期每班12小时，则进行判断 */
 //        EquipDianjianList djLast=new EquipDianjianList();
@@ -177,24 +188,29 @@ public class EquipDianjianListController extends BaseController
                 /*******小时相等******/
                 if(lastHour==curHour){
                     dianJian.setFlag(1);
+                    dianJian.setDjresult("异常");
                 }
                 /*******现在大于上一次******/
                 else if(lastHour<curHour){
                     if(curHour<8){
                         dianJian.setFlag(1);
+                        dianJian.setDjresult("异常");
                     }
                     else if(lastHour>=20){
                         dianJian.setFlag(1);
+                        dianJian.setDjresult("异常");
                     }
                     ////
                     else if(lastHour>=8 && curHour<20){
                         dianJian.setFlag(1);
+                        dianJian.setDjresult("异常");
                     }
                 }
                 /*******现在小于上一次，即昨日20点以后点检过******/
                 else {
                     if(curHour<8){
                         dianJian.setFlag(1);
+                        dianJian.setDjresult("异常");
                     }
                 }
             }
@@ -205,11 +221,12 @@ public class EquipDianjianListController extends BaseController
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
             if(doneDate.equals(sdf.format(curBz.getLasttime()))){
                 dianJian.setFlag(1);
+                dianJian.setDjresult("异常");
             }
         }
         SimpleDateFormat df = new SimpleDateFormat("MM月dd日 HH点mm分");//设置日期格式
         //        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-        dianJian.setNote("上次点检时刻:"+df.format(curBz.getLasttime()));
+        dianJian.setNote("上次点检:"+df.format(curBz.getLasttime()));
 
         dianJian.setDjr(checkUser.getNickName());
         dianJian.setSbid(curBz.getSbid());
@@ -221,6 +238,10 @@ public class EquipDianjianListController extends BaseController
         dianJian.setZhouqi(curBz.getZhouqi());
         dianJian.setLeibie(curBz.getLeibie());
         dianJian.setZhoucishu(curBz.getZhoucishu());
+        /**添加点检分级、运行参数2022-05-27**/
+        dianJian.setFenji(curBz.getFenji());
+        dianJian.setYxcs(curBz.getYxcs());
+
         dianJian.setDjcontent("");
         return AjaxResult.success(dianJian);
     }
@@ -306,7 +327,27 @@ public class EquipDianjianListController extends BaseController
         String doneDate= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         equipDianjianList.setDjtime(new Date());
         equipDianjianList.setDjrq(doneDate);
+        String ip=IpUtils.getIpAddr(ServletUtils.getRequest());
+        if(ip.contains(":")){
+            ip=ip.substring(0,ip.indexOf(":"));
+        }
+        equipDianjianList.setIp(ip);
+        Ipguanli ipguanli=new Ipguanli();
+        ipguanli.setIp(ip);
+        ipguanli.setXinghao("无线AP");
+
+        List<Ipguanli> listip = ipguanliService.selectIpguanliList(ipguanli);
+        if(listip.size()>0){
+            equipDianjianList.setLaiyuan("手机");
+        }else{
+            equipDianjianList.setLaiyuan("电脑");
+        }
+
+
+        /** 增加点检记录*/
         int result=equipDianjianListService.insertEquipDianjianList(equipDianjianList);
+
+        /**更新点检标准里的最近点检时间*/
         curBz.setLasttime(new Date());
         int res=equipDianjianBiaozhunService.updateEquipDianjianBiaozhun(curBz);
 //        return toAjax(equipDianjianListService.insertEquipDianjianList(equipDianjianList));

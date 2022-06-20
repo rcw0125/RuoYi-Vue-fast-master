@@ -34,6 +34,22 @@ public class EquipQuyu extends BaseEntity
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /** 分级 */
+    @Excel(name = "分级")
+    private String fenji;
+
+    /** 关注参数 */
+    @Excel(name = "关注参数")
+    private String yxcs;
+
+    /** 包保人 */
+    @Excel(name = "包保人")
+    private String baobaoren;
+
+    /** 汇总 */
+    @Excel(name = "汇总")
+    private String huizong;
+
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
@@ -127,6 +143,43 @@ private List<EquipQuyu> children = new ArrayList<EquipQuyu>();
         return delFlag;
     }
 
+    public void setFenji(String fenji)
+    {
+        this.fenji = fenji;
+    }
+
+    public String getFenji()
+    {
+        return fenji;
+    }
+    public void setYxcs(String yxcs)
+    {
+        this.yxcs = yxcs;
+    }
+
+    public String getYxcs()
+    {
+        return yxcs;
+    }
+    public void setBaobaoren(String baobaoren)
+    {
+        this.baobaoren = baobaoren;
+    }
+
+    public String getBaobaoren()
+    {
+        return baobaoren;
+    }
+    public void setHuizong(String huizong)
+    {
+        this.huizong = huizong;
+    }
+
+    public String getHuizong()
+    {
+        return huizong;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -142,6 +195,10 @@ private List<EquipQuyu> children = new ArrayList<EquipQuyu>();
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+                .append("fenji", getFenji())
+                .append("yxcs", getYxcs())
+                .append("baobaoren", getBaobaoren())
+                .append("huizong", getHuizong())
             .toString();
     }
 }
