@@ -61,6 +61,14 @@ public class MesNengyuanDayController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/lastList")
+    public TableDataInfo lastList(MesNengyuanDay mesNengyuanDay)
+    {
+        DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name());
+        List<MesNengyuanDay> list = mesNengyuanDayService.selectMesNengyuanDayLastList(mesNengyuanDay);
+        DynamicDataSourceContextHolder.clearDataSourceType();
+        return getDataTable(list);
+    }
     /**
      * 导出能源数据列表
      */

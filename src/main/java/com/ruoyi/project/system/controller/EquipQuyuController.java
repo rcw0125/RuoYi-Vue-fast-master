@@ -1,6 +1,12 @@
 package com.ruoyi.project.system.controller;
 
 import java.util.List;
+
+import com.ruoyi.project.system.domain.EquipDianjianBiaozhun;
+import com.ruoyi.project.system.domain.EquipJianxiu;
+import com.ruoyi.project.system.service.IEquipDianjianBiaozhunService;
+import com.ruoyi.project.system.service.IEquipJianxiuService;
+import org.apache.velocity.runtime.directive.Foreach;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +37,10 @@ public class EquipQuyuController extends BaseController
 {
     @Autowired
     private IEquipQuyuService equipQuyuService;
-
+    @Autowired
+    private IEquipDianjianBiaozhunService equipDianjianBiaozhunService;
+    @Autowired
+    private IEquipJianxiuService equipJianxiuService;
     /**
      * 查询设备区域列表
      */
@@ -85,7 +94,31 @@ public class EquipQuyuController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody EquipQuyu equipQuyu)
     {
-        return toAjax(equipQuyuService.updateEquipQuyu(equipQuyu));
+        EquipQuyu preQuyu=equipQuyuService.selectEquipQuyuById(equipQuyu.getId());
+        int i= equipQuyuService.updateEquipQuyu(equipQuyu);
+        EquipQuyu nextQuyu=equipQuyuService.selectEquipQuyuById(equipQuyu.getId());
+        if(nextQuyu.getName().equals(preQuyu.getName())){
+            return toAjax(i);
+        }else {
+            /****************修改设备名称时，同步修改设备点检标准、设备检修中的设备名称****************/
+            //int i= equipQuyuService.updateEquipQuyu(equipQuyu);
+            EquipDianjianBiaozhun equipDianjianBiaozhun=new EquipDianjianBiaozhun();
+            equipDianjianBiaozhun.setSbid(equipQuyu.getId());
+            List<EquipDianjianBiaozhun> list = equipDianjianBiaozhunService.selectEquipDianjianBiaozhunList(equipDianjianBiaozhun);
+            for(EquipDianjianBiaozhun item :list){
+                item.setSbname(nextQuyu.getName());
+                equipDianjianBiaozhunService.updateEquipDianjianBiaozhun(item);
+            }
+            EquipJianxiu equipJianxiu=new EquipJianxiu();
+            equipJianxiu.setSbid(equipQuyu.getId());
+            List<EquipJianxiu> listJx = equipJianxiuService.selectEquipJianxiuList(equipJianxiu);
+            for(EquipJianxiu item :listJx){
+                item.setSbname(nextQuyu.getName());
+                equipJianxiuService.updateEquipJianxiu(item);
+            }
+            return toAjax(i);
+        }
+
     }
 
     /**

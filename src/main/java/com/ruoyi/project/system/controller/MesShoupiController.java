@@ -62,7 +62,7 @@ public class MesShoupiController extends BaseController
         DynamicDataSourceContextHolder.clearDataSourceType();
         int count=list.size();
         if(count>0){
-            double ironweight = 0, scrapweight = 0, pigironweight = 0, ykweight = 0, steelweight = 0, qingshao = 0, shoupi = 0,yangqi=0,bofalloy=0,lfalloy=0,bofshihui=0,lfshihui=0,dingzhahui=0,lgbaiyunshi=0,shihuishi=0;
+            double ironweight = 0, scrapweight = 0, pigironweight = 0, ykweight = 0, steelweight = 0, qingshao = 0, shoupi = 0,yangqi=0,bofalloy=0,lfalloy=0,bofshihui=0,lfshihui=0,dingzhahui=0,lgbaiyunshi=0,shihuishi=0,shaojiefankuang=0;
             DecimalFormat df=new DecimalFormat("######0.0");
             for (MesShoupi item:list) {
                 if (item.getBloomweight()>0){
@@ -86,6 +86,7 @@ public class MesShoupiController extends BaseController
                 dingzhahui+=item.getDingzhahui();
                 lgbaiyunshi+=item.getLgbaiyunshi();
                 shihuishi+=item.getShihuishi();
+                shaojiefankuang+=item.getShaojiefankuang();
             }
             MesShoupi leiJi=new MesShoupi();
             leiJi.setCcmid("累计");
@@ -104,6 +105,7 @@ public class MesShoupiController extends BaseController
             leiJi.setDingzhahui(zhuanhuan(dingzhahui));
             leiJi.setLgbaiyunshi(zhuanhuan(lgbaiyunshi));
             leiJi.setShihuishi(zhuanhuan(shihuishi));
+            leiJi.setShaojiefankuang(zhuanhuan(shaojiefankuang));
             list.add(leiJi);
 
             MesShoupi pingjun=new MesShoupi();
@@ -130,6 +132,7 @@ public class MesShoupiController extends BaseController
             pingjun.setDingzhahui(zhuanhuan(dingzhahui/shoupi));
             pingjun.setLgbaiyunshi(zhuanhuan(lgbaiyunshi/shoupi));
             pingjun.setShihuishi(zhuanhuan(shihuishi/shoupi));
+            pingjun.setShaojiefankuang(zhuanhuan(shaojiefankuang/shoupi));
             list.add(pingjun);
         }
 
@@ -160,7 +163,7 @@ public class MesShoupiController extends BaseController
         DynamicDataSourceContextHolder.clearDataSourceType();
         int count=list.size();
         if(count>0){
-            double ironweight = 0, scrapweight = 0, pigironweight = 0, ykweight = 0, steelweight = 0, qingshao = 0, shoupi = 0,yangqi=0,bofalloy=0,lfalloy=0,bofshihui=0,lfshihui=0,dingzhahui=0,lgbaiyunshi=0,shihuishi=0;
+            double ironweight = 0, scrapweight = 0, pigironweight = 0, ykweight = 0, steelweight = 0, qingshao = 0, shoupi = 0,yangqi=0,bofalloy=0,lfalloy=0,bofshihui=0,lfshihui=0,dingzhahui=0,lgbaiyunshi=0,shihuishi=0,shaojiefankuang=0;
             DecimalFormat df=new DecimalFormat("######0.0");
             for (MesShoupi item:list) {
                 if (item.getBloomweight()>0){
@@ -184,6 +187,7 @@ public class MesShoupiController extends BaseController
                 dingzhahui+=item.getDingzhahui();
                 lgbaiyunshi+=item.getLgbaiyunshi();
                 shihuishi+=item.getShihuishi();
+                shaojiefankuang+=item.getShaojiefankuang();
             }
             MesShoupi leiJi=new MesShoupi();
             leiJi.setCcmid("累计");
@@ -202,6 +206,7 @@ public class MesShoupiController extends BaseController
             leiJi.setDingzhahui(zhuanhuan(dingzhahui));
             leiJi.setLgbaiyunshi(zhuanhuan(lgbaiyunshi));
             leiJi.setShihuishi(zhuanhuan(shihuishi));
+            leiJi.setShaojiefankuang(zhuanhuan(shaojiefankuang));
             list.add(leiJi);
 
             MesShoupi pingjun=new MesShoupi();
@@ -228,6 +233,7 @@ public class MesShoupiController extends BaseController
             pingjun.setDingzhahui(zhuanhuan(dingzhahui/shoupi));
             pingjun.setLgbaiyunshi(zhuanhuan(lgbaiyunshi/shoupi));
             pingjun.setShihuishi(zhuanhuan(shihuishi/shoupi));
+            pingjun.setShaojiefankuang(zhuanhuan(shaojiefankuang/shoupi));
             list.add(pingjun);
 
         }

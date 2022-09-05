@@ -27,6 +27,8 @@ public interface MesNengyuanDayMapper
      */
     public List<MesNengyuanDay> selectMesNengyuanDayList(MesNengyuanDay mesNengyuanDay);
 
+    public List<MesNengyuanDay> selectMesNengyuanDayLastList(MesNengyuanDay mesNengyuanDay);
+
     /**
      * 新增能源数据
      *

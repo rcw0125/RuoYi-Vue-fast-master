@@ -107,13 +107,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                         "/**/*.js",
                         "/profile/**"
                 ).permitAll()
-                .antMatchers("/common/download**").anonymous()
+                .antMatchers("/common/download**").permitAll()
+                /** 移动端登陆前获取版本号**/
+                .antMatchers("/system/config/configKey/**").permitAll()
                 .antMatchers("/common/download/resource**").anonymous()
                 .antMatchers("/swagger-ui.html").anonymous()
                 .antMatchers("/swagger-resources/**").anonymous()
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 /** 新增api 路由，将不需要登陆的查询写在此路径下 使用 permitAll() 方法所有人都能访问，包括带上 token 访问  2021-09-17**/
+                .antMatchers("/common/upload**").permitAll()
                 .antMatchers("/*/*/api/**").permitAll()
                 .antMatchers("/mobile/login/**").permitAll()
                 .antMatchers("/druid/**").anonymous()

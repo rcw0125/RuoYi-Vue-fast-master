@@ -5,9 +5,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.TreeEntity;
 
+import java.util.List;
+
 /**
  * 新闻菜单对象 cms_caidan
- * 
+ *
  * @author ruoyi
  * @date 2021-06-29
  */
@@ -33,48 +35,60 @@ public class CmsCaidan extends TreeEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
-    public void setId(Long id) 
+    /****/
+    public List<BlogArticle> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<BlogArticle> articles) {
+        this.articles = articles;
+    }
+
+    /** 新闻对象,返回该目录下最新新闻8条 */
+    private List<BlogArticle> articles;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setName(String name) 
+    public void setName(String name)
     {
         this.name = name;
     }
 
-    public String getName() 
+    public String getName()
     {
         return name;
     }
-    public void setNote(String note) 
+    public void setNote(String note)
     {
         this.note = note;
     }
 
-    public String getNote() 
+    public String getNote()
     {
         return note;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setDelFlag(String delFlag) 
+    public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
     }
 
-    public String getDelFlag() 
+    public String getDelFlag()
     {
         return delFlag;
     }

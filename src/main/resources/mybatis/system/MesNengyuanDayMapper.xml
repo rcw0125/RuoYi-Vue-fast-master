@@ -39,6 +39,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectMesNengyuanDayLastList" parameterType="MesNengyuanDay" resultMap="MesNengyuanDayResult">
+        select to_number(substr(logtime,9,2))||'日' as logtime,trunc(tg,0) as tg from (
+        select logtime,tg from NENGYUAN_DAY order by logtime desc
+        )a
+        where rownum &lt;=7 order by a.logtime
+    </select>
+
+
     <select id="selectMesNengyuanDayByLogtime" parameterType="String" resultMap="MesNengyuanDayResult">
         <include refid="selectMesNengyuanDayVo"/>
         where logtime = #{logtime}

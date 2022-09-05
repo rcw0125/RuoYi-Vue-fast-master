@@ -1,6 +1,9 @@
 package com.ruoyi.project.system.controller;
 
 import java.util.List;
+
+import com.ruoyi.project.system.domain.CmsCaidan;
+import com.ruoyi.project.system.service.ICmsCaidanService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,7 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 
 /**
  * 博客文章Controller
- * 
+ *
  * @author ruoyi
  * @date 2021-06-30
  */
@@ -32,7 +35,8 @@ public class BlogArticleController extends BaseController
 {
     @Autowired
     private IBlogArticleService blogArticleService;
-
+    @Autowired
+    private ICmsCaidanService cmsCaidanService;
     /**
      * 查询博客文章列表
      */
@@ -43,6 +47,17 @@ public class BlogArticleController extends BaseController
         startPage();
         List<BlogArticle> list = blogArticleService.selectBlogArticleList(blogArticle);
         return getDataTable(list);
+    }
+
+    @GetMapping("/SummerList")
+    public TableDataInfo SummerList(String pid)
+    {
+        //startPage();
+        CmsCaidan cmsCaidan=new CmsCaidan();
+        cmsCaidan.setParentId(Long.parseLong(pid));
+        List<CmsCaidan> caidanList = cmsCaidanService.selectCmsCaidanList(cmsCaidan);
+       // List<BlogArticle> list = blogArticleService.selectBlogArticleList(blogArticle);
+        return getDataTable(caidanList);
     }
 
     /**

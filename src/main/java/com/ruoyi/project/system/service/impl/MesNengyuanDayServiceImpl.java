@@ -52,6 +52,12 @@ public class MesNengyuanDayServiceImpl implements IMesNengyuanDayService
 
 
     @Override
+    public List<MesNengyuanDay> selectMesNengyuanDayLastList(MesNengyuanDay mesNengyuanDay)
+    {
+        return mesNengyuanDayMapper.selectMesNengyuanDayLastList(mesNengyuanDay);
+    }
+
+    @Override
     public int shengchengMesNengyuanDay(String logtime)
     {
         /**如果日期长度不等于10，即不是标准日期，则默认日期为前一天*/

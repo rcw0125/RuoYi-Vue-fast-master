@@ -86,6 +86,18 @@ public class MesShoupi extends BaseEntity
     @Excel(name = "精炼石灰")
     private Double lfshihui;
 
+    public Double getShaojiefankuang() {
+        return shaojiefankuang;
+    }
+
+    public void setShaojiefankuang(Double shaojiefankuang) {
+        this.shaojiefankuang = shaojiefankuang;
+    }
+
+    /** 烧结返矿 */
+    @Excel(name = "烧结返矿")
+    private Double shaojiefankuang;
+
     /** 转炉合金 */
     @Excel(name = "转炉合金")
     private Double bofalloy;
@@ -471,6 +483,7 @@ public class MesShoupi extends BaseEntity
                 .append("blowjudge", getBlowjudge())
                 .append("boftime", getBoftime())
                 .append("tiehao", getTiehao())
+                .append("shaojiefankuang", getShaojiefankuang())
                 .toString();
     }
 }

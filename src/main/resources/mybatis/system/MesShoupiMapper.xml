@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="luling"    column="luling"    />
         <result property="zhouqi"    column="zhouqi"    />
         <result property="qingshaobaiyunshi"    column="qingshaobaiyunshi"    />
+        <result property="shaojiefankuang"    column="shaojiefankuang"    />
         <result property="lgbaiyunshi"    column="lgbaiyunshi"    />
         <result property="lactemp"    column="lactemp"    />
         <result property="dingzhahui"    column="dingzhahui"    />
@@ -44,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  steelgrade ,baocihao ,productiondate ,ironweight ,scrapweight ,pigironweight ,ykweight ,steelweight ,nvl(bloomweight,0) as bloomweight
   ,nvl(o2total,0) as yangqi,nvl(bofshihui,0) as bofshihui ,nvl(lfshihui,0) as lfshihui,nvl(bofalloy,0) as bofalloy, nvl(lfalloy,0) as lfalloy
   ,nvl(irontemp,0) as irontemp  , nvl(ncflag,'未上传') as ncflag,nvl(qingshaobaiyunshi,0) as qingshaobaiyunshi,  nvl(shihuishi,0) as shihuishi,liuzha,luling,zhouqi,
-  lactemp,nvl(dingzhahui,0) as dingzhahui,nvl(lgbaiyunshi,0) as lgbaiyunshi, reblow_count,getyicilatan(heatid) as blowjudge,boftime
+  lactemp,nvl(dingzhahui,0) as dingzhahui,nvl(lgbaiyunshi,0) as lgbaiyunshi, reblow_count,getyicilatan(heatid) as blowjudge,boftime,shaojiefankuang
   from (
   select substr(a.ccmid, 3, 1) || '#铸机' as ccmid, a.heatid, a.steelgrade,(select cal_weight  from cbloom_data where cbloom_data.heatid = a.heatid) as bloomweight,
   round(o2total,2)  as o2total,decode(remainslag,'是','1','0') as liuzha,reblow_count,furnace_age as luling,to_char(round(smelt_period*1.0/60,1)) as zhouqi ,lac_temp as lactemp,
@@ -56,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   (select sum(weight)  from cbof_addition_data where element = '13305' and type = 9 and cbof_addition_data.heatid = a.heatid) as qingshaobaiyunshi,
   (select sum(weight)  from cbof_addition_data where element = '13307' and type = 9 and cbof_addition_data.heatid = a.heatid) as shihuishi,
   (select sum(weight)  from cbof_addition_data where element = '13323' and type = 9 and cbof_addition_data.heatid = a.heatid) as lgbaiyunshi,
+  (select sum(weight)  from cbof_addition_data where element = '60121' and type = 9 and cbof_addition_data.heatid = a.heatid) as shaojiefankuang,
   (select substr(ccmid, 3, 1) || '-' || tundish_heatnum from cccm_process_data where cccm_process_data.heatid = a.heatid) as baocihao,
    round(b.ironweight, 2) as ironweight,round(b.scrapweight, 2) as scrapweight,round(b.pigironweight, 2) as pigironweight,round(ykweight, 2) as ykweight,
    c.weight as steelweight,to_char(productiondate,'yyyy-MM-dd') as productiondate,to_char(e.CHARGING_START_TIME,'yyyy-MM-dd') as boftime,b.irontemp ,

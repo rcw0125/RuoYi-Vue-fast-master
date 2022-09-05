@@ -48,7 +48,7 @@ public class EquipJianxiu extends BaseEntity
     @Excel(name = "登记时间")
     private String djtime;
 
-    /** 检修内容 */
+    /** 计划项目 */
     @Excel(name = "检修内容")
     private String jxnr;
 
@@ -63,6 +63,10 @@ public class EquipJianxiu extends BaseEntity
     /** 状态(等待检修、检修完成、异常结束) */
     @Excel(name = "状态(等待检修、检修完成、异常结束)")
     private String status;
+
+    /** 检修人 */
+    @Excel(name = "检修人")
+    private String jxr;
 
     public void setId(Long id)
     {
@@ -172,6 +176,15 @@ public class EquipJianxiu extends BaseEntity
     {
         return status;
     }
+    public void setJxr(String jxr)
+    {
+        this.jxr = jxr;
+    }
+
+    public String getJxr()
+    {
+        return jxr;
+    }
 
     @Override
     public String toString() {
@@ -188,6 +201,7 @@ public class EquipJianxiu extends BaseEntity
             .append("jxms", getJxms())
             .append("jxtime", getJxtime())
             .append("status", getStatus())
+                .append("jxr", getJxr())
             .toString();
     }
 }

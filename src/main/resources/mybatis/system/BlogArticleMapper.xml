@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.project.system.mapper.BlogArticleMapper">
-    
+
     <resultMap type="BlogArticle" id="BlogArticleResult">
         <result property="id"    column="id"    />
         <result property="classifyId"    column="classify_id"    />
@@ -42,9 +42,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBlogArticleList" parameterType="BlogArticle" resultMap="BlogArticleResult">
         <include refid="selectBlogArticleVo"/>
-        <where>  
+        <where>
             <if test="classifyId != null  and classifyId != ''"> and classify_id = #{classifyId}</if>
-            <if test="channelId != null  and channelId != ''"> and channel_id = #{channelId}</if>
+            <if test="channelId != null  and channelId != ''">  and (channel_id = #{channelId} OR channel_id  IN ( SELECT t.id FROM cms_caidan t WHERE find_in_set(#{channelId }, ancestors) ))</if>
             <if test="title != null  and title != ''"> and title = #{title}</if>
             <if test="keywords != null  and keywords != ''"> and keywords = #{keywords}</if>
             <if test="source != null  and source != ''"> and source = #{source}</if>
@@ -71,12 +71,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateUserId != null "> and update_user_id = #{updateUserId}</if>
         </where>
     </select>
-    
+
     <select id="selectBlogArticleById" parameterType="Long" resultMap="BlogArticleResult">
         <include refid="selectBlogArticleVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertBlogArticle" parameterType="BlogArticle" useGeneratedKeys="true" keyProperty="id">
         insert into blog_article
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -181,7 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBlogArticleByIds" parameterType="String">
-        delete from blog_article where id in 
+        delete from blog_article where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
